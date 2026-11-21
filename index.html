@@ -24,8 +24,8 @@
     .btn-sec { background: #334155; color: #f8fafc; }
     .btn-del { width: auto; background: #991b1b; color: #fecaca; font-size: 0.75rem; padding: 5px 9px; border-radius: 6px; margin-left: 8px; flex-shrink: 0; }
     .kpi { font-size: 1.15rem; font-weight: 700; color: #fdba74; }
-    .barra-bg { width: 100%; height: 12px; background: #0f172a; border-radius: 999px; overflow: hidden; border: 1px solid #334155; margin: 6px 0 10px; }
-    .barra-fill { height: 100%; background: #38bdf8; width: 0%; transition: width 0.25s; }
+    .barra-bg { width: 100%; height: 14px; background: #0f172a; border-radius: 999px; overflow: hidden; border: 1px solid #475569; margin: 6px 0 10px; }
+    .barra-fill { height: 100%; background: #38bdf8; min-width: 6px; width: 6%; transition: width 0.25s; }
     .barra-saude { background: #22c55e; }
     .barra-treino { background: #fb923c; }
     .barra-kcal { background: #facc15; }
@@ -40,7 +40,7 @@
     .aba { display: none; }
     .aba.ativa { display: block; }
     nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 6px 2px; overflow-x: auto; }
-    nav button { background: transparent; color: #94a3b8; font-size: 0.64rem; padding: 6px 2px; border-radius: 6px; min-width: 44px; }
+    nav button { background: transparent; color: #94a3b8; font-size: 0.66rem; padding: 6px 2px; border-radius: 6px; min-width: 46px; }
     nav button.ativa { background: #334155; color: #fb923c; }
   </style>
 </head>
@@ -53,7 +53,7 @@
   <main>
     <div id="alerta-banner" class="alerta-banner"></div>
 
-    <section id="aba-painel" class="aba ativa">
+    <section id="aba-painel" class="aba">
       <div class="card">
         <div id="resumo-aluno" style="font-weight:700; font-size:1rem; margin-bottom:8px;">Aluno não cadastrado</div>
         <div class="grid-2">
@@ -185,52 +185,41 @@
       <div class="card" id="lista-glicemia"></div>
     </section>
 
-    <section id="aba-prato" class="aba">
+    <section id="aba-alimentos" class="aba">
       <div class="card">
-        <label for="pr-item">Item do prato</label>
-        <input id="pr-item" type="text" placeholder="Ex: Frango + arroz integral" />
+        <label for="al-nome">Alimento / Refeição</label>
+        <input id="al-nome" type="text" placeholder="Ex: Frango + arroz integral" />
         <div class="grid-2">
           <div>
-            <label for="pr-kcal">Calorias (kcal)</label>
-            <input id="pr-kcal" type="number" inputmode="numeric" placeholder="Ex: 320" />
+            <label for="al-kcal">Calorias (kcal)</label>
+            <input id="al-kcal" type="number" inputmode="numeric" placeholder="Ex: 250" />
           </div>
           <div>
-            <label for="pr-saude">Tipo de alimentação</label>
-            <select id="pr-saude">
+            <label for="al-saude">Tipo de alimentação</label>
+            <select id="al-saude">
               <option value="auto">Automático (pelo item)</option>
               <option value="saudavel">Saudável</option>
               <option value="nao_saudavel">Não saudável / Livre</option>
             </select>
           </div>
         </div>
-        <button onclick="registrarPrato()">Adicionar ao prato</button>
-      </div>
-      <div class="card" id="lista-prato"></div>
-    </section>
-
-    <section id="aba-alimentos" class="aba">
-      <div class="card">
-        <label for="al-nome">Alimento</label>
-        <input id="al-nome" type="text" placeholder="Ex: Aveia (40g)" />
-        <label for="al-kcal">Calorias (kcal)</label>
-        <input id="al-kcal" type="number" inputmode="numeric" placeholder="Ex: 150" />
-        <button onclick="registrarAlimento()">Salvar alimento</button>
+        <button onclick="registrarAlimento()">Salvar alimentação</button>
       </div>
       <div class="card" id="lista-alimentos"></div>
     </section>
 
-    <section id="aba-resumo" class="aba">
+    <section id="aba-resumo" class="aba ativa">
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <span style="font-weight:700; font-size:1rem;">Dashboard do Dia</span>
           <span id="resumo-data-hoje" style="font-size:0.82rem; color:#94a3b8;">--/--/----</span>
         </div>
-        <div class="sub" id="resumo-avaliacao-alim">Carregando resumo...</div>
+        <div class="sub" id="resumo-avaliacao-alim">Nenhuma alimentação registrada hoje ainda.</div>
 
         <div class="grid-2" style="margin-top:12px;">
           <div>
             <label>Água tomada hoje</label>
-            <div class="kpi" id="dash-agua">0 ml</div>
+            <div class="kpi" id="dash-agua">0 / 2500 ml</div>
           </div>
           <div>
             <label>Calorias do dia</label>
@@ -253,15 +242,15 @@
         <div class="chart-row">
           <div class="chart-head">
             <span>Hidratação (meta diária)</span>
-            <span id="grafico-agua-txt">0%</span>
+            <span id="grafico-agua-txt">0% (0 ml)</span>
           </div>
           <div class="barra-bg"><div class="barra-fill" id="grafico-agua-bar"></div></div>
         </div>
 
         <div class="chart-row">
           <div class="chart-head">
-            <span>Proporção de itens saudáveis no prato</span>
-            <span id="grafico-saude-txt">0%</span>
+            <span>Proporção de itens saudáveis</span>
+            <span id="grafico-saude-txt">Sem registros hoje</span>
           </div>
           <div class="barra-bg"><div class="barra-fill barra-saude" id="grafico-saude-bar"></div></div>
         </div>
@@ -269,7 +258,7 @@
         <div class="chart-row">
           <div class="chart-head">
             <span>Volume calórico do dia (ref. 2.000 kcal)</span>
-            <span id="grafico-kcal-txt">0 kcal</span>
+            <span id="grafico-kcal-txt">0 kcal (0%)</span>
           </div>
           <div class="barra-bg"><div class="barra-fill barra-kcal" id="grafico-kcal-bar"></div></div>
         </div>
@@ -277,7 +266,7 @@
         <div class="chart-row">
           <div class="chart-head">
             <span>Tempo de treino hoje (ref. 45 min)</span>
-            <span id="grafico-treino-txt">0 min</span>
+            <span id="grafico-treino-txt">0 min (0%)</span>
           </div>
           <div class="barra-bg"><div class="barra-fill barra-treino" id="grafico-treino-bar"></div></div>
         </div>
@@ -285,25 +274,24 @@
 
       <div class="card">
         <label>O que você comeu hoje (e classificação)</label>
-        <div id="dash-lista-prato"></div>
+        <div id="dash-lista-prato"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
       </div>
 
       <div class="card">
         <label>Água, treinos e destros registrados hoje</label>
-        <div id="dash-lista-atividades"></div>
+        <div id="dash-lista-atividades"><div class="item"><span>Nenhuma atividade registrada hoje ainda.</span></div></div>
       </div>
     </section>
   </main>
 
   <nav>
-    <button class="ativa" onclick="abrirAba('painel', this)">Painel</button>
+    <button onclick="abrirAba('painel', this)">Painel</button>
     <button onclick="abrirAba('rotina', this)">Água/Ref.</button>
     <button onclick="abrirAba('balanca', this)">Balança</button>
     <button onclick="abrirAba('treinos', this)">Treinos</button>
     <button onclick="abrirAba('glicemia', this)">Glicemia</button>
-    <button onclick="abrirAba('prato', this)">Prato</button>
     <button onclick="abrirAba('alimentos', this)">Alim.</button>
-    <button onclick="abrirAba('resumo', this)">Resumo</button>
+    <button class="ativa" onclick="abrirAba('resumo', this)">Resumo</button>
   </nav>
 
   <script>
@@ -401,65 +389,67 @@
     }
 
     function renderizarDashboardDia(res) {
-      if (!res) return;
-      document.getElementById('resumo-data-hoje').textContent = res.data_hoje || '--/--/----';
-      document.getElementById('resumo-avaliacao-alim').textContent = res.avaliacao_alimentacao || '';
+      const agora = new Date();
+      const dataPadrao = agora.toLocaleDateString('pt-BR');
+      const r = res || {};
+      document.getElementById('resumo-data-hoje').textContent = r.data_hoje || dataPadrao;
+      document.getElementById('resumo-avaliacao-alim').textContent = r.avaliacao_alimentacao || 'Nenhuma alimentação registrada hoje ainda.';
 
-      const aguaMl = res.agua_ml || 0;
-      const metaAgua = Math.max(1, res.meta_agua_ml || 2500);
+      const aguaMl = r.agua_ml || 0;
+      const metaAgua = Math.max(1, r.meta_agua_ml || 2500);
       const pctAgua = Math.min(100, Math.round((aguaMl / metaAgua) * 100));
 
-      const kcalHoje = res.kcal_hoje || 0;
+      const kcalHoje = r.kcal_hoje || 0;
       const pctKcal = Math.min(100, Math.round((kcalHoje / 2000) * 100));
 
-      const minTreino = res.minutos_treino_hoje || 0;
+      const minTreino = r.minutos_treino_hoje || 0;
       const pctTreino = Math.min(100, Math.round((minTreino / 45) * 100));
 
-      const qtdSaud = res.qtd_saudaveis || 0;
-      const qtdNaoSaud = res.qtd_nao_saudaveis || 0;
+      const qtdSaud = r.qtd_saudaveis || 0;
+      const qtdNaoSaud = r.qtd_nao_saudaveis || 0;
       const totalItensAlim = qtdSaud + qtdNaoSaud;
       const pctSaude = totalItensAlim > 0 ? Math.round((qtdSaud / totalItensAlim) * 100) : 0;
 
       document.getElementById('dash-agua').textContent = `${aguaMl} / ${metaAgua} ml`;
       document.getElementById('dash-kcal').textContent = `${kcalHoje} kcal`;
       document.getElementById('dash-treino').textContent = `${minTreino} min`;
-      document.getElementById('dash-destros').textContent = `${res.destros_hoje || 0}`;
+      document.getElementById('dash-destros').textContent = `${r.destros_hoje || 0}`;
 
       document.getElementById('grafico-agua-txt').textContent = `${pctAgua}% (${aguaMl} ml)`;
-      document.getElementById('grafico-agua-bar').style.width = `${pctAgua}%`;
+      document.getElementById('grafico-agua-bar').style.width = `${Math.max(4, pctAgua)}%`;
 
       document.getElementById('grafico-saude-txt').textContent = totalItensAlim > 0
         ? `${pctSaude}% saudáveis (${qtdSaud}/${totalItensAlim})`
-        : 'Sem itens hoje';
-      document.getElementById('grafico-saude-bar').style.width = `${pctSaude}%`;
+        : 'Sem registros hoje';
+      document.getElementById('grafico-saude-bar').style.width = `${Math.max(4, pctSaude)}%`;
 
       document.getElementById('grafico-kcal-txt').textContent = `${kcalHoje} kcal (${pctKcal}%)`;
-      document.getElementById('grafico-kcal-bar').style.width = `${pctKcal}%`;
+      document.getElementById('grafico-kcal-bar').style.width = `${Math.max(4, pctKcal)}%`;
 
       document.getElementById('grafico-treino-txt').textContent = `${minTreino} min (${pctTreino}%)`;
-      document.getElementById('grafico-treino-bar').style.width = `${pctTreino}%`;
+      document.getElementById('grafico-treino-bar').style.width = `${Math.max(4, pctTreino)}%`;
 
-      const pratoHoje = res.prato_hoje || [];
-      document.getElementById('dash-lista-prato').innerHTML = pratoHoje.length
-        ? pratoHoje.map(x => {
+      const alimHoje = r.alimentos_hoje || [];
+      document.getElementById('dash-lista-prato').innerHTML = alimHoje.length
+        ? alimHoje.map(x => {
             const tag = x.saudavel !== false
               ? '<span class="badge-ok">Saudável</span>'
               : '<span class="badge-warn">Não saudável</span>';
-            return `<div class="item"><span>${x.data} — <b>${x.item}</b> (${x.kcal} kcal)</span>${tag}</div>`;
+            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b> (${x.kcal} kcal)</span>${tag}</div>`;
           }).join('')
-        : '<div class="item"><span>Nenhuma refeição registrada hoje.</span></div>';
+        : '<div class="item"><span>Nenhuma alimentação registrada hoje.</span></div>';
 
       const linhasAtividades = [];
-      (res.agua_historico || []).forEach(a => {
+      (r.agua_historico || []).forEach(a => {
         linhasAtividades.push(`<div class="item"><span>Água às ${a.hora} — <b>+${a.ml} ml</b></span><span class="badge-ok">Água</span></div>`);
       });
-      (res.treinos_hoje || []).forEach(t => {
+      (r.treinos_hoje || []).forEach(t => {
         linhasAtividades.push(`<div class="item"><span>${t.data} — Treino <b>${t.descricao}</b> (${t.minutos} min${t.tempo_fmt ? ' • ' + t.tempo_fmt : ''})</span><span class="badge-warn">Treino</span></div>`);
       });
-      (res.balanca_hoje || []).forEach(b => {
+      (r.balanca_hoje || []).forEach(b => {
         linhasAtividades.push(`<div class="item"><span>${b.data} — Destro / Balança: <b>${b.peso} kg</b> (Meta: ${b.meta} kg)</span><span class="badge-ok">Destro</span></div>`);
       });
-      (res.glicemia_hoje || []).forEach(g => {
+      (r.glicemia_hoje || []).forEach(g => {
         linhasAtividades.push(`<div class="item"><span>${g.data} — Glicemia: <b>${g.valor} mg/dL</b> (${g.momento})</span><span class="badge-ok">Glicemia</span></div>`);
       });
 
@@ -524,111 +514,108 @@
     }
 
     async function carregarEstado() {
-      const res = await fetch('/api/estado');
-      const d = await res.json();
-      ultimoEstado = d;
-      const p = d.perfil || {};
+      renderizarDashboardDia(ultimoEstado ? ultimoEstado.resumo_dia : null);
+      try {
+        const res = await fetch('/api/estado');
+        if (!res.ok) return;
+        const d = await res.json();
+        ultimoEstado = d;
+        const p = d.perfil || {};
 
-      const partes = [];
-      if (p.nome) partes.push(p.nome);
-      if (p.idade != null) partes.push(p.idade + ' anos');
-      if (p.altura_cm != null) partes.push(p.altura_cm + ' cm');
-      document.getElementById('resumo-aluno').textContent = partes.length ? partes.join(' • ') : 'Aluno não cadastrado';
+        const partes = [];
+        if (p.nome) partes.push(p.nome);
+        if (p.idade != null) partes.push(p.idade + ' anos');
+        if (p.altura_cm != null) partes.push(p.altura_cm + ' cm');
+        document.getElementById('resumo-aluno').textContent = partes.length ? partes.join(' • ') : 'Aluno não cadastrado';
 
-      document.getElementById('kpi-peso').textContent = d.peso_atual != null ? d.peso_atual + ' kg' : '--';
-      document.getElementById('kpi-meta').textContent = d.meta_peso != null ? d.meta_peso + ' kg' : '--';
-      document.getElementById('kpi-diff').textContent =
-        d.diferenca_meta != null ? 'Diferença para meta: ' + d.diferenca_meta + ' kg' : 'Diferença para meta: --';
+        document.getElementById('kpi-peso').textContent = d.peso_atual != null ? d.peso_atual + ' kg' : '--';
+        document.getElementById('kpi-meta').textContent = d.meta_peso != null ? d.meta_peso + ' kg' : '--';
+        document.getElementById('kpi-diff').textContent =
+          d.diferenca_meta != null ? 'Diferença para meta: ' + d.diferenca_meta + ' kg' : 'Diferença para meta: --';
 
-      const ori = d.orientacao || {};
-      document.getElementById('base-instrutor').textContent =
-        (ori.foco ? 'Programa: ' + ori.foco + ' — ' : '') +
-        (ori.meta_status ? ori.meta_status + ' ' : '') +
-        (ori.base_resumo || '');
+        const ori = d.orientacao || {};
+        document.getElementById('base-instrutor').textContent =
+          (ori.foco ? 'Programa: ' + ori.foco + ' — ' : '') +
+          (ori.meta_status ? ori.meta_status + ' ' : '') +
+          (ori.base_resumo || '');
 
-      document.getElementById('p-nome').value = p.nome || '';
-      document.getElementById('p-idade').value = p.idade != null ? p.idade : '';
-      document.getElementById('p-altura').value = p.altura_cm != null ? p.altura_cm : '';
-      document.getElementById('p-objetivo').value = p.objetivo || 'perda';
+        document.getElementById('p-nome').value = p.nome || '';
+        document.getElementById('p-idade').value = p.idade != null ? p.idade : '';
+        document.getElementById('p-altura').value = p.altura_cm != null ? p.altura_cm : '';
+        document.getElementById('p-objetivo').value = p.objetivo || 'perda';
 
-      if (d.meta_peso != null) {
-        document.getElementById('painel-meta').value = d.meta_peso;
-        document.getElementById('bal-meta').value = d.meta_peso;
-      }
-      if (d.peso_atual != null) {
-        document.getElementById('painel-peso').value = d.peso_atual;
-        document.getElementById('bal-peso').value = d.peso_atual;
-      } else {
-        document.getElementById('painel-peso').value = '';
-        document.getElementById('bal-peso').value = '';
-      }
+        if (d.meta_peso != null) {
+          document.getElementById('painel-meta').value = d.meta_peso;
+          document.getElementById('bal-meta').value = d.meta_peso;
+        }
+        if (d.peso_atual != null) {
+          document.getElementById('painel-peso').value = d.peso_atual;
+          document.getElementById('bal-peso').value = d.peso_atual;
+        } else {
+          document.getElementById('painel-peso').value = '';
+          document.getElementById('bal-peso').value = '';
+        }
 
-      const agua = d.agua || { consumido_ml: 0, meta_ml: 2500, historico: [] };
-      const pct = Math.min(100, Math.round(((agua.consumido_ml || 0) / Math.max(1, agua.meta_ml || 2500)) * 100));
-      document.getElementById('agua-status').textContent = `${agua.consumido_ml || 0} / ${agua.meta_ml || 2500} ml (${pct}%)`;
-      document.getElementById('agua-barra').style.width = pct + '%';
-      document.getElementById('agua-meta').value = agua.meta_ml || 2500;
-      const restante = Math.max(0, (agua.meta_ml || 2500) - (agua.consumido_ml || 0));
-      document.getElementById('agua-lembrete').textContent = restante > 0
-        ? `Lembrete de água: faltam ${restante} ml para a meta de hoje.`
-        : 'Parabéns: meta diária de água atingida!';
+        const agua = d.agua || { consumido_ml: 0, meta_ml: 2500, historico: [] };
+        const pct = Math.min(100, Math.round(((agua.consumido_ml || 0) / Math.max(1, agua.meta_ml || 2500)) * 100));
+        document.getElementById('agua-status').textContent = `${agua.consumido_ml || 0} / ${agua.meta_ml || 2500} ml (${pct}%)`;
+        document.getElementById('agua-barra').style.width = Math.max(4, pct) + '%';
+        document.getElementById('agua-meta').value = agua.meta_ml || 2500;
+        const restante = Math.max(0, (agua.meta_ml || 2500) - (agua.consumido_ml || 0));
+        document.getElementById('agua-lembrete').textContent = restante > 0
+          ? `Lembrete de água: faltam ${restante} ml para a meta de hoje.`
+          : 'Parabéns: meta diária de água atingida!';
 
-      document.getElementById('lista-agua').innerHTML =
-        (agua.historico || []).map((x, i) => `
-          <div class="item">
-            <span>${x.hora} — <b>+${x.ml} ml</b></span>
-            <button type="button" class="btn-del" onclick="excluirAgua(${i})">Excluir</button>
-          </div>`).join('') || '<div class="item"><span>Sem copos registrados hoje.</span></div>';
-
-      document.getElementById('lista-refeicoes').innerHTML =
-        (d.refeicoes || []).map((x, i) => `
-          <div class="item">
-            <span><b>${x.horario}</b> — ${x.nome}</span>
-            <button type="button" class="btn-del" onclick="excluirRefeicao(${i})">Excluir</button>
-          </div>`).join('') || '<div class="item"><span>Nenhum horário de refeição cadastrado.</span></div>';
-
-      document.getElementById('lista-balanca').innerHTML =
-        (d.balanca || []).map((x, i) => `
-          <div class="item">
-            <span>${x.data} — <b>${x.peso} kg</b> (Meta: ${x.meta} kg)</span>
-            <button type="button" class="btn-del" onclick="excluirItem('balanca', ${i})">Excluir</button>
-          </div>`).join('') || '<div class="item"><span>Sem registros ainda.</span></div>';
-
-      document.getElementById('lista-treinos').innerHTML =
-        (d.treinos || []).map((x, i) => `
-          <div class="item">
-            <span>${x.data} — <b>${x.descricao}</b> (${x.minutos} min${x.tempo_fmt ? ' • ' + x.tempo_fmt : ''})</span>
-            <button type="button" class="btn-del" onclick="excluirItem('treinos', ${i})">Excluir</button>
-          </div>`).join('') || '<div class="item"><span>Sem treinos ainda.</span></div>';
-
-      document.getElementById('lista-glicemia').innerHTML =
-        (d.glicemia || []).map((x, i) => `
-          <div class="item">
-            <span>${x.data} — <b>${x.valor} mg/dL</b> (${x.momento})</span>
-            <button type="button" class="btn-del" onclick="excluirItem('glicemia', ${i})">Excluir</button>
-          </div>`).join('') || '<div class="item"><span>Sem medições ainda.</span></div>';
-
-      document.getElementById('lista-prato').innerHTML =
-        (d.prato || []).map((x, i) => {
-          const badge = x.saudavel !== false
-            ? '<span class="badge-ok">Saudável</span>'
-            : '<span class="badge-warn">Não saudável</span>';
-          return `
+        document.getElementById('lista-agua').innerHTML =
+          (agua.historico || []).map((x, i) => `
             <div class="item">
-              <span>${x.data} — <b>${x.item}</b> (${x.kcal} kcal) ${badge}</span>
-              <button type="button" class="btn-del" onclick="excluirItem('prato', ${i})">Excluir</button>
-            </div>`;
-        }).join('') || '<div class="item"><span>Prato vazio.</span></div>';
+              <span>${x.hora} — <b>+${x.ml} ml</b></span>
+              <button type="button" class="btn-del" onclick="excluirAgua(${i})">Excluir</button>
+            </div>`).join('') || '<div class="item"><span>Sem copos registrados hoje.</span></div>';
 
-      document.getElementById('lista-alimentos').innerHTML =
-        (d.alimentos || []).map((x, i) => `
-          <div class="item">
-            <span><b>${x.nome}</b> — ${x.kcal} kcal</span>
-            <button type="button" class="btn-del" onclick="excluirItem('alimentos', ${i})">Excluir</button>
-          </div>`).join('') || '<div class="item"><span>Sem alimentos cadastrados.</span></div>';
+        document.getElementById('lista-refeicoes').innerHTML =
+          (d.refeicoes || []).map((x, i) => `
+            <div class="item">
+              <span><b>${x.horario}</b> — ${x.nome}</span>
+              <button type="button" class="btn-del" onclick="excluirRefeicao(${i})">Excluir</button>
+            </div>`).join('') || '<div class="item"><span>Nenhum horário de refeição cadastrado.</span></div>';
 
-      renderizarDashboardDia(d.resumo_dia);
-      verificarAlertas(d);
+        document.getElementById('lista-balanca').innerHTML =
+          (d.balanca || []).map((x, i) => `
+            <div class="item">
+              <span>${x.data} — <b>${x.peso} kg</b> (Meta: ${x.meta} kg)</span>
+              <button type="button" class="btn-del" onclick="excluirItem('balanca', ${i})">Excluir</button>
+            </div>`).join('') || '<div class="item"><span>Sem registros ainda.</span></div>';
+
+        document.getElementById('lista-treinos').innerHTML =
+          (d.treinos || []).map((x, i) => `
+            <div class="item">
+              <span>${x.data} — <b>${x.descricao}</b> (${x.minutos} min${x.tempo_fmt ? ' • ' + x.tempo_fmt : ''})</span>
+              <button type="button" class="btn-del" onclick="excluirItem('treinos', ${i})">Excluir</button>
+            </div>`).join('') || '<div class="item"><span>Sem treinos ainda.</span></div>';
+
+        document.getElementById('lista-glicemia').innerHTML =
+          (d.glicemia || []).map((x, i) => `
+            <div class="item">
+              <span>${x.data} — <b>${x.valor} mg/dL</b> (${x.momento})</span>
+              <button type="button" class="btn-del" onclick="excluirItem('glicemia', ${i})">Excluir</button>
+            </div>`).join('') || '<div class="item"><span>Sem medições ainda.</span></div>';
+
+        document.getElementById('lista-alimentos').innerHTML =
+          (d.alimentos || []).map((x, i) => {
+            const badge = x.saudavel !== false
+              ? '<span class="badge-ok">Saudável</span>'
+              : '<span class="badge-warn">Não saudável</span>';
+            return `
+              <div class="item">
+                <span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b> (${x.kcal} kcal) ${badge}</span>
+                <button type="button" class="btn-del" onclick="excluirItem('alimentos', ${i})">Excluir</button>
+              </div>`;
+          }).join('') || '<div class="item"><span>Sem alimentos cadastrados.</span></div>';
+
+        renderizarDashboardDia(d.resumo_dia);
+        verificarAlertas(d);
+      } catch (e) {}
     }
 
     async function salvarPerfilCompleto() {
@@ -692,28 +679,14 @@
       carregarEstado();
     }
 
-    async function registrarPrato() {
-      await fetch('/api/prato', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          item: document.getElementById('pr-item').value,
-          kcal: document.getElementById('pr-kcal').value,
-          saude_tipo: document.getElementById('pr-saude').value
-        })
-      });
-      document.getElementById('pr-item').value = '';
-      document.getElementById('pr-kcal').value = '';
-      carregarEstado();
-    }
-
     async function registrarAlimento() {
       await fetch('/api/alimentos', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           nome: document.getElementById('al-nome').value,
-          kcal: document.getElementById('al-kcal').value
+          kcal: document.getElementById('al-kcal').value,
+          saude_tipo: document.getElementById('al-saude').value
         })
       });
       document.getElementById('al-nome').value = '';

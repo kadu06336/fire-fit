@@ -1,1652 +1,701 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>Fire Fit • Balança, Treinos, Glicemia & Painel</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fire Fit</title>
   <style>
-    :root {
-      --bg: #0b0e14;
-      --surface: #141923;
-      --surface-2: #1c2432;
-      --border: #2c384d;
-      --text: #f5f7fa;
-      --muted: #a3b3c8;
-      --fire: #ff5a1f;
-      --fire-soft: #ff8a3d;
-      --fire-dark: #190702;
-      --green: #2ecc71;
-      --amber: #f59e0b;
-      --cyan: #38bdf8;
-      --red: #ef4444;
-    }
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 16px;
-      line-height: 1.45;
-      padding-bottom: 92px;
-    }
-
-    .num {
-      font-variant-numeric: tabular-nums;
-    }
-
-    header {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 16px;
-      position: sticky;
-      top: 0;
-      z-index: 20;
-    }
-
-    .top-row {
-      max-width: 960px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .brand {
-      font-size: 1.15rem;
-      font-weight: 900;
-      color: var(--fire-soft);
-      letter-spacing: 0.4px;
-    }
-
-    .badge-apoio {
-      font-size: 0.72rem;
-      color: var(--muted);
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      padding: 4px 10px;
-      border-radius: 999px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 68vw;
-    }
-
-    main {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 14px;
-    }
-
-    .resumo-strip {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    @media (min-width: 680px) {
-      .resumo-strip {
-        grid-template-columns: repeat(5, 1fr);
-      }
-    }
-
-    .kpi-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 12px;
-    }
-
-    .kpi-label {
-      font-size: 0.76rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .kpi-val {
-      font-size: 1.15rem;
-      font-weight: 800;
-      margin-top: 2px;
-    }
-
-    .kpi-sub {
-      font-size: 0.73rem;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .kpi-kcal { color: var(--fire-soft); }
-    .kpi-burn { color: var(--green); }
-    .kpi-carb { color: var(--amber); }
-    .kpi-saldo { color: var(--cyan); }
-    .kpi-destro { color: #f472b6; }
-
-    .nav-tabs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-bottom: 14px;
-    }
-
-    @media (min-width: 640px) {
-      .nav-tabs {
-        grid-template-columns: repeat(6, 1fr);
-      }
-    }
-
-    .nav-btn {
-      background: var(--surface);
-      color: var(--muted);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 6px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .nav-btn.active {
-      background: var(--fire);
-      color: var(--fire-dark);
-      border-color: var(--fire);
-    }
-
-    .view { display: none; }
-    .view.active { display: block; }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 14px;
-    }
-
-    .card-title {
-      margin: 0 0 12px 0;
-      font-size: 1.08rem;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .mode-switch {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 4px;
-      margin-bottom: 14px;
-    }
-
-    .mode-btn {
-      background: transparent;
-      color: var(--muted);
-      border: none;
-      padding: 10px 8px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .mode-btn.active {
-      background: var(--surface-2);
-      color: var(--fire-soft);
-      border: 1px solid var(--border);
-    }
-
-    label {
-      display: block;
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--muted);
-      margin: 12px 0 6px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      min-height: 48px;
-      font-size: 16px;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text);
-      font-family: inherit;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: 2px solid var(--fire);
-      border-color: var(--fire);
-    }
-
-    .chips-row {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 6px 0 4px;
-    }
-
-    .chip {
-      background: var(--surface-2);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 7px 13px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-
-    .chip:active, .chip.selected {
-      background: var(--fire);
-      color: var(--fire-dark);
-      border-color: var(--fire);
-    }
-
-    .visor-balanca {
-      background: #070a0f;
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      margin-top: 14px;
-    }
-
-    .visor-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 10px;
-    }
-
-    .visor-peso {
-      font-size: 1.75rem;
-      font-weight: 900;
-      color: var(--fire-soft);
-    }
-
-    .visor-sub {
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    .visor-macros {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      text-align: center;
-      border-top: 1px solid var(--border);
-      padding-top: 10px;
-    }
-
-    .m-item strong {
-      display: block;
-      font-size: 1.05rem;
-    }
-
-    .m-item span {
-      font-size: 0.76rem;
-      color: var(--muted);
-    }
-
-    .btn-primary {
-      width: 100%;
-      min-height: 52px;
-      margin-top: 14px;
-      background: var(--fire);
-      color: var(--fire-dark);
-      border: none;
-      border-radius: 12px;
-      font-size: 1rem;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .btn-secondary {
-      width: 100%;
-      min-height: 46px;
-      margin-top: 10px;
-      background: var(--surface-2);
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      font-size: 0.94rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .tara-box {
-      background: var(--surface-2);
-      border: 1px dashed var(--border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      margin-top: 10px;
-    }
-
-    .tara-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .item-card {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .item-title {
-      font-weight: 700;
-      font-size: 0.98rem;
-    }
-
-    .item-meta {
-      font-size: 0.84rem;
-      color: var(--muted);
-      margin-top: 3px;
-    }
-
-    .btn-del {
-      background: transparent;
-      color: var(--red);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 8px 10px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .feedback {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--fire-soft);
-      text-align: center;
-    }
-
-    .grid-2-form, .grid-3-form {
-      display: grid;
-      gap: 10px;
-    }
-
-    .grid-2-form { grid-template-columns: 1fr 1fr; }
-    .grid-3-form { grid-template-columns: repeat(3, 1fr); }
-
-    .dica-modalidade {
-      background: var(--surface-2);
-      border-left: 4px solid var(--fire-soft);
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin-top: 8px;
-      font-size: 0.86rem;
-      color: var(--muted);
-    }
-
-    .faixa-box {
-      border-radius: 12px;
-      padding: 12px 14px;
-      margin-top: 12px;
-      border: 1px solid var(--border);
-      background: var(--surface-2);
-    }
-
-    .faixa-box.alvo { border-left: 5px solid var(--green); }
-    .faixa-box.baixa { border-left: 5px solid var(--red); }
-    .faixa-box.alta { border-left: 5px solid var(--amber); }
-    .faixa-box.muito_alta { border-left: 5px solid var(--red); }
-
-    .faixa-titulo {
-      font-weight: 800;
-      font-size: 0.96rem;
-    }
-
-    .faixa-texto {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    .timer-display {
-      font-size: 2.3rem;
-      font-weight: 900;
-      text-align: center;
-      color: var(--fire-soft);
-      background: #070a0f;
-      border: 2px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      margin: 10px 0;
-    }
-
-    .barra-meta {
-      height: 10px;
-      background: var(--bg);
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: 6px;
-      border: 1px solid var(--border);
-    }
-
-    .barra-meta > div {
-      height: 100%;
-      background: var(--fire);
-      width: 0%;
-      transition: width 0.25s ease;
-    }
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+    body { margin: 0; background: #0f172a; color: #f8fafc; padding-bottom: 84px; }
+    header { background: #1e293b; padding: 14px 16px; border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 10; }
+    h1 { margin: 0; font-size: 1.2rem; color: #fb923c; }
+    .aviso { font-size: 0.78rem; color: #cbd5e1; margin-top: 4px; }
+    main { padding: 14px; max-width: 720px; margin: 0 auto; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+    .alerta-banner { background: #431407; border: 1px solid #ea580c; color: #fed7aa; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-size: 0.9rem; display: none; }
+    .alerta-banner.ativo { display: block; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 4px; }
+    input, select, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #475569; font-size: 0.95rem; }
+    input, select { background: #0f172a; color: #f8fafc; margin-bottom: 10px; }
+    button { background: #ea580c; color: #fff; border: none; font-weight: 600; cursor: pointer; }
+    button:active { opacity: 0.85; }
+    .btn-sec { background: #334155; color: #f8fafc; }
+    .btn-del { width: auto; background: #991b1b; color: #fecaca; font-size: 0.75rem; padding: 5px 9px; border-radius: 6px; margin-left: 8px; flex-shrink: 0; }
+    .kpi { font-size: 1.15rem; font-weight: 700; color: #fdba74; }
+    .barra-bg { width: 100%; height: 14px; background: #0f172a; border-radius: 999px; overflow: hidden; border: 1px solid #475569; margin: 6px 0 10px; }
+    .barra-fill { height: 100%; background: #38bdf8; min-width: 6px; width: 6%; transition: width 0.25s; }
+    .barra-saude { background: #22c55e; }
+    .barra-treino { background: #fb923c; }
+    .barra-kcal { background: #facc15; }
+    .crono-display { font-size: 2rem; font-weight: 800; text-align: center; color: #fdba74; letter-spacing: 1px; margin: 6px 0 12px; font-variant-numeric: tabular-nums; }
+    .sub { font-size: 0.88rem; color: #cbd5e1; margin-top: 6px; line-height: 1.35; }
+    .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #334155; font-size: 0.88rem; }
+    .item:last-child { border-bottom: none; }
+    .badge-ok { background: #14532d; color: #86efac; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
+    .badge-warn { background: #7c2d12; color: #fed7aa; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
+    .chart-row { margin-bottom: 12px; }
+    .chart-head { display: flex; justify-content: space-between; font-size: 0.82rem; color: #e2e8f0; }
+    .aba { display: none; }
+    .aba.ativa { display: block; }
+    nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 6px 2px; overflow-x: auto; }
+    nav button { background: transparent; color: #94a3b8; font-size: 0.66rem; padding: 6px 2px; border-radius: 6px; min-width: 46px; }
+    nav button.ativa { background: #334155; color: #fb923c; }
   </style>
 </head>
 <body>
   <header>
-    <div class="top-row">
-      <div class="brand">🔥 FIRE FIT</div>
-      <div class="badge-apoio" id="badgeApoio">Apoio educativo ao dia a dia</div>
-    </div>
+    <h1>Fire Fit</h1>
+    <div class="aviso">Apoio educativo no dia a dia — não substitui profissionais de saúde.</div>
   </header>
 
   <main>
-    <div class="resumo-strip">
-      <div class="kpi-box">
-        <div class="kpi-label">Comido Hoje</div>
-        <div class="kpi-val kpi-kcal num" id="kpiComido">0 kcal</div>
-        <div class="kpi-sub num" id="subMetaKcal">Meta: 2200 kcal</div>
-        <div class="barra-meta"><div id="barraKcal"></div></div>
-      </div>
-      <div class="kpi-box">
-        <div class="kpi-label">Perdido em Treino</div>
-        <div class="kpi-val kpi-burn num" id="kpiPerdido">0 kcal</div>
-        <div class="kpi-sub num" id="subMetaTreino">Meta: 400 kcal</div>
-        <div class="barra-meta"><div id="barraTreino" style="background:var(--green);"></div></div>
-      </div>
-      <div class="kpi-box">
-        <div class="kpi-label">Carboidratos</div>
-        <div class="kpi-val kpi-carb num" id="kpiCarb">0 g</div>
-        <div class="kpi-sub num" id="subMetaCarb">Meta: 220 g</div>
-        <div class="barra-meta"><div id="barraCarb" style="background:var(--amber);"></div></div>
-      </div>
-      <div class="kpi-box">
-        <div class="kpi-label">Saldo Kcal Dia</div>
-        <div class="kpi-val kpi-saldo num" id="kpiSaldo">0 kcal</div>
-        <div class="kpi-sub num" id="subTempoTreino">0 min treino</div>
-      </div>
-      <div class="kpi-box">
-        <div class="kpi-label">Último Destro</div>
-        <div class="kpi-val kpi-destro num" id="kpiDestro">--</div>
-        <div class="kpi-sub num" id="subInsulinaDia">Insulina: 0U</div>
-      </div>
-    </div>
+    <div id="alerta-banner" class="alerta-banner"></div>
 
-    <div class="nav-tabs">
-      <button class="nav-btn active" data-view="balanca">⚖️ Balança</button>
-      <button class="nav-btn" data-view="treinos">🏋️ Treinos</button>
-      <button class="nav-btn" data-view="glicemia">🩸 Glicemia</button>
-      <button class="nav-btn" data-view="refeicoes">🍽️ Prato</button>
-      <button class="nav-btn" data-view="alimentos">➕ Alimentos</button>
-      <button class="nav-btn" data-view="painel">📊 Painel</button>
-    </div>
-
-    <!-- ABA 1: BALANÇA -->
-    <section id="view-balanca" class="view active">
+    <section id="aba-painel" class="aba">
       <div class="card">
-        <div class="mode-switch">
-          <button type="button" class="mode-btn active" id="btnModoPeso">Pesei na Balança (g)</button>
-          <button type="button" class="mode-btn" id="btnModoMeta">Calcular por Meta</button>
+        <div id="resumo-aluno" style="font-weight:700; font-size:1rem; margin-bottom:8px;">Aluno não cadastrado</div>
+        <div class="grid-2">
+          <div>
+            <label>Peso atual (kg)</label>
+            <div class="kpi" id="kpi-peso">--</div>
+          </div>
+          <div>
+            <label>Meta de peso (kg)</label>
+            <div class="kpi" id="kpi-meta">--</div>
+          </div>
+        </div>
+        <div class="sub" id="kpi-diff">Diferença para meta: --</div>
+        <div class="sub" id="base-instrutor"></div>
+      </div>
+
+      <div class="card">
+        <label for="p-nome">Nome</label>
+        <input id="p-nome" type="text" placeholder="Nome completo" />
+
+        <div class="grid-2">
+          <div>
+            <label for="p-idade">Idade</label>
+            <input id="p-idade" type="number" inputmode="numeric" placeholder="Ex: 32" />
+          </div>
+          <div>
+            <label for="p-altura">Altura (cm)</label>
+            <input id="p-altura" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 175" />
+          </div>
         </div>
 
-        <label for="selRefeicao">Refeição atual</label>
-        <select id="selRefeicao">
-          <option>Café da manhã</option>
-          <option selected>Almoço</option>
-          <option>Lanche da tarde</option>
-          <option>Jantar</option>
-          <option>Pré-treino</option>
-          <option>Pós-treino</option>
-          <option>Ceia</option>
+        <div class="grid-2">
+          <div>
+            <label for="painel-peso">Peso atual (kg)</label>
+            <input id="painel-peso" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 82.5" />
+          </div>
+          <div>
+            <label for="painel-meta">Meta de peso (kg)</label>
+            <input id="painel-meta" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 75.0" />
+          </div>
+        </div>
+
+        <label for="p-objetivo">Programa / Objetivo</label>
+        <select id="p-objetivo">
+          <option value="perda">Perda de peso</option>
+          <option value="ganho">Ganho de massa</option>
         </select>
 
-        <label>Favoritos rápidos (1 toque)</label>
-        <div class="chips-row" id="chipsFavoritos"></div>
-
-        <label for="buscaAlimento">Buscar alimento</label>
-        <input type="text" id="buscaAlimento" placeholder="Digite para filtrar (ex.: arroz, frango, pão)..." />
-
-        <label for="selAlimento">Alimento selecionado</label>
-        <select id="selAlimento"></select>
-
-        <div id="painelModoPeso">
-          <label for="inputGramas">Peso na balança (gramas)</label>
-          <input type="number" id="inputGramas" inputmode="decimal" step="0.1" min="0" placeholder="Ex.: 150" />
-
-          <div class="chips-row">
-            <button type="button" class="chip peso-rapido" data-g="50">50 g</button>
-            <button type="button" class="chip peso-rapido" data-g="100">100 g</button>
-            <button type="button" class="chip peso-rapido" data-g="150">150 g</button>
-            <button type="button" class="chip peso-rapido" data-g="200">200 g</button>
-            <button type="button" class="chip peso-rapido" data-g="250">250 g</button>
-          </div>
-
-          <div class="tara-box">
-            <div class="tara-row">
-              <span style="font-size:0.86rem; color:var(--muted);">
-                <strong>Tara / Prato acumulado:</strong> <span id="lblTara" class="num">0 g</span>
-              </span>
-              <button type="button" class="chip" id="btnZerarTara">Zerar Tara</button>
-            </div>
-            <div style="margin-top:8px;">
-              <input type="number" id="inputPesoTotalPrato" inputmode="decimal" step="0.1" min="0" placeholder="Ou digite o peso total da balança com prato acumulado (g)" />
-            </div>
-          </div>
-        </div>
-
-        <div id="painelModoMeta" style="display:none;">
-          <div class="grid-2-form">
-            <div>
-              <label for="selTipoMeta">Tipo de meta</label>
-              <select id="selTipoMeta">
-                <option value="carb">Meta de Carboidratos (g)</option>
-                <option value="kcal">Meta de Calorias (kcal)</option>
-              </select>
-            </div>
-            <div>
-              <label for="inputValorMeta">Quanto quer consumir?</label>
-              <input type="number" id="inputValorMeta" inputmode="decimal" step="0.1" min="0" placeholder="Ex.: 30" />
-            </div>
-          </div>
-        </div>
-
-        <div class="visor-balanca">
-          <div class="visor-top">
-            <div>
-              <div class="visor-sub" id="visorTitulo">Porção calculada</div>
-              <div class="visor-peso num" id="visorGramas">0.0 g</div>
-            </div>
-            <div style="text-align:right;">
-              <div class="visor-sub" id="visorPreparo">--</div>
-              <div style="font-size:0.85rem; color:var(--muted);" id="visorBase100">Base 100g</div>
-            </div>
-          </div>
-          <div class="visor-macros">
-            <div class="m-item">
-              <strong class="num" style="color:var(--fire-soft);" id="visorKcal">0</strong>
-              <span>kcal</span>
-            </div>
-            <div class="m-item">
-              <strong class="num" style="color:var(--amber);" id="visorCarb">0 g</strong>
-              <span>Carbs</span>
-            </div>
-            <div class="m-item">
-              <strong class="num" style="color:var(--green);" id="visorProt">0 g</strong>
-              <span>Prot</span>
-            </div>
-            <div class="m-item">
-              <strong class="num" id="visorGord">0 g</strong>
-              <span>Gord</span>
-            </div>
-          </div>
-        </div>
-
-        <button type="button" class="btn-primary" id="btnAdicionarPrato">
-          + Adicionar ao Prato / Refeição
-        </button>
-        <div class="feedback" id="msgBalanca"></div>
+        <button onclick="salvarPerfilCompleto()">Salvar dados e meta</button>
       </div>
     </section>
 
-    <!-- ABA 2: TREINOS + CRONÔMETRO -->
-    <section id="view-treinos" class="view">
+    <section id="aba-rotina" class="aba">
       <div class="card">
-        <div class="card-title">Cronômetro / Timer de Treino & Descanso</div>
-        <div class="grid-2-form">
-          <div>
-            <label for="selModoTimer">Modo do cronômetro</label>
-            <select id="selModoTimer">
-              <option value="crono">Cronômetro progressivo</option>
-              <option value="timer">Contagem regressiva (Timer)</option>
-            </select>
-          </div>
-          <div>
-            <label for="inputSegTimer">Segundos do timer</label>
-            <input type="number" id="inputSegTimer" inputmode="numeric" step="5" min="5" value="60" />
-          </div>
+        <label>Água hoje</label>
+        <div class="kpi" id="agua-status">0 / 2500 ml</div>
+        <div class="barra-bg"><div class="barra-fill" id="agua-barra"></div></div>
+        <div class="sub" id="agua-lembrete">Lembrete de água: beba água aos poucos ao longo do dia.</div>
+
+        <div class="grid-3" style="margin-top: 10px;">
+          <button type="button" onclick="addAgua(250)">+ 250 ml</button>
+          <button type="button" onclick="addAgua(500)">+ 500 ml</button>
+          <button type="button" class="btn-sec" onclick="resetAgua()">Zerar dia</button>
         </div>
-        <div class="chips-row">
-          <button type="button" class="chip preset-timer" data-s="30">30s</button>
-          <button type="button" class="chip preset-timer" data-s="45">45s</button>
-          <button type="button" class="chip preset-timer" data-s="60">60s</button>
-          <button type="button" class="chip preset-timer" data-s="90">90s</button>
-          <button type="button" class="chip preset-timer" data-s="120">2 min</button>
+
+        <label for="agua-meta" style="margin-top: 10px;">Meta diária de água (ml)</label>
+        <input id="agua-meta" type="number" step="50" inputmode="numeric" placeholder="Ex: 2500" />
+        <button type="button" class="btn-sec" onclick="salvarMetaAgua()">Salvar meta de água</button>
+      </div>
+
+      <div class="card" id="lista-agua"></div>
+
+      <div class="card">
+        <label>Alerta de horário das refeições</label>
+        <div class="sub" style="margin-bottom:10px;">Quando o app estiver aberto no horário configurado, ele exibe um alerta visual e notificação (se permitida).</div>
+        <button type="button" class="btn-sec" style="margin-bottom:12px;" onclick="pedirPermissaoNotif()">Ativar notificações do navegador</button>
+
+        <label for="ref-nome">Refeição</label>
+        <input id="ref-nome" type="text" placeholder="Ex: Café da manhã / Pré-treino" />
+        <label for="ref-hora">Horário</label>
+        <input id="ref-hora" type="time" />
+        <button type="button" onclick="addRefeicao()">Adicionar horário de refeição</button>
+      </div>
+
+      <div class="card" id="lista-refeicoes"></div>
+    </section>
+
+    <section id="aba-balanca" class="aba">
+      <div class="card">
+        <label for="bal-peso">Peso (kg)</label>
+        <input id="bal-peso" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 82.5" />
+        <label for="bal-meta">Meta de peso (kg)</label>
+        <input id="bal-meta" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 75.0" />
+        <button onclick="registrarBalanca()">Registrar na balança</button>
+      </div>
+      <div class="card" id="lista-balanca"></div>
+    </section>
+
+    <section id="aba-treinos" class="aba">
+      <div class="card">
+        <label>Cronômetro do treino</label>
+        <div class="crono-display" id="crono-display">00:00:00</div>
+        <div class="grid-3" style="margin-bottom: 10px;">
+          <button type="button" onclick="iniciarCrono()">Iniciar</button>
+          <button type="button" class="btn-sec" onclick="pausarCrono()">Pausar</button>
+          <button type="button" class="btn-sec" onclick="zerarCrono()">Zerar</button>
         </div>
-        <div class="timer-display num" id="visorTimer">00:00</div>
-        <div class="grid-3-form">
-          <button type="button" class="btn-primary" style="margin-top:0;" id="btnTimerIniciar">Iniciar / Pausar</button>
-          <button type="button" class="btn-secondary" style="margin-top:0;" id="btnTimerZerar">Zerar</button>
-          <button type="button" class="btn-secondary" style="margin-top:0;" id="btnTimerParaMin">Usar min no treino</button>
-        </div>
+        <button type="button" class="btn-sec" onclick="usarTempoCrono()">Usar tempo no treino</button>
       </div>
 
       <div class="card">
-        <div class="card-title">Registrar Treino e Calorias Perdidas</div>
+        <label for="tr-desc">Treino</label>
+        <input id="tr-desc" type="text" placeholder="Ex: Caminhada leve / Musculação" />
+        <label for="tr-min">Duração (min)</label>
+        <input id="tr-min" type="number" inputmode="numeric" placeholder="Ex: 30" />
+        <button onclick="registrarTreino()">Salvar treino</button>
+      </div>
+      <div class="card" id="lista-treinos"></div>
+    </section>
 
-        <label>Atalhos de modalidades (1 toque)</label>
-        <div class="chips-row" id="chipsModalidades"></div>
+    <section id="aba-glicemia" class="aba">
+      <div class="card">
+        <label for="gl-val">Glicemia (mg/dL)</label>
+        <input id="gl-val" type="number" step="1" inputmode="numeric" placeholder="Ex: 98" />
+        <label for="gl-mom">Momento</label>
+        <input id="gl-mom" type="text" placeholder="Ex: Jejum / Pós-refeição" />
+        <button onclick="registrarGlicemia()">Salvar glicemia</button>
+      </div>
+      <div class="card" id="lista-glicemia"></div>
+    </section>
 
-        <label for="selModalidade">Modalidade</label>
-        <select id="selModalidade"></select>
-
-        <label for="inputModalidadeExtra">Ou digite outra modalidade personalizada</label>
-        <input type="text" id="inputModalidadeExtra" placeholder="Ex.: Slackline, Jiu-Jitsu, Trilhas, Remo, Patins..." />
-
-        <div class="dica-modalidade" id="dicaModalidade">
-          Escolha uma modalidade para ver o foco e uma estimativa inicial ajustável.
-        </div>
-
-        <label>Sugestões rápidas de treino / foco</label>
-        <div class="chips-row" id="chipsSugestoesTreino">
-          <button type="button" class="chip sug-treino" data-t="Circuito de Obstáculos / Força">Circuito / Obstáculos</button>
-          <button type="button" class="chip sug-treino" data-t="Sessão de Manobras / Pista">Manobras / Pista</button>
-          <button type="button" class="chip sug-treino" data-t="Saltos, Precisão e Fluxo">Saltos & Fluxo</button>
-          <button type="button" class="chip sug-treino" data-t="Hipertrofia / Força">Hipertrofia / Força</button>
-          <button type="button" class="chip sug-treino" data-t="Cardio / Resistência">Cardio / Resistência</button>
-          <button type="button" class="chip sug-treino" data-t="Mobilidade / Recuperação">Mobilidade / Leve</button>
-        </div>
-
-        <label for="inputTituloTreino">Nome ou foco do treino</label>
-        <input type="text" id="inputTituloTreino" placeholder="Ex.: Circuito Ninja + Pegada" />
-
-        <div class="grid-2-form">
+    <section id="aba-alimentos" class="aba">
+      <div class="card">
+        <label for="al-nome">Alimento / Refeição</label>
+        <input id="al-nome" type="text" placeholder="Ex: Frango + arroz integral" />
+        <div class="grid-2">
           <div>
-            <label for="inputDuracao">Duração (minutos)</label>
-            <input type="number" id="inputDuracao" inputmode="decimal" step="1" min="1" value="45" />
+            <label for="al-kcal">Calorias (kcal)</label>
+            <input id="al-kcal" type="number" inputmode="numeric" placeholder="Ex: 250" />
           </div>
           <div>
-            <label for="selIntensidade">Intensidade</label>
-            <select id="selIntensidade">
-              <option value="0.8">Leve</option>
-              <option value="1.0" selected>Moderada</option>
-              <option value="1.25">Alta / Intensa</option>
+            <label for="al-saude">Tipo de alimentação</label>
+            <select id="al-saude">
+              <option value="auto">Automático (pelo item)</option>
+              <option value="saudavel">Saudável</option>
+              <option value="nao_saudavel">Não saudável / Livre</option>
             </select>
           </div>
         </div>
-
-        <label for="inputKcalPerdidas">Calorias perdidas (kcal)</label>
-        <input type="number" id="inputKcalPerdidas" inputmode="decimal" step="1" min="0" placeholder="Calcula automático ou digite o valor do seu relógio" />
-
-        <label for="inputObsTreino">Observação rápida (opcional)</label>
-        <input type="text" id="inputObsTreino" placeholder="Ex.: pista molhada, pegada pesada, treino pós-lanche..." />
-
-        <button type="button" class="btn-primary" id="btnSalvarTreino">
-          + Salvar Treino de Hoje
-        </button>
-        <div class="feedback" id="msgTreino"></div>
+        <button onclick="registrarAlimento()">Salvar alimentação</button>
       </div>
-
-      <div class="card">
-        <div class="card-title">Treinos Realizados Hoje</div>
-        <div id="listaTreinosHoje"></div>
-      </div>
+      <div class="card" id="lista-alimentos"></div>
     </section>
 
-    <!-- ABA 3: GLICEMIA -->
-    <section id="view-glicemia" class="view">
+    <section id="aba-resumo" class="aba ativa">
       <div class="card">
-        <div class="card-title">Registrar Destro (mg/dL) e Insulina</div>
-
-        <label for="selMomentoGlic">Momento do dia</label>
-        <select id="selMomentoGlic">
-          <option>Jejum</option>
-          <option selected>Pré-refeição</option>
-          <option>Pós-refeição (2h)</option>
-          <option>Pré-treino</option>
-          <option>Pós-treino</option>
-          <option>Antes de dormir</option>
-          <option>Madrugada</option>
-        </select>
-
-        <div class="grid-2-form">
-          <div>
-            <label for="inputGlicemia">Destro (mg/dL)</label>
-            <input type="number" id="inputGlicemia" inputmode="decimal" step="1" min="1" max="900" placeholder="Ex.: 115" />
-          </div>
-          <div>
-            <label for="inputInsulina">Insulina (unidades)</label>
-            <input type="number" id="inputInsulina" inputmode="decimal" step="0.5" min="0" placeholder="Ex.: 4" />
-          </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-weight:700; font-size:1rem;">Dashboard do Dia</span>
+          <span id="resumo-data-hoje" style="font-size:0.82rem; color:#94a3b8;">--/--/----</span>
         </div>
+        <div class="sub" id="resumo-avaliacao-alim">Nenhuma alimentação registrada hoje ainda.</div>
 
-        <label for="selTipoInsulina">Tipo de insulina aplicada</label>
-        <select id="selTipoInsulina">
-          <option selected>Rápida / Bolus</option>
-          <option>Basal / Lenta</option>
-          <option>Correção</option>
-        </select>
-
-        <label for="inputObsGlic">Observação (opcional)</label>
-        <input type="text" id="inputObsGlic" placeholder="Ex.: antes do treino, após prato pesado..." />
-
-        <div class="faixa-box alvo" id="cardOrientacaoGlic">
-          <div class="faixa-titulo" id="tituloOrientacaoGlic">Aguardando valor de destro</div>
-          <div class="faixa-texto" id="textoOrientacaoGlic">
-            Digite o valor em mg/dL para ver a classificação frente à sua faixa configurada. Ferramenta de apoio educativo no dia a dia; não substitui orientação médica.
-          </div>
-        </div>
-
-        <button type="button" class="btn-primary" id="btnSalvarGlicemia">
-          + Salvar Destro / Insulina
-        </button>
-        <div class="feedback" id="msgGlicemia"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Referência Educativa de Carboidratos & Faixa Alvo</div>
-        <div class="grid-3-form">
+        <div class="grid-2" style="margin-top:12px;">
           <div>
-            <label for="cfgAlvoMin">Faixa Mín (mg/dL)</label>
-            <input type="number" id="cfgAlvoMin" inputmode="decimal" step="1" value="70" />
+            <label>Água tomada hoje</label>
+            <div class="kpi" id="dash-agua">0 / 2500 ml</div>
           </div>
           <div>
-            <label for="cfgAlvoMax">Faixa Máx (mg/dL)</label>
-            <input type="number" id="cfgAlvoMax" inputmode="decimal" step="1" value="180" />
+            <label>Calorias do dia</label>
+            <div class="kpi" id="dash-kcal">0 kcal</div>
           </div>
           <div>
-            <label for="cfgAlertaAlto">Alerta Alto (mg/dL)</label>
-            <input type="number" id="cfgAlertaAlto" inputmode="decimal" step="1" value="250" />
-          </div>
-        </div>
-
-        <div class="grid-3-form">
-          <div>
-            <label for="cfgCarbPorU">g Carb / 1U</label>
-            <input type="number" id="cfgCarbPorU" inputmode="decimal" step="0.5" value="15" />
+            <label>Tempo de treino hoje</label>
+            <div class="kpi" id="dash-treino">0 min</div>
           </div>
           <div>
-            <label for="cfgFatorCorr">Fator Corr (mg/dL/U)</label>
-            <input type="number" id="cfgFatorCorr" inputmode="decimal" step="1" value="50" />
+            <label>Registros de destros hoje</label>
+            <div class="kpi" id="dash-destros">0</div>
           </div>
-          <div>
-            <label for="cfgAlvoCorr">Alvo Corr (mg/dL)</label>
-            <input type="number" id="cfgAlvoCorr" inputmode="decimal" step="1" value="120" />
-          </div>
-        </div>
-
-        <div class="dica-modalidade" id="resumoReferenciaCarb" style="margin-top:12px;">
-          Carboidratos pesados hoje: 0 g • Referência educativa configurada: 15g carb/U.
-        </div>
-
-        <button type="button" class="btn-secondary" id="btnSalvarCfgGlic">
-          Salvar Faixas e Parâmetros de Referência
-        </button>
-        <div class="feedback" id="msgCfgGlic"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Registros de Glicemia e Insulina Hoje</div>
-        <div id="listaGlicemiasHoje"></div>
-      </div>
-    </section>
-
-    <!-- ABA 4: PRATO -->
-    <section id="view-refeicoes" class="view">
-      <div class="card">
-        <div class="card-title">Resumo por Refeição Hoje</div>
-        <div id="listaResumoRefeicoes"></div>
-
-        <div style="margin-top:14px; border-top:1px solid var(--border); padding-top:12px;">
-          <label for="nomePratoPronto">Salvar refeição atual como Prato Pronto</label>
-          <input type="text" id="nomePratoPronto" placeholder="Ex.: Almoço Padrão Arroz e Frango" />
-          <button type="button" class="btn-secondary" id="btnSalvarPrato">Salvar como Prato Pronto</button>
         </div>
       </div>
 
-      <div class="card" id="cardPratosProntos" style="display:none;">
-        <div class="card-title">Pratos Prontos (Lançar com 1 toque)</div>
-        <div id="listaPratosProntos"></div>
-      </div>
-
       <div class="card">
-        <div class="card-title">Alimentos Pesados Hoje</div>
-        <div id="listaItensHoje"></div>
-      </div>
-    </section>
+        <label>Gráfico comparativo do dia</label>
 
-    <!-- ABA 5: ALIMENTOS -->
-    <section id="view-alimentos" class="view">
-      <div class="card">
-        <div class="card-title">Cadastrar Novo Alimento (por 100 g)</div>
-        <form id="formNovoAlimento">
-          <label for="novoNome">Nome do alimento</label>
-          <input type="text" id="novoNome" placeholder="Ex.: Macarrão integral cozido" required />
-
-          <label for="novoEstado">Estado na hora da pesagem</label>
-          <select id="novoEstado">
-            <option>Cozido</option>
-            <option>Grelhado / Assado</option>
-            <option>Cru / Seco</option>
-            <option>In natura</option>
-            <option>Pronto / Industrializado</option>
-          </select>
-
-          <div class="grid-2-form">
-            <div>
-              <label for="novoKcal">Calorias (100 g)</label>
-              <input type="number" id="novoKcal" inputmode="decimal" step="0.1" min="0" required />
-            </div>
-            <div>
-              <label for="novoCarb">Carboidratos (100 g)</label>
-              <input type="number" id="novoCarb" inputmode="decimal" step="0.1" min="0" value="0" />
-            </div>
+        <div class="chart-row">
+          <div class="chart-head">
+            <span>Hidratação (meta diária)</span>
+            <span id="grafico-agua-txt">0% (0 ml)</span>
           </div>
-
-          <div class="grid-2-form">
-            <div>
-              <label for="novoProt">Proteínas (100 g)</label>
-              <input type="number" id="novoProt" inputmode="decimal" step="0.1" min="0" value="0" />
-            </div>
-            <div>
-              <label for="novoGord">Gorduras (100 g)</label>
-              <input type="number" id="novoGord" inputmode="decimal" step="0.1" min="0" value="0" />
-            </div>
-          </div>
-
-          <button type="submit" class="btn-primary">Salvar na Tabela de Alimentos</button>
-          <div class="feedback" id="msgNovoAlim"></div>
-        </form>
-      </div>
-    </section>
-
-    <!-- ABA 6: PAINEL (METAS, RESUMO 1 TOQUE, HISTÓRICO 7 DIAS & PERFIS/DEPLOY) -->
-    <section id="view-painel" class="view">
-      <div class="card">
-        <div class="card-title">Resumo do Dia em 1 Toque</div>
-        <textarea id="txtResumoDia" rows="5" readonly></textarea>
-        <button type="button" class="btn-primary" id="btnCopiarResumo">Copiar Resumo do Dia</button>
-        <div class="feedback" id="msgCopiarResumo"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Metas Diárias de Apoio</div>
-        <div class="grid-3-form">
-          <div>
-            <label for="metaKcalDia">Meta Kcal / dia</label>
-            <input type="number" id="metaKcalDia" inputmode="decimal" step="50" min="100" value="2200" />
-          </div>
-          <div>
-            <label for="metaCarbDia">Meta Carb (g) / dia</label>
-            <input type="number" id="metaCarbDia" inputmode="decimal" step="10" min="10" value="220" />
-          </div>
-          <div>
-            <label for="metaTreinoKcalDia">Meta Treino (kcal)</label>
-            <input type="number" id="metaTreinoKcalDia" inputmode="decimal" step="50" min="50" value="400" />
-          </div>
+          <div class="barra-bg"><div class="barra-fill" id="grafico-agua-bar"></div></div>
         </div>
-        <button type="button" class="btn-secondary" id="btnSalvarMetas">Salvar Metas Diárias</button>
-        <div class="feedback" id="msgMetas"></div>
-      </div>
 
-      <div class="card">
-        <div class="card-title">Histórico dos Últimos 7 Dias</div>
-        <div id="listaHistorico7Dias"></div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">Perfil Ativo & Base para Nuvem / Deploy</div>
-        <label for="selPerfil">Selecionar perfil</label>
-        <select id="selPerfil"></select>
-        <label for="novoPerfilNome">Ou criar novo perfil</label>
-        <input type="text" id="novoPerfilNome" placeholder="Ex.: Dia de Competição / Ninja..." />
-        <button type="button" class="btn-secondary" id="btnTrocarPerfil">Ativar / Criar Perfil</button>
-        <div class="dica-modalidade" style="margin-top:12px;">
-          <strong>Pronto para rodar na rede local ou nuvem:</strong> usa <code>dados_fire_fit.json</code>, porta dinâmica via <code>PORT</code> e <code>Procfile</code> com <code>gunicorn</code>. Para publicar online, envie a pasta para o GitHub e conecte em um serviço como Render ou Railway (lembre-se de manter sempre o aviso educativo de apoio, sem substituir profissionais de saúde).
+        <div class="chart-row">
+          <div class="chart-head">
+            <span>Proporção de itens saudáveis</span>
+            <span id="grafico-saude-txt">Sem registros hoje</span>
+          </div>
+          <div class="barra-bg"><div class="barra-fill barra-saude" id="grafico-saude-bar"></div></div>
         </div>
+
+        <div class="chart-row">
+          <div class="chart-head">
+            <span>Volume calórico do dia (ref. 2.000 kcal)</span>
+            <span id="grafico-kcal-txt">0 kcal (0%)</span>
+          </div>
+          <div class="barra-bg"><div class="barra-fill barra-kcal" id="grafico-kcal-bar"></div></div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-head">
+            <span>Tempo de treino hoje (ref. 45 min)</span>
+            <span id="grafico-treino-txt">0 min (0%)</span>
+          </div>
+          <div class="barra-bg"><div class="barra-fill barra-treino" id="grafico-treino-bar"></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <label>O que você comeu hoje (e classificação)</label>
+        <div id="dash-lista-prato"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
+      </div>
+
+      <div class="card">
+        <label>Água, treinos e destros registrados hoje</label>
+        <div id="dash-lista-atividades"><div class="item"><span>Nenhuma atividade registrada hoje ainda.</span></div></div>
       </div>
     </section>
   </main>
 
+  <nav>
+    <button onclick="abrirAba('painel', this)">Painel</button>
+    <button onclick="abrirAba('rotina', this)">Água/Ref.</button>
+    <button onclick="abrirAba('balanca', this)">Balança</button>
+    <button onclick="abrirAba('treinos', this)">Treinos</button>
+    <button onclick="abrirAba('glicemia', this)">Glicemia</button>
+    <button onclick="abrirAba('alimentos', this)">Alim.</button>
+    <button class="ativa" onclick="abrirAba('resumo', this)">Resumo</button>
+  </nav>
+
   <script>
-    let estado = null;
-    let modoAtual = "peso";
-    let taraAcumulada = 0;
-    let gramasCalculadasAtuais = 0;
-    let kcalEditadaManualmente = false;
+    let cronoSegundos = 0;
+    let cronoTimer = null;
+    let ultimoEstado = null;
+    const alertasDisparadosHoje = new Set();
 
-    let timerInterval = null;
-    let timerSegundos = 0;
-    let timerRodando = false;
-
-    document.querySelectorAll(".nav-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".nav-btn").forEach((b) => b.classList.remove("active"));
-        document.querySelectorAll(".view").forEach((v) => v.classList.remove("active"));
-        btn.classList.add("active");
-        document.getElementById("view-" + btn.dataset.view).classList.add("active");
-      });
-    });
-
-    function formatarTempo(segTotal) {
-      const s = Math.max(0, Math.floor(segTotal));
-      const m = Math.floor(s / 60);
-      const r = s % 60;
-      return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
+    function formatarCrono(seg) {
+      const h = String(Math.floor(seg / 3600)).padStart(2, '0');
+      const m = String(Math.floor((seg % 3600) / 60)).padStart(2, '0');
+      const s = String(seg % 60).padStart(2, '0');
+      return `${h}:${m}:${s}`;
     }
 
-    function atualizarVisorTimer() {
-      document.getElementById("visorTimer").textContent = formatarTempo(timerSegundos);
-    }
-
-    document.querySelectorAll(".preset-timer").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        const seg = parseInt(chip.dataset.s, 10) || 60;
-        document.getElementById("inputSegTimer").value = seg;
-        document.getElementById("selModoTimer").value = "timer";
-        timerRodando = false;
-        clearInterval(timerInterval);
-        timerSegundos = seg;
-        atualizarVisorTimer();
-      });
-    });
-
-    document.getElementById("selModoTimer").addEventListener("change", () => {
-      timerRodando = false;
-      clearInterval(timerInterval);
-      const modo = document.getElementById("selModoTimer").value;
-      timerSegundos = modo === "timer" ? (parseInt(document.getElementById("inputSegTimer").value, 10) || 60) : 0;
-      atualizarVisorTimer();
-    });
-
-    document.getElementById("inputSegTimer").addEventListener("input", () => {
-      if (document.getElementById("selModoTimer").value === "timer" && !timerRodando) {
-        timerSegundos = parseInt(document.getElementById("inputSegTimer").value, 10) || 0;
-        atualizarVisorTimer();
-      }
-    });
-
-    document.getElementById("btnTimerIniciar").addEventListener("click", () => {
-      if (timerRodando) {
-        timerRodando = false;
-        clearInterval(timerInterval);
-        return;
-      }
-      const modo = document.getElementById("selModoTimer").value;
-      if (modo === "timer" && timerSegundos <= 0) {
-        timerSegundos = parseInt(document.getElementById("inputSegTimer").value, 10) || 60;
-      }
-      timerRodando = true;
-      clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        if (modo === "crono") {
-          timerSegundos += 1;
-          atualizarVisorTimer();
-        } else {
-          if (timerSegundos > 0) {
-            timerSegundos -= 1;
-            atualizarVisorTimer();
-          } else {
-            timerRodando = false;
-            clearInterval(timerInterval);
-            document.getElementById("visorTimer").textContent = "00:00 • FIM!";
-          }
-        }
+    function iniciarCrono() {
+      if (cronoTimer) return;
+      cronoTimer = setInterval(() => {
+        cronoSegundos++;
+        document.getElementById('crono-display').textContent = formatarCrono(cronoSegundos);
       }, 1000);
-    });
-
-    document.getElementById("btnTimerZerar").addEventListener("click", () => {
-      timerRodando = false;
-      clearInterval(timerInterval);
-      const modo = document.getElementById("selModoTimer").value;
-      timerSegundos = modo === "timer" ? (parseInt(document.getElementById("inputSegTimer").value, 10) || 60) : 0;
-      atualizarVisorTimer();
-    });
-
-    document.getElementById("btnTimerParaMin").addEventListener("click", () => {
-      const modo = document.getElementById("selModoTimer").value;
-      const baseSeg = modo === "timer"
-        ? ((parseInt(document.getElementById("inputSegTimer").value, 10) || 60) - timerSegundos)
-        : timerSegundos;
-      const mins = Math.max(1, Math.round(Math.max(60, baseSeg) / 60));
-      document.getElementById("inputDuracao").value = mins;
-      kcalEditadaManualmente = false;
-      atualizarEstimativaTreino(true);
-    });
-
-    document.getElementById("btnModoPeso").addEventListener("click", () => {
-      modoAtual = "peso";
-      document.getElementById("btnModoPeso").classList.add("active");
-      document.getElementById("btnModoMeta").classList.remove("active");
-      document.getElementById("painelModoPeso").style.display = "block";
-      document.getElementById("painelModoMeta").style.display = "none";
-      recalcularVisor();
-    });
-
-    document.getElementById("btnModoMeta").addEventListener("click", () => {
-      modoAtual = "meta";
-      document.getElementById("btnModoMeta").classList.add("active");
-      document.getElementById("btnModoPeso").classList.remove("active");
-      document.getElementById("painelModoMeta").style.display = "block";
-      document.getElementById("painelModoPeso").style.display = "none";
-      recalcularVisor();
-    });
-
-    function obterAlimentoSelecionado() {
-      if (!estado) return null;
-      const id = document.getElementById("selAlimento").value;
-      return estado.alimentos.find((a) => a.id === id) || null;
     }
 
-    function recalcularVisor() {
-      const ali = obterAlimentoSelecionado();
-      if (!ali) return;
-
-      document.getElementById("visorPreparo").textContent = ali.estado || "";
-      document.getElementById("visorBase100").textContent = `${ali.kcal_100g} kcal • ${ali.carb_100g}g carb / 100g`;
-
-      let gramas = 0;
-      if (modoAtual === "peso") {
-        document.getElementById("visorTitulo").textContent = "Peso na balança";
-        gramas = parseFloat(document.getElementById("inputGramas").value) || 0;
-      } else {
-        document.getElementById("visorTitulo").textContent = "Pese na balança até atingir";
-        const tipo = document.getElementById("selTipoMeta").value;
-        const meta = parseFloat(document.getElementById("inputValorMeta").value) || 0;
-        const base = tipo === "carb" ? ali.carb_100g : ali.kcal_100g;
-        gramas = base > 0 ? (meta / base) * 100 : 0;
+    function pausarCrono() {
+      if (cronoTimer) {
+        clearInterval(cronoTimer);
+        cronoTimer = null;
       }
-
-      gramasCalculadasAtuais = Math.max(0, gramas);
-      const fator = gramasCalculadasAtuais / 100;
-
-      document.getElementById("visorGramas").textContent = `${gramasCalculadasAtuais.toFixed(1)} g`;
-      document.getElementById("visorKcal").textContent = (ali.kcal_100g * fator).toFixed(1);
-      document.getElementById("visorCarb").textContent = `${(ali.carb_100g * fator).toFixed(1)} g`;
-      document.getElementById("visorProt").textContent = `${(ali.prot_100g * fator).toFixed(1)} g`;
-      document.getElementById("visorGord").textContent = `${(ali.gord_100g * fator).toFixed(1)} g`;
     }
 
-    document.querySelectorAll(".peso-rapido").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        document.getElementById("inputGramas").value = chip.dataset.g;
-        document.getElementById("inputPesoTotalPrato").value = "";
-        recalcularVisor();
-      });
-    });
+    function zerarCrono() {
+      pausarCrono();
+      cronoSegundos = 0;
+      document.getElementById('crono-display').textContent = '00:00:00';
+    }
 
-    document.getElementById("inputPesoTotalPrato").addEventListener("input", (e) => {
-      const total = parseFloat(e.target.value);
-      if (!isNaN(total) && total >= taraAcumulada) {
-        document.getElementById("inputGramas").value = (total - taraAcumulada).toFixed(1);
-        recalcularVisor();
+    function usarTempoCrono() {
+      const mins = Math.max(1, Math.round(cronoSegundos / 60));
+      document.getElementById('tr-min').value = mins;
+    }
+
+    function abrirAba(nome, btn) {
+      document.querySelectorAll('.aba').forEach(el => el.classList.remove('ativa'));
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('ativa'));
+      document.getElementById('aba-' + nome).classList.add('ativa');
+      if (btn) btn.classList.add('ativa');
+    }
+
+    async function pedirPermissaoNotif() {
+      if (!('Notification' in window)) return;
+      await Notification.requestPermission();
+    }
+
+    function dispararNotificacao(titulo, corpo) {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try { new Notification(titulo, { body: corpo }); } catch (e) {}
       }
-    });
+    }
 
-    document.getElementById("btnZerarTara").addEventListener("click", () => {
-      taraAcumulada = 0;
-      document.getElementById("lblTara").textContent = "0 g";
-      document.getElementById("inputPesoTotalPrato").value = "";
-    });
-
-    function preencherSelectAlimentos(filtro = "") {
+    function verificarAlertas(estado) {
       if (!estado) return;
-      const sel = document.getElementById("selAlimento");
-      const anterior = sel.value;
-      const termo = filtro.trim().toLowerCase();
+      const agora = new Date();
+      const hh = String(agora.getHours()).padStart(2, '0');
+      const mm = String(agora.getMinutes()).padStart(2, '0');
+      const horaAtual = `${hh}:${mm}`;
+      const diaKey = agora.toISOString().slice(0, 10);
 
-      const filtrados = estado.alimentos.filter(
-        (a) => !termo || a.nome.toLowerCase().includes(termo) || (a.estado || "").toLowerCase().includes(termo)
-      );
+      const agua = estado.agua || { consumido_ml: 0, meta_ml: 2500 };
+      const faltamAgua = Math.max(0, (agua.meta_ml || 2500) - (agua.consumido_ml || 0));
 
-      sel.innerHTML = filtrados.map((a) =>
-        `<option value="${a.id}">${a.nome} (${a.estado}) — ${a.kcal_100g} kcal | ${a.carb_100g}g carb</option>`
-      ).join("");
+      const refeicoes = estado.refeicoes || [];
+      const refAgora = refeicoes.filter(r => r.horario === horaAtual);
+      const proximas = refeicoes.filter(r => r.horario >= horaAtual).slice(0, 2);
 
-      if (filtrados.some((a) => a.id === anterior)) {
-        sel.value = anterior;
-      }
-      recalcularVisor();
-    }
-
-    document.getElementById("buscaAlimento").addEventListener("input", (e) => {
-      preencherSelectAlimentos(e.target.value);
-    });
-
-    document.getElementById("selAlimento").addEventListener("change", recalcularVisor);
-    document.getElementById("inputGramas").addEventListener("input", recalcularVisor);
-    document.getElementById("selTipoMeta").addEventListener("change", recalcularVisor);
-    document.getElementById("inputValorMeta").addEventListener("input", recalcularVisor);
-
-    function atualizarEstimativaTreino(forcar = false) {
-      if (!estado) return;
-      const modNome = document.getElementById("inputModalidadeExtra").value.trim() || document.getElementById("selModalidade").value;
-      const modObj = estado.modalidades.find((m) => m.nome.toLowerCase() === modNome.toLowerCase());
-      const kcalMin = modObj ? Number(modObj.kcal_min) : 7.5;
-      const foco = modObj ? modObj.foco : "Modalidade personalizada";
-
-      document.getElementById("dicaModalidade").textContent =
-        `${modNome}: ${foco} • Estimativa base: ~${kcalMin} kcal/min (ajustável pela intensidade ou pelo seu relógio).`;
-
-      if (forcar || !kcalEditadaManualmente) {
-        const dur = parseFloat(document.getElementById("inputDuracao").value) || 0;
-        const mult = parseFloat(document.getElementById("selIntensidade").value) || 1.0;
-        const estimada = Math.round(dur * kcalMin * mult);
-        document.getElementById("inputKcalPerdidas").value = estimada > 0 ? estimada : "";
+      const banner = document.getElementById('alerta-banner');
+      if (refAgora.length > 0) {
+        const nomes = refAgora.map(r => `${r.nome} (${r.horario})`).join(', ');
+        banner.textContent = `Hora da refeição: ${nomes}! Lembre-se também de beber água.`;
+        banner.classList.add('ativo');
+        refAgora.forEach(r => {
+          const chave = `${diaKey}-${r.nome}-${r.horario}`;
+          if (!alertasDisparadosHoje.has(chave)) {
+            alertasDisparadosHoje.add(chave);
+            dispararNotificacao('Fire Fit — Horário de refeição', `Chegou a hora de: ${r.nome} (${r.horario})`);
+          }
+        });
+      } else if (proximas.length > 0) {
+        const proxTxt = proximas.map(r => `${r.nome} às ${r.horario}`).join(' • ');
+        const aguaTxt = faltamAgua > 0 ? `Faltam ${faltamAgua} ml de água hoje.` : 'Meta de água de hoje concluída!';
+        banner.textContent = `Próximas refeições: ${proxTxt} — ${aguaTxt}`;
+        banner.classList.add('ativo');
+      } else {
+        banner.classList.remove('ativo');
       }
     }
 
-    document.getElementById("selModalidade").addEventListener("change", () => {
-      kcalEditadaManualmente = false;
-      atualizarEstimativaTreino(true);
-    });
-    document.getElementById("inputModalidadeExtra").addEventListener("input", () => {
-      kcalEditadaManualmente = false;
-      atualizarEstimativaTreino(true);
-    });
-    document.getElementById("inputDuracao").addEventListener("input", () => atualizarEstimativaTreino(false));
-    document.getElementById("selIntensidade").addEventListener("change", () => atualizarEstimativaTreino(false));
-    document.getElementById("inputKcalPerdidas").addEventListener("input", () => {
-      kcalEditadaManualmente = true;
-    });
+    function renderizarDashboardDia(res) {
+      const agora = new Date();
+      const dataPadrao = agora.toLocaleDateString('pt-BR');
+      const r = res || {};
+      document.getElementById('resumo-data-hoje').textContent = r.data_hoje || dataPadrao;
+      document.getElementById('resumo-avaliacao-alim').textContent = r.avaliacao_alimentacao || 'Nenhuma alimentação registrada hoje ainda.';
 
-    document.querySelectorAll(".sug-treino").forEach((chip) => {
-      chip.addEventListener("click", () => {
-        document.getElementById("inputTituloTreino").value = chip.dataset.t;
+      const aguaMl = r.agua_ml || 0;
+      const metaAgua = Math.max(1, r.meta_agua_ml || 2500);
+      const pctAgua = Math.min(100, Math.round((aguaMl / metaAgua) * 100));
+
+      const kcalHoje = r.kcal_hoje || 0;
+      const pctKcal = Math.min(100, Math.round((kcalHoje / 2000) * 100));
+
+      const minTreino = r.minutos_treino_hoje || 0;
+      const pctTreino = Math.min(100, Math.round((minTreino / 45) * 100));
+
+      const qtdSaud = r.qtd_saudaveis || 0;
+      const qtdNaoSaud = r.qtd_nao_saudaveis || 0;
+      const totalItensAlim = qtdSaud + qtdNaoSaud;
+      const pctSaude = totalItensAlim > 0 ? Math.round((qtdSaud / totalItensAlim) * 100) : 0;
+
+      document.getElementById('dash-agua').textContent = `${aguaMl} / ${metaAgua} ml`;
+      document.getElementById('dash-kcal').textContent = `${kcalHoje} kcal`;
+      document.getElementById('dash-treino').textContent = `${minTreino} min`;
+      document.getElementById('dash-destros').textContent = `${r.destros_hoje || 0}`;
+
+      document.getElementById('grafico-agua-txt').textContent = `${pctAgua}% (${aguaMl} ml)`;
+      document.getElementById('grafico-agua-bar').style.width = `${Math.max(4, pctAgua)}%`;
+
+      document.getElementById('grafico-saude-txt').textContent = totalItensAlim > 0
+        ? `${pctSaude}% saudáveis (${qtdSaud}/${totalItensAlim})`
+        : 'Sem registros hoje';
+      document.getElementById('grafico-saude-bar').style.width = `${Math.max(4, pctSaude)}%`;
+
+      document.getElementById('grafico-kcal-txt').textContent = `${kcalHoje} kcal (${pctKcal}%)`;
+      document.getElementById('grafico-kcal-bar').style.width = `${Math.max(4, pctKcal)}%`;
+
+      document.getElementById('grafico-treino-txt').textContent = `${minTreino} min (${pctTreino}%)`;
+      document.getElementById('grafico-treino-bar').style.width = `${Math.max(4, pctTreino)}%`;
+
+      const alimHoje = r.alimentos_hoje || [];
+      document.getElementById('dash-lista-prato').innerHTML = alimHoje.length
+        ? alimHoje.map(x => {
+            const tag = x.saudavel !== false
+              ? '<span class="badge-ok">Saudável</span>'
+              : '<span class="badge-warn">Não saudável</span>';
+            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b> (${x.kcal} kcal)</span>${tag}</div>`;
+          }).join('')
+        : '<div class="item"><span>Nenhuma alimentação registrada hoje.</span></div>';
+
+      const linhasAtividades = [];
+      (r.agua_historico || []).forEach(a => {
+        linhasAtividades.push(`<div class="item"><span>Água às ${a.hora} — <b>+${a.ml} ml</b></span><span class="badge-ok">Água</span></div>`);
       });
-    });
-
-    function atualizarPreviaGlicemia() {
-      const cfg = estado ? estado.config_glicemia : {
-        alvo_min: 70, alvo_max: 180, alerta_alto: 250,
-        carb_por_unidade_insulina: 15, fator_correcao_mgdl: 50, alvo_correcao: 120
-      };
-      const val = parseFloat(document.getElementById("inputGlicemia").value);
-      const box = document.getElementById("cardOrientacaoGlic");
-      const tit = document.getElementById("tituloOrientacaoGlic");
-      const txt = document.getElementById("textoOrientacaoGlic");
-
-      box.classList.remove("alvo", "baixa", "alta", "muito_alta");
-
-      if (isNaN(val) || val <= 0) {
-        box.classList.add("alvo");
-        tit.textContent = `Faixa configurada: ${cfg.alvo_min} a ${cfg.alvo_max} mg/dL`;
-        txt.textContent = "Digite o destro em mg/dL para ver o enquadramento educativo. Não substitui orientação da sua equipe de saúde.";
-        return;
-      }
-
-      if (val < cfg.alvo_min) {
-        box.classList.add("baixa");
-        tit.textContent = `${val} mg/dL — Abaixo da faixa alvo (< ${cfg.alvo_min} mg/dL)`;
-        txt.textContent = "Apoio educativo: siga o plano combinado com sua equipe médica para correção e nova conferência do destro. Não substitui orientação profissional.";
-      } else if (val > cfg.alerta_alto) {
-        box.classList.add("muito_alta");
-        tit.textContent = `${val} mg/dL — Muito acima da faixa (> ${cfg.alerta_alto} mg/dL)`;
-        txt.textContent = "Apoio educativo: mantenha hidratação com água, cautela com treinos intensos sem aval prévio e siga o protocolo da sua equipe de saúde.";
-      } else if (val > cfg.alvo_max) {
-        box.classList.add("alta");
-        tit.textContent = `${val} mg/dL — Acima da faixa alvo (> ${cfg.alvo_max} mg/dL)`;
-        txt.textContent = "Apoio educativo: considere refeições e treinos do dia e siga as orientações médicas definidas para você. Não substitui profissional de saúde.";
-      } else {
-        box.classList.add("alvo");
-        tit.textContent = `${val} mg/dL — Dentro da faixa alvo (${cfg.alvo_min}–${cfg.alvo_max} mg/dL)`;
-        txt.textContent = "Apoio educativo: valor dentro da sua faixa configurada. Mantenha o acompanhamento regular.";
-      }
-    }
-
-    document.getElementById("inputGlicemia").addEventListener("input", atualizarPreviaGlicemia);
-
-    function renderizar(novoEstado) {
-      estado = novoEstado;
-      document.getElementById("badgeApoio").textContent = `${estado.perfil_ativo} • ${estado.aviso_apoio}`;
-
-      const t = estado.totais_hoje;
-      const m = estado.metas_diarias;
-
-      document.getElementById("kpiComido").textContent = `${t.kcal_consumidas} kcal`;
-      document.getElementById("kpiPerdido").textContent = `${t.kcal_perdidas} kcal`;
-      document.getElementById("kpiCarb").textContent = `${t.carboidratos_g} g`;
-      document.getElementById("kpiSaldo").textContent = `${t.saldo_kcal} kcal`;
-      document.getElementById("kpiDestro").textContent = t.ultimo_destro != null ? `${t.ultimo_destro} mg/dL` : "--";
-
-      document.getElementById("subMetaKcal").textContent = `Meta: ${m.meta_kcal_dia} kcal`;
-      document.getElementById("subMetaTreino").textContent = `Meta: ${m.meta_treino_kcal_dia} kcal`;
-      document.getElementById("subMetaCarb").textContent = `Meta: ${m.meta_carb_dia} g`;
-      document.getElementById("subTempoTreino").textContent = `${t.minutos_treino} min treino`;
-      document.getElementById("subInsulinaDia").textContent = `Insulina: ${t.insulina_u}U`;
-
-      document.getElementById("barraKcal").style.width = `${Math.min(100, (t.kcal_consumidas / Math.max(1, m.meta_kcal_dia)) * 100)}%`;
-      document.getElementById("barraTreino").style.width = `${Math.min(100, (t.kcal_perdidas / Math.max(1, m.meta_treino_kcal_dia)) * 100)}%`;
-      document.getElementById("barraCarb").style.width = `${Math.min(100, (t.carboidratos_g / Math.max(1, m.meta_carb_dia)) * 100)}%`;
-
-      document.getElementById("txtResumoDia").value = estado.texto_resumo_dia || "";
-      document.getElementById("metaKcalDia").value = m.meta_kcal_dia;
-      document.getElementById("metaCarbDia").value = m.meta_carb_dia;
-      document.getElementById("metaTreinoKcalDia").value = m.meta_treino_kcal_dia;
-
-      const selPerfil = document.getElementById("selPerfil");
-      selPerfil.innerHTML = estado.perfis.map((p) => `<option value="${p}">${p}</option>`).join("");
-      selPerfil.value = estado.perfil_ativo;
-
-      const histDiv = document.getElementById("listaHistorico7Dias");
-      histDiv.innerHTML = (estado.historico_7_dias || []).slice().reverse().map((d) => `
-        <div class="item-card">
-          <div>
-            <div class="item-title num">${d.data}</div>
-            <div class="item-meta num">Comido: ${d.kcal_consumidas} kcal • Treino: -${d.kcal_perdidas} kcal • Carb: ${d.carboidratos_g}g • Destro méd.: ${d.media_destro != null ? d.media_destro + " mg/dL" : "--"}</div>
-          </div>
-        </div>
-      `).join("");
-
-      const cfg = estado.config_glicemia;
-      document.getElementById("cfgAlvoMin").value = cfg.alvo_min;
-      document.getElementById("cfgAlvoMax").value = cfg.alvo_max;
-      document.getElementById("cfgAlertaAlto").value = cfg.alerta_alto;
-      document.getElementById("cfgCarbPorU").value = cfg.carb_por_unidade_insulina;
-      document.getElementById("cfgFatorCorr").value = cfg.fator_correcao_mgdl;
-      document.getElementById("cfgAlvoCorr").value = cfg.alvo_correcao;
-
-      const refCarbEq = cfg.carb_por_unidade_insulina > 0
-        ? (t.carboidratos_g / cfg.carb_por_unidade_insulina).toFixed(1)
-        : "0.0";
-      document.getElementById("resumoReferenciaCarb").textContent =
-        `Carboidratos pesados hoje: ${t.carboidratos_g} g • Referência educativa configurada: ${cfg.carb_por_unidade_insulina}g/U (~${refCarbEq}U ref. carb) • Insulina registrada hoje: ${t.insulina_u}U.`;
-
-      atualizarPreviaGlicemia();
-
-      const listaGlc = document.getElementById("listaGlicemiasHoje");
-      if (!estado.glicemias_hoje.length) {
-        listaGlc.innerHTML = `<div style="color:var(--muted); font-size:0.9rem;">Nenhum destro ou aplicação registrada hoje ainda.</div>`;
-      } else {
-        listaGlc.innerHTML = "";
-        estado.glicemias_hoje.slice().reverse().forEach((g) => {
-          const div = document.createElement("div");
-          div.className = "item-card";
-          const parteDestro = g.glicemia_mgdl != null ? `<strong class="num">${g.glicemia_mgdl} mg/dL</strong>` : "Sem destro";
-          const parteIns = g.insulina_u > 0 ? ` • <span style="color:var(--cyan); font-weight:700;">${g.insulina_u}U</span> (${g.tipo_insulina})` : "";
-          div.innerHTML = `
-            <div>
-              <div class="item-title">${g.momento}: ${parteDestro}${parteIns}</div>
-              <div class="item-meta">${g.rotulo_faixa}${g.observacao ? " • " + g.observacao : ""} • ${g.data_hora}</div>
-            </div>
-            <button type="button" class="btn-del">Remover</button>
-          `;
-          div.querySelector("button").addEventListener("click", async () => {
-            const resp = await fetch(`/api/glicemia/${g.id}`, { method: "DELETE" });
-            const data = await resp.json();
-            if (resp.ok) renderizar(data.estado);
-          });
-          listaGlc.appendChild(div);
-        });
-      }
-
-      const favContainer = document.getElementById("chipsFavoritos");
-      favContainer.innerHTML = "";
-      estado.alimentos.filter((a) => a.favorito).forEach((fav) => {
-        const b = document.createElement("button");
-        b.type = "button";
-        b.className = "chip";
-        b.textContent = fav.nome;
-        b.addEventListener("click", () => {
-          document.getElementById("buscaAlimento").value = "";
-          preencherSelectAlimentos("");
-          document.getElementById("selAlimento").value = fav.id;
-          recalcularVisor();
-        });
-        favContainer.appendChild(b);
+      (r.treinos_hoje || []).forEach(t => {
+        linhasAtividades.push(`<div class="item"><span>${t.data} — Treino <b>${t.descricao}</b> (${t.minutos} min${t.tempo_fmt ? ' • ' + t.tempo_fmt : ''})</span><span class="badge-warn">Treino</span></div>`);
+      });
+      (r.balanca_hoje || []).forEach(b => {
+        linhasAtividades.push(`<div class="item"><span>${b.data} — Destro / Balança: <b>${b.peso} kg</b> (Meta: ${b.meta} kg)</span><span class="badge-ok">Destro</span></div>`);
+      });
+      (r.glicemia_hoje || []).forEach(g => {
+        linhasAtividades.push(`<div class="item"><span>${g.data} — Glicemia: <b>${g.valor} mg/dL</b> (${g.momento})</span><span class="badge-ok">Glicemia</span></div>`);
       });
 
-      preencherSelectAlimentos(document.getElementById("buscaAlimento").value);
-
-      const selMod = document.getElementById("selModalidade");
-      const modAtual = selMod.value;
-      selMod.innerHTML = estado.modalidades.map((m) =>
-        `<option value="${m.nome}">${m.nome}</option>`
-      ).join("");
-      if (estado.modalidades.some((m) => m.nome === modAtual)) {
-        selMod.value = modAtual;
-      }
-
-      const chipsMod = document.getElementById("chipsModalidades");
-      chipsMod.innerHTML = "";
-      estado.modalidades.forEach((m) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "chip";
-        btn.textContent = m.nome;
-        btn.addEventListener("click", () => {
-          document.getElementById("inputModalidadeExtra").value = "";
-          selMod.value = m.nome;
-          kcalEditadaManualmente = false;
-          atualizarEstimativaTreino(true);
-        });
-        chipsMod.appendChild(btn);
-      });
-      atualizarEstimativaTreino(false);
-
-      const listaTreinos = document.getElementById("listaTreinosHoje");
-      if (!estado.treinos_hoje.length) {
-        listaTreinos.innerHTML = `<div style="color:var(--muted); font-size:0.9rem;">Nenhum treino registrado hoje ainda.</div>`;
-      } else {
-        listaTreinos.innerHTML = "";
-        estado.treinos_hoje.slice().reverse().forEach((tr) => {
-          const div = document.createElement("div");
-          div.className = "item-card";
-          div.innerHTML = `
-            <div>
-              <div class="item-title">${tr.modalidade} — <span class="num" style="color:var(--green);">-${tr.kcal_perdidas} kcal</span></div>
-              <div class="item-meta num">${tr.titulo} • ${tr.duracao_min} min • ${tr.intensidade}${tr.observacao ? " • " + tr.observacao : ""}</div>
-            </div>
-            <button type="button" class="btn-del">Remover</button>
-          `;
-          div.querySelector("button").addEventListener("click", async () => {
-            const resp = await fetch(`/api/treinos/${tr.id}`, { method: "DELETE" });
-            const data = await resp.json();
-            if (resp.ok) renderizar(data.estado);
-          });
-          listaTreinos.appendChild(div);
-        });
-      }
-
-      const resDiv = document.getElementById("listaResumoRefeicoes");
-      const entradas = Object.entries(estado.resumo_por_refeicao);
-      if (!entradas.length) {
-        resDiv.innerHTML = `<div style="color:var(--muted); font-size:0.9rem;">Nenhuma refeição pesada hoje ainda.</div>`;
-      } else {
-        resDiv.innerHTML = entradas.map(([nomeRef, dadosRef]) => `
-          <div class="item-card">
-            <div>
-              <div class="item-title">${nomeRef} (${dadosRef.itens} itens • ${dadosRef.gramas} g)</div>
-              <div class="item-meta num">${dadosRef.kcal} kcal • Carboidratos: ${dadosRef.carboidratos_g} g</div>
-            </div>
-          </div>
-        `).join("");
-      }
-
-      const cardPratos = document.getElementById("cardPratosProntos");
-      const listaPratos = document.getElementById("listaPratosProntos");
-      if (estado.pratos_prontos.length) {
-        cardPratos.style.display = "block";
-        listaPratos.innerHTML = "";
-        estado.pratos_prontos.forEach((p) => {
-          const div = document.createElement("div");
-          div.className = "item-card";
-          div.innerHTML = `
-            <div>
-              <div class="item-title">${p.nome}</div>
-              <div class="item-meta">${p.itens.map((i) => `${i.alimento} (${i.gramas}g)`).join(", ")}</div>
-            </div>
-            <button type="button" class="chip">+ Lançar</button>
-          `;
-          div.querySelector("button").addEventListener("click", async () => {
-            const resp = await fetch(`/api/pratos-prontos/${p.id}/lancar`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ refeicao_tipo: document.getElementById("selRefeicao").value }),
-            });
-            const data = await resp.json();
-            if (resp.ok) renderizar(data.estado);
-          });
-          listaPratos.appendChild(div);
-        });
-      } else {
-        cardPratos.style.display = "none";
-      }
-
-      const listaItens = document.getElementById("listaItensHoje");
-      if (!estado.refeicoes_hoje.length) {
-        listaItens.innerHTML = `<div style="color:var(--muted); font-size:0.9rem;">Use a aba <strong>Balança</strong> para pesar e adicionar alimentos.</div>`;
-      } else {
-        listaItens.innerHTML = "";
-        estado.refeicoes_hoje.slice().reverse().forEach((item) => {
-          const div = document.createElement("div");
-          div.className = "item-card";
-          div.innerHTML = `
-            <div>
-              <div class="item-title">${item.alimento} — <span class="num" style="color:var(--fire-soft);">${item.gramas} g</span></div>
-              <div class="item-meta num">${item.refeicao_tipo} • ${item.kcal} kcal • ${item.carboidratos_g}g carb • ${item.proteinas_g}g prot</div>
-            </div>
-            <button type="button" class="btn-del">Remover</button>
-          `;
-          div.querySelector("button").addEventListener("click", async () => {
-            const resp = await fetch(`/api/refeicoes/${item.id}`, { method: "DELETE" });
-            const data = await resp.json();
-            if (resp.ok) renderizar(data.estado);
-          });
-          listaItens.appendChild(div);
-        });
-      }
+      document.getElementById('dash-lista-atividades').innerHTML = linhasAtividades.length
+        ? linhasAtividades.join('')
+        : '<div class="item"><span>Nenhuma atividade registrada hoje ainda.</span></div>';
     }
 
-    document.getElementById("btnCopiarResumo").addEventListener("click", async () => {
-      const txt = document.getElementById("txtResumoDia").value;
-      const msg = document.getElementById("msgCopiarResumo");
+    async function excluirItem(categoria, idx) {
+      await fetch(`/api/excluir/${categoria}/${idx}`, { method: 'DELETE' });
+      carregarEstado();
+    }
+
+    async function addAgua(ml) {
+      await fetch('/api/agua', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ add_ml: ml })
+      });
+      carregarEstado();
+    }
+
+    async function resetAgua() {
+      await fetch('/api/agua', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ resetar: true })
+      });
+      carregarEstado();
+    }
+
+    async function salvarMetaAgua() {
+      await fetch('/api/agua', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ meta_ml: document.getElementById('agua-meta').value })
+      });
+      carregarEstado();
+    }
+
+    async function excluirAgua(idx) {
+      await fetch(`/api/agua/excluir/${idx}`, { method: 'DELETE' });
+      carregarEstado();
+    }
+
+    async function addRefeicao() {
+      await fetch('/api/refeicoes', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          nome: document.getElementById('ref-nome').value,
+          horario: document.getElementById('ref-hora').value
+        })
+      });
+      document.getElementById('ref-nome').value = '';
+      carregarEstado();
+    }
+
+    async function excluirRefeicao(idx) {
+      await fetch(`/api/refeicoes/excluir/${idx}`, { method: 'DELETE' });
+      carregarEstado();
+    }
+
+    async function carregarEstado() {
+      renderizarDashboardDia(ultimoEstado ? ultimoEstado.resumo_dia : null);
       try {
-        await navigator.clipboard.writeText(txt);
-        msg.textContent = "Resumo copiado para a área de transferência!";
-      } catch (e) {
-        document.getElementById("txtResumoDia").select();
-        msg.textContent = "Resumo selecionado — pressione Ctrl+C para copiar.";
-      }
-    });
+        const res = await fetch('/api/estado');
+        if (!res.ok) return;
+        const d = await res.json();
+        ultimoEstado = d;
+        const p = d.perfil || {};
 
-    document.getElementById("btnSalvarMetas").addEventListener("click", async () => {
-      const msg = document.getElementById("msgMetas");
-      msg.textContent = "Salvando metas...";
-      const resp = await fetch("/api/metas", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          meta_kcal_dia: document.getElementById("metaKcalDia").value,
-          meta_carb_dia: document.getElementById("metaCarbDia").value,
-          meta_treino_kcal_dia: document.getElementById("metaTreinoKcalDia").value,
-        }),
-      });
-      const data = await resp.json();
-      if (!resp.ok) {
-        msg.textContent = data.erro || "Erro ao salvar metas.";
-        return;
-      }
-      msg.textContent = "Metas diárias atualizadas!";
-      renderizar(data.estado);
-    });
+        const partes = [];
+        if (p.nome) partes.push(p.nome);
+        if (p.idade != null) partes.push(p.idade + ' anos');
+        if (p.altura_cm != null) partes.push(p.altura_cm + ' cm');
+        document.getElementById('resumo-aluno').textContent = partes.length ? partes.join(' • ') : 'Aluno não cadastrado';
 
-    document.getElementById("btnTrocarPerfil").addEventListener("click", async () => {
-      const novo = document.getElementById("novoPerfilNome").value.trim();
-      const escolhido = novo || document.getElementById("selPerfil").value;
-      const resp = await fetch("/api/perfil", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ perfil: escolhido }),
-      });
-      const data = await resp.json();
-      if (resp.ok) {
-        document.getElementById("novoPerfilNome").value = "";
-        renderizar(data.estado);
-      }
-    });
+        document.getElementById('kpi-peso').textContent = d.peso_atual != null ? d.peso_atual + ' kg' : '--';
+        document.getElementById('kpi-meta').textContent = d.meta_peso != null ? d.meta_peso + ' kg' : '--';
+        document.getElementById('kpi-diff').textContent =
+          d.diferenca_meta != null ? 'Diferença para meta: ' + d.diferenca_meta + ' kg' : 'Diferença para meta: --';
 
-    document.getElementById("btnSalvarGlicemia").addEventListener("click", async () => {
-      const msg = document.getElementById("msgGlicemia");
-      msg.textContent = "Salvando registro...";
-      const resp = await fetch("/api/glicemia", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          momento: document.getElementById("selMomentoGlic").value,
-          glicemia_mgdl: document.getElementById("inputGlicemia").value,
-          insulina_u: document.getElementById("inputInsulina").value,
-          tipo_insulina: document.getElementById("selTipoInsulina").value,
-          observacao: document.getElementById("inputObsGlic").value,
-        }),
-      });
-      const data = await resp.json();
-      if (!resp.ok) {
-        msg.textContent = data.erro || "Erro ao salvar.";
-        return;
-      }
-      document.getElementById("inputGlicemia").value = "";
-      document.getElementById("inputInsulina").value = "";
-      document.getElementById("inputObsGlic").value = "";
-      msg.textContent = "Registro salvo com sucesso!";
-      renderizar(data.estado);
-    });
+        const ori = d.orientacao || {};
+        document.getElementById('base-instrutor').textContent =
+          (ori.foco ? 'Programa: ' + ori.foco + ' — ' : '') +
+          (ori.meta_status ? ori.meta_status + ' ' : '') +
+          (ori.base_resumo || '');
 
-    document.getElementById("btnSalvarCfgGlic").addEventListener("click", async () => {
-      const msg = document.getElementById("msgCfgGlic");
-      msg.textContent = "Salvando parâmetros...";
-      const resp = await fetch("/api/glicemia/config", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          alvo_min: document.getElementById("cfgAlvoMin").value,
-          alvo_max: document.getElementById("cfgAlvoMax").value,
-          alerta_alto: document.getElementById("cfgAlertaAlto").value,
-          carb_por_unidade_insulina: document.getElementById("cfgCarbPorU").value,
-          fator_correcao_mgdl: document.getElementById("cfgFatorCorr").value,
-          alvo_correcao: document.getElementById("cfgAlvoCorr").value,
-        }),
-      });
-      const data = await resp.json();
-      if (!resp.ok) {
-        msg.textContent = data.erro || "Erro ao salvar parâmetros.";
-        return;
-      }
-      msg.textContent = "Parâmetros salvos!";
-      renderizar(data.estado);
-    });
+        document.getElementById('p-nome').value = p.nome || '';
+        document.getElementById('p-idade').value = p.idade != null ? p.idade : '';
+        document.getElementById('p-altura').value = p.altura_cm != null ? p.altura_cm : '';
+        document.getElementById('p-objetivo').value = p.objetivo || 'perda';
 
-    document.getElementById("btnSalvarTreino").addEventListener("click", async () => {
-      const msg = document.getElementById("msgTreino");
-      const modalidade = document.getElementById("inputModalidadeExtra").value.trim() || document.getElementById("selModalidade").value;
-      const multSel = document.getElementById("selIntensidade");
-      const intensidadeLabel = multSel.options[multSel.selectedIndex].text;
+        if (d.meta_peso != null) {
+          document.getElementById('painel-meta').value = d.meta_peso;
+          document.getElementById('bal-meta').value = d.meta_peso;
+        }
+        if (d.peso_atual != null) {
+          document.getElementById('painel-peso').value = d.peso_atual;
+          document.getElementById('bal-peso').value = d.peso_atual;
+        } else {
+          document.getElementById('painel-peso').value = '';
+          document.getElementById('bal-peso').value = '';
+        }
 
-      msg.textContent = "Salvando treino...";
-      const resp = await fetch("/api/treinos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          modalidade,
-          titulo: document.getElementById("inputTituloTreino").value,
-          duracao_min: document.getElementById("inputDuracao").value,
-          intensidade: intensidadeLabel,
-          kcal_perdidas: document.getElementById("inputKcalPerdidas").value,
-          observacao: document.getElementById("inputObsTreino").value,
-        }),
-      });
-      const data = await resp.json();
-      if (!resp.ok) {
-        msg.textContent = data.erro || "Erro ao salvar treino.";
-        return;
-      }
+        const agua = d.agua || { consumido_ml: 0, meta_ml: 2500, historico: [] };
+        const pct = Math.min(100, Math.round(((agua.consumido_ml || 0) / Math.max(1, agua.meta_ml || 2500)) * 100));
+        document.getElementById('agua-status').textContent = `${agua.consumido_ml || 0} / ${agua.meta_ml || 2500} ml (${pct}%)`;
+        document.getElementById('agua-barra').style.width = Math.max(4, pct) + '%';
+        document.getElementById('agua-meta').value = agua.meta_ml || 2500;
+        const restante = Math.max(0, (agua.meta_ml || 2500) - (agua.consumido_ml || 0));
+        document.getElementById('agua-lembrete').textContent = restante > 0
+          ? `Lembrete de água: faltam ${restante} ml para a meta de hoje.`
+          : 'Parabéns: meta diária de água atingida!';
 
-      document.getElementById("inputModalidadeExtra").value = "";
-      document.getElementById("inputTituloTreino").value = "";
-      document.getElementById("inputObsTreino").value = "";
-      kcalEditadaManualmente = false;
-      msg.textContent = `Treino salvo: ${data.treino.modalidade} (-${data.treino.kcal_perdidas} kcal)`;
-      renderizar(data.estado);
-    });
+        document.getElementById('lista-agua').innerHTML =
+          (agua.historico || []).map((x, i) => `
+            <div class="item">
+              <span>${x.hora} — <b>+${x.ml} ml</b></span>
+              <button type="button" class="btn-del" onclick="excluirAgua(${i})">Excluir</button>
+            </div>`).join('') || '<div class="item"><span>Sem copos registrados hoje.</span></div>';
 
-    document.getElementById("btnAdicionarPrato").addEventListener("click", async () => {
-      const msg = document.getElementById("msgBalanca");
-      const ali = obterAlimentoSelecionado();
-      if (!ali || gramasCalculadasAtuais <= 0) {
-        msg.textContent = "Informe um peso ou meta maior que zero.";
-        return;
-      }
-      msg.textContent = "Adicionando...";
-      const resp = await fetch("/api/refeicoes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          refeicao_tipo: document.getElementById("selRefeicao").value,
-          alimento_id: ali.id,
-          gramas: gramasCalculadasAtuais,
-        }),
-      });
-      const data = await resp.json();
-      if (!resp.ok) {
-        msg.textContent = data.erro || "Erro ao adicionar.";
-        return;
-      }
+        document.getElementById('lista-refeicoes').innerHTML =
+          (d.refeicoes || []).map((x, i) => `
+            <div class="item">
+              <span><b>${x.horario}</b> — ${x.nome}</span>
+              <button type="button" class="btn-del" onclick="excluirRefeicao(${i})">Excluir</button>
+            </div>`).join('') || '<div class="item"><span>Nenhum horário de refeição cadastrado.</span></div>';
 
-      taraAcumulada = Math.round((taraAcumulada + gramasCalculadasAtuais) * 10) / 10;
-      document.getElementById("lblTara").textContent = `${taraAcumulada} g`;
-      document.getElementById("inputGramas").value = "";
-      document.getElementById("inputValorMeta").value = "";
-      document.getElementById("inputPesoTotalPrato").value = "";
-      recalcularVisor();
+        document.getElementById('lista-balanca').innerHTML =
+          (d.balanca || []).map((x, i) => `
+            <div class="item">
+              <span>${x.data} — <b>${x.peso} kg</b> (Meta: ${x.meta} kg)</span>
+              <button type="button" class="btn-del" onclick="excluirItem('balanca', ${i})">Excluir</button>
+            </div>`).join('') || '<div class="item"><span>Sem registros ainda.</span></div>';
 
-      msg.textContent = `Adicionado: ${data.item.alimento} (${data.item.gramas} g • ${data.item.kcal} kcal)`;
-      renderizar(data.estado);
-    });
+        document.getElementById('lista-treinos').innerHTML =
+          (d.treinos || []).map((x, i) => `
+            <div class="item">
+              <span>${x.data} — <b>${x.descricao}</b> (${x.minutos} min${x.tempo_fmt ? ' • ' + x.tempo_fmt : ''})</span>
+              <button type="button" class="btn-del" onclick="excluirItem('treinos', ${i})">Excluir</button>
+            </div>`).join('') || '<div class="item"><span>Sem treinos ainda.</span></div>';
 
-    document.getElementById("btnSalvarPrato").addEventListener("click", async () => {
-      const nome = document.getElementById("nomePratoPronto").value;
-      const resp = await fetch("/api/pratos-prontos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nome,
-          refeicao_tipo: document.getElementById("selRefeicao").value,
-        }),
-      });
-      const data = await resp.json();
-      if (!resp.ok) {
-        alert(data.erro || "Não foi possível salvar o prato.");
-        return;
-      }
-      document.getElementById("nomePratoPronto").value = "";
-      renderizar(data.estado);
-    });
+        document.getElementById('lista-glicemia').innerHTML =
+          (d.glicemia || []).map((x, i) => `
+            <div class="item">
+              <span>${x.data} — <b>${x.valor} mg/dL</b> (${x.momento})</span>
+              <button type="button" class="btn-del" onclick="excluirItem('glicemia', ${i})">Excluir</button>
+            </div>`).join('') || '<div class="item"><span>Sem medições ainda.</span></div>';
 
-    document.getElementById("formNovoAlimento").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const msg = document.getElementById("msgNovoAlim");
-      msg.textContent = "Salvando...";
-      const resp = await fetch("/api/alimentos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nome: document.getElementById("novoNome").value,
-          estado: document.getElementById("novoEstado").value,
-          kcal_100g: document.getElementById("novoKcal").value,
-          carb_100g: document.getElementById("novoCarb").value,
-          prot_100g: document.getElementById("novoProt").value,
-          gord_100g: document.getElementById("novoGord").value,
-        }),
-      });
-      const data = await resp.json();
-      if (!resp.ok) {
-        msg.textContent = data.erro || "Erro ao cadastrar.";
-        return;
-      }
-      e.target.reset();
-      msg.textContent = "Alimento cadastrado com sucesso!";
-      renderizar(data.estado);
-    });
+        document.getElementById('lista-alimentos').innerHTML =
+          (d.alimentos || []).map((x, i) => {
+            const badge = x.saudavel !== false
+              ? '<span class="badge-ok">Saudável</span>'
+              : '<span class="badge-warn">Não saudável</span>';
+            return `
+              <div class="item">
+                <span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b> (${x.kcal} kcal) ${badge}</span>
+                <button type="button" class="btn-del" onclick="excluirItem('alimentos', ${i})">Excluir</button>
+              </div>`;
+          }).join('') || '<div class="item"><span>Sem alimentos cadastrados.</span></div>';
 
-    async function iniciar() {
-      atualizarVisorTimer();
-      const resp = await fetch("/api/estado");
-      const data = await resp.json();
-      renderizar(data);
+        renderizarDashboardDia(d.resumo_dia);
+        verificarAlertas(d);
+      } catch (e) {}
     }
 
-    iniciar();
+    async function salvarPerfilCompleto() {
+      await fetch('/api/perfil', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          nome: document.getElementById('p-nome').value,
+          idade: document.getElementById('p-idade').value,
+          altura_cm: document.getElementById('p-altura').value,
+          objetivo: document.getElementById('p-objetivo').value,
+          peso_atual: document.getElementById('painel-peso').value,
+          meta_peso: document.getElementById('painel-meta').value
+        })
+      });
+      carregarEstado();
+    }
+
+    async function registrarBalanca() {
+      await fetch('/api/balanca', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          peso: document.getElementById('bal-peso').value,
+          meta_peso: document.getElementById('bal-meta').value
+        })
+      });
+      carregarEstado();
+    }
+
+    async function registrarTreino() {
+      const tempoFmt = cronoSegundos > 0 ? formatarCrono(cronoSegundos) : '';
+      const minsInput = document.getElementById('tr-min').value;
+      const minsFinal = minsInput ? minsInput : (cronoSegundos > 0 ? Math.max(1, Math.round(cronoSegundos / 60)) : 0);
+      await fetch('/api/treinos', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          descricao: document.getElementById('tr-desc').value,
+          minutos: minsFinal,
+          tempo_fmt: tempoFmt
+        })
+      });
+      document.getElementById('tr-desc').value = '';
+      document.getElementById('tr-min').value = '';
+      zerarCrono();
+      carregarEstado();
+    }
+
+    async function registrarGlicemia() {
+      await fetch('/api/glicemia', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          valor: document.getElementById('gl-val').value,
+          momento: document.getElementById('gl-mom').value
+        })
+      });
+      document.getElementById('gl-val').value = '';
+      document.getElementById('gl-mom').value = '';
+      carregarEstado();
+    }
+
+    async function registrarAlimento() {
+      await fetch('/api/alimentos', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          nome: document.getElementById('al-nome').value,
+          kcal: document.getElementById('al-kcal').value,
+          saude_tipo: document.getElementById('al-saude').value
+        })
+      });
+      document.getElementById('al-nome').value = '';
+      document.getElementById('al-kcal').value = '';
+      carregarEstado();
+    }
+
+    carregarEstado();
+    setInterval(() => verificarAlertas(ultimoEstado), 30000);
   </script>
 </body>
 </html>

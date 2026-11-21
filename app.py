@@ -42,12 +42,11 @@ DEFAULT_DATA = {
     "balanca": [],
     "treinos": [],
     "glicemia": [],
-    "prato": [],
     "alimentos": [
-        {"nome": "Arroz integral (100g)", "kcal": 124, "saudavel": True},
-        {"nome": "Peito de frango grelhado (100g)", "kcal": 159, "saudavel": True},
-        {"nome": "Ovo cozido (1 un)", "kcal": 78, "saudavel": True},
-        {"nome": "Banana prata (1 un)", "kcal": 87, "saudavel": True}
+        {"nome": "Arroz integral (100g)", "kcal": 124, "saudavel": True, "data": ""},
+        {"nome": "Peito de frango grelhado (100g)", "kcal": 159, "saudavel": True, "data": ""},
+        {"nome": "Ovo cozido (1 un)", "kcal": 78, "saudavel": True, "data": ""},
+        {"nome": "Banana prata (1 un)", "kcal": 87, "saudavel": True, "data": ""}
     ]
 }
 
@@ -119,9 +118,11 @@ def normalizar_dados(raw):
         data["agua"]["historico"] = []
     data["agua"]["data_ref"] = hoje
 
-    for item in data.get("prato", []):
+    for item in data.get("alimentos", []):
         if "saudavel" not in item:
-            item["saudavel"] = classificar_saude(item.get("item", ""))
+            item["saudavel"] = classificar_saude(item.get("nome", ""))
+        if "data" not in item:
+            item["data"] = ""
 
     return data
 
@@ -249,18 +250,18 @@ def orientacao_instrutor(perfil, peso, meta):
 def montar_resumo_dia(data):
     prefixo_hoje = hoje_br_curto() + " "
 
-    prato_hoje = [x for x in data.get("prato", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
+    alimentos_hoje = [x for x in data.get("alimentos", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
     treinos_hoje = [x for x in data.get("treinos", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
     balanca_hoje = [x for x in data.get("balanca", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
     glicemia_hoje = [x for x in data.get("glicemia", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
     agua = data.get("agua", DEFAULT_DATA["agua"])
 
-    kcal_total = sum(int(x.get("kcal", 0) or 0) for x in prato_hoje)
-    qtd_saudaveis = sum(1 for x in prato_hoje if x.get("saudavel", True))
-    qtd_nao_saudaveis = sum(1 for x in prato_hoje if not x.get("saudavel", True))
+    kcal_total = sum(int(x.get("kcal", 0) or 0) for x in alimentos_hoje)
+    qtd_saudaveis = sum(1 for x in alimentos_hoje if x.get("saudavel", True))
+    qtd_nao_saudaveis = sum(1 for x in alimentos_hoje if not x.get("saudavel", True))
 
-    if not prato_hoje:
-        avaliacao_alimentacao = "Sem refeições registradas hoje."
+    if not alimentos_hoje:
+        avaliacao_alimentacao = "Nenhuma alimentação registrada hoje ainda."
     elif qtd_nao_saudaveis == 0:
         avaliacao_alimentacao = "Alimentação do dia dentro do saudável."
     elif qtd_saudaveis >= qtd_nao_saudaveis:
@@ -270,10 +271,9 @@ def montar_resumo_dia(data):
 
     minutos_treino_hoje = sum(int(x.get("minutos", 0) or 0) for x in treinos_hoje)
     destros_hoje = len(balanca_hoje)
-    ultimo_peso_hoje = balanca_hoje[0]["peso"] if balanca_hoje else data.get("peso_atual")
 
     return {
-        "data_hoje": hoje_br_dt().strftime("%d/%m/%Y"),
+        "data_hoje": agora_br_dt().strftime("%d/%m/%Y"),
         "agua_ml": int(agua.get("consumido_ml", 0) or 0),
         "meta_agua_ml": int(agua.get("meta_ml", 2500) or 2500),
         "agua_historico": agua.get("historico", []),
@@ -281,11 +281,10 @@ def montar_resumo_dia(data):
         "qtd_saudaveis": qtd_saudaveis,
         "qtd_nao_saudaveis": qtd_nao_saudaveis,
         "avaliacao_alimentacao": avaliacao_alimentacao,
-        "prato_hoje": prato_hoje,
+        "alimentos_hoje": alimentos_hoje,
         "minutos_treino_hoje": minutos_treino_hoje,
         "treinos_hoje": treinos_hoje,
         "destros_hoje": destros_hoje,
-        "ultimo_peso_hoje": ultimo_peso_hoje,
         "balanca_hoje": balanca_hoje,
         "glicemia_hoje": glicemia_hoje
     }
@@ -315,7 +314,6 @@ def get_estado():
         "balanca": data.get("balanca", []),
         "treinos": data.get("treinos", []),
         "glicemia": data.get("glicemia", []),
-        "prato": data.get("prato", []),
         "alimentos": data.get("alimentos", []),
         "resumo_dia": montar_resumo_dia(data)
     })
@@ -465,28 +463,13 @@ def add_glicemia():
     return jsonify({"ok": True})
 
 
-@app.route("/api/prato", methods=["POST"])
-def add_prato():
-    payload = request.get_json(force=True) or {}
-    data = load_data()
-    item_nome = str(payload.get("item", "")).strip()
-    saudavel_flag = classificar_saude(item_nome, payload.get("saude_tipo"))
-    data["prato"].insert(0, {
-        "data": agora_br(),
-        "item": item_nome,
-        "kcal": int(payload.get("kcal", 0) or 0),
-        "saudavel": saudavel_flag
-    })
-    save_data(data)
-    return jsonify({"ok": True})
-
-
 @app.route("/api/alimentos", methods=["POST"])
 def add_alimento():
     payload = request.get_json(force=True) or {}
     data = load_data()
     nome_alimento = str(payload.get("nome", "")).strip()
     data["alimentos"].insert(0, {
+        "data": agora_br(),
         "nome": nome_alimento,
         "kcal": int(payload.get("kcal", 0) or 0),
         "saudavel": classificar_saude(nome_alimento, payload.get("saude_tipo"))
@@ -497,7 +480,7 @@ def add_alimento():
 
 @app.route("/api/excluir/<categoria>/<int:idx>", methods=["DELETE"])
 def excluir_item(categoria, idx):
-    permitidos = {"balanca", "treinos", "glicemia", "prato", "alimentos"}
+    permitidos = {"balanca", "treinos", "glicemia", "alimentos"}
     if categoria not in permitidos:
         return jsonify({"ok": False, "erro": "Categoria inválida"}), 400
     data = load_data()
