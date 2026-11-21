@@ -6,12 +6,14 @@
   <title>Fire Fit</title>
   <style>
     * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-    body { margin: 0; background: #0f172a; color: #f8fafc; padding-bottom: 76px; }
+    body { margin: 0; background: #0f172a; color: #f8fafc; padding-bottom: 78px; }
     header { background: #1e293b; padding: 14px 16px; border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 10; }
     h1 { margin: 0; font-size: 1.2rem; color: #fb923c; }
     .aviso { font-size: 0.78rem; color: #cbd5e1; margin-top: 4px; }
     main { padding: 14px; max-width: 680px; margin: 0 auto; }
     .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+    .alerta-banner { background: #431407; border: 1px solid #ea580c; color: #fed7aa; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-size: 0.9rem; display: none; }
+    .alerta-banner.ativo { display: block; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
     label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 4px; }
@@ -22,14 +24,16 @@
     .btn-sec { background: #334155; color: #f8fafc; }
     .btn-del { width: auto; background: #991b1b; color: #fecaca; font-size: 0.75rem; padding: 5px 9px; border-radius: 6px; margin-left: 8px; flex-shrink: 0; }
     .kpi { font-size: 1.2rem; font-weight: 700; color: #fdba74; }
+    .barra-bg { width: 100%; height: 12px; background: #0f172a; border-radius: 999px; overflow: hidden; border: 1px solid #334155; margin: 8px 0 10px; }
+    .barra-fill { height: 100%; background: #38bdf8; width: 0%; transition: width 0.25s; }
     .crono-display { font-size: 2rem; font-weight: 800; text-align: center; color: #fdba74; letter-spacing: 1px; margin: 6px 0 12px; font-variant-numeric: tabular-nums; }
     .sub { font-size: 0.88rem; color: #cbd5e1; margin-top: 6px; line-height: 1.35; }
     .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #334155; font-size: 0.88rem; }
     .item:last-child { border-bottom: none; }
     .aba { display: none; }
     .aba.ativa { display: block; }
-    nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 6px 4px; }
-    nav button { background: transparent; color: #94a3b8; font-size: 0.72rem; padding: 6px 2px; border-radius: 6px; }
+    nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 6px 2px; }
+    nav button { background: transparent; color: #94a3b8; font-size: 0.68rem; padding: 6px 2px; border-radius: 6px; }
     nav button.ativa { background: #334155; color: #fb923c; }
   </style>
 </head>
@@ -40,6 +44,8 @@
   </header>
 
   <main>
+    <div id="alerta-banner" class="alerta-banner"></div>
+
     <section id="aba-painel" class="aba ativa">
       <div class="card">
         <div id="resumo-aluno" style="font-weight:700; font-size:1rem; margin-bottom:8px;">Aluno não cadastrado</div>
@@ -91,6 +97,41 @@
 
         <button onclick="salvarPerfilCompleto()">Salvar dados e meta</button>
       </div>
+    </section>
+
+    <section id="aba-rotina" class="aba">
+      <div class="card">
+        <label>Água hoje</label>
+        <div class="kpi" id="agua-status">0 / 2500 ml</div>
+        <div class="barra-bg"><div class="barra-fill" id="agua-barra"></div></div>
+        <div class="sub" id="agua-lembrete">Lembrete de água: beba água aos poucos ao longo do dia.</div>
+
+        <div class="grid-3" style="margin-top: 10px;">
+          <button type="button" onclick="addAgua(250)">+ 250 ml</button>
+          <button type="button" onclick="addAgua(500)">+ 500 ml</button>
+          <button type="button" class="btn-sec" onclick="resetAgua()">Zerar dia</button>
+        </div>
+
+        <label for="agua-meta" style="margin-top: 10px;">Meta diária de água (ml)</label>
+        <input id="agua-meta" type="number" step="50" inputmode="numeric" placeholder="Ex: 2500" />
+        <button type="button" class="btn-sec" onclick="salvarMetaAgua()">Salvar meta de água</button>
+      </div>
+
+      <div class="card" id="lista-agua"></div>
+
+      <div class="card">
+        <label>Alerta de horário das refeições</label>
+        <div class="sub" style="margin-bottom:10px;">Quando o app estiver aberto no horário configurado, ele exibe um alerta visual e notificação (se permitida).</div>
+        <button type="button" class="btn-sec" style="margin-bottom:12px;" onclick="pedirPermissaoNotif()">Ativar notificações do navegador</button>
+
+        <label for="ref-nome">Refeição</label>
+        <input id="ref-nome" type="text" placeholder="Ex: Café da manhã / Pré-treino" />
+        <label for="ref-hora">Horário</label>
+        <input id="ref-hora" type="time" />
+        <button type="button" onclick="addRefeicao()">Adicionar horário de refeição</button>
+      </div>
+
+      <div class="card" id="lista-refeicoes"></div>
     </section>
 
     <section id="aba-balanca" class="aba">
@@ -162,6 +203,7 @@
 
   <nav>
     <button class="ativa" onclick="abrirAba('painel', this)">Painel</button>
+    <button onclick="abrirAba('rotina', this)">Água/Ref.</button>
     <button onclick="abrirAba('balanca', this)">Balança</button>
     <button onclick="abrirAba('treinos', this)">Treinos</button>
     <button onclick="abrirAba('glicemia', this)">Glicemia</button>
@@ -172,6 +214,8 @@
   <script>
     let cronoSegundos = 0;
     let cronoTimer = null;
+    let ultimoEstado = null;
+    const alertasDisparadosHoje = new Set();
 
     function formatarCrono(seg) {
       const h = String(Math.floor(seg / 3600)).padStart(2, '0');
@@ -213,14 +257,113 @@
       if (btn) btn.classList.add('ativa');
     }
 
+    async function pedirPermissaoNotif() {
+      if (!('Notification' in window)) return;
+      await Notification.requestPermission();
+    }
+
+    function dispararNotificacao(titulo, corpo) {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try { new Notification(titulo, { body: corpo }); } catch (e) {}
+      }
+    }
+
+    function verificarAlertas(estado) {
+      if (!estado) return;
+      const agora = new Date();
+      const hh = String(agora.getHours()).padStart(2, '0');
+      const mm = String(agora.getMinutes()).padStart(2, '0');
+      const horaAtual = `${hh}:${mm}`;
+      const diaKey = agora.toISOString().slice(0, 10);
+
+      const agua = estado.agua || { consumido_ml: 0, meta_ml: 2500 };
+      const faltamAgua = Math.max(0, (agua.meta_ml || 2500) - (agua.consumido_ml || 0));
+
+      const refeicoes = estado.refeicoes || [];
+      const refAgora = refeicoes.filter(r => r.horario === horaAtual);
+      const proximas = refeicoes.filter(r => r.horario >= horaAtual).slice(0, 2);
+
+      const banner = document.getElementById('alerta-banner');
+      if (refAgora.length > 0) {
+        const nomes = refAgora.map(r => `${r.nome} (${r.horario})`).join(', ');
+        banner.textContent = `Hora da refeição: ${nomes}! Lembre-se também de beber água.`;
+        banner.classList.add('ativo');
+        refAgora.forEach(r => {
+          const chave = `${diaKey}-${r.nome}-${r.horario}`;
+          if (!alertasDisparadosHoje.has(chave)) {
+            alertasDisparadosHoje.add(chave);
+            dispararNotificacao('Fire Fit — Horário de refeição', `Chegou a hora de: ${r.nome} (${r.horario})`);
+          }
+        });
+      } else if (proximas.length > 0) {
+        const proxTxt = proximas.map(r => `${r.nome} às ${r.horario}`).join(' • ');
+        const aguaTxt = faltamAgua > 0 ? `Faltam ${faltamAgua} ml de água hoje.` : 'Meta de água de hoje concluída!';
+        banner.textContent = `Próximas refeições: ${proxTxt} — ${aguaTxt}`;
+        banner.classList.add('ativo');
+      } else {
+        banner.classList.remove('ativo');
+      }
+    }
+
     async function excluirItem(categoria, idx) {
       await fetch(`/api/excluir/${categoria}/${idx}`, { method: 'DELETE' });
+      carregarEstado();
+    }
+
+    async function addAgua(ml) {
+      await fetch('/api/agua', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ add_ml: ml })
+      });
+      carregarEstado();
+    }
+
+    async function resetAgua() {
+      await fetch('/api/agua', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ resetar: true })
+      });
+      carregarEstado();
+    }
+
+    async function salvarMetaAgua() {
+      await fetch('/api/agua', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ meta_ml: document.getElementById('agua-meta').value })
+      });
+      carregarEstado();
+    }
+
+    async function excluirAgua(idx) {
+      await fetch(`/api/agua/excluir/${idx}`, { method: 'DELETE' });
+      carregarEstado();
+    }
+
+    async function addRefeicao() {
+      await fetch('/api/refeicoes', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          nome: document.getElementById('ref-nome').value,
+          horario: document.getElementById('ref-hora').value
+        })
+      });
+      document.getElementById('ref-nome').value = '';
+      carregarEstado();
+    }
+
+    async function excluirRefeicao(idx) {
+      await fetch(`/api/refeicoes/excluir/${idx}`, { method: 'DELETE' });
       carregarEstado();
     }
 
     async function carregarEstado() {
       const res = await fetch('/api/estado');
       const d = await res.json();
+      ultimoEstado = d;
       const p = d.perfil || {};
 
       const partes = [];
@@ -257,6 +400,30 @@
         document.getElementById('bal-peso').value = '';
       }
 
+      const agua = d.agua || { consumido_ml: 0, meta_ml: 2500, historico: [] };
+      const pct = Math.min(100, Math.round(((agua.consumido_ml || 0) / Math.max(1, agua.meta_ml || 2500)) * 100));
+      document.getElementById('agua-status').textContent = `${agua.consumido_ml || 0} / ${agua.meta_ml || 2500} ml (${pct}%)`;
+      document.getElementById('agua-barra').style.width = pct + '%';
+      document.getElementById('agua-meta').value = agua.meta_ml || 2500;
+      const restante = Math.max(0, (agua.meta_ml || 2500) - (agua.consumido_ml || 0));
+      document.getElementById('agua-lembrete').textContent = restante > 0
+        ? `Lembrete de água: faltam ${restante} ml para a meta de hoje.`
+        : 'Parabéns: meta diária de água atingida!';
+
+      document.getElementById('lista-agua').innerHTML =
+        (agua.historico || []).map((x, i) => `
+          <div class="item">
+            <span>${x.hora} — <b>+${x.ml} ml</b></span>
+            <button type="button" class="btn-del" onclick="excluirAgua(${i})">Excluir</button>
+          </div>`).join('') || '<div class="item"><span>Sem copos registrados hoje.</span></div>';
+
+      document.getElementById('lista-refeicoes').innerHTML =
+        (d.refeicoes || []).map((x, i) => `
+          <div class="item">
+            <span><b>${x.horario}</b> — ${x.nome}</span>
+            <button type="button" class="btn-del" onclick="excluirRefeicao(${i})">Excluir</button>
+          </div>`).join('') || '<div class="item"><span>Nenhum horário de refeição cadastrado.</span></div>';
+
       document.getElementById('lista-balanca').innerHTML =
         (d.balanca || []).map((x, i) => `
           <div class="item">
@@ -291,6 +458,8 @@
             <span><b>${x.nome}</b> — ${x.kcal} kcal</span>
             <button type="button" class="btn-del" onclick="excluirItem('alimentos', ${i})">Excluir</button>
           </div>`).join('') || '<div class="item"><span>Sem alimentos cadastrados.</span></div>';
+
+      verificarAlertas(d);
     }
 
     async function salvarPerfilCompleto() {
@@ -383,6 +552,7 @@
     }
 
     carregarEstado();
+    setInterval(() => verificarAlertas(ultimoEstado), 30000);
   </script>
 </body>
 </html>

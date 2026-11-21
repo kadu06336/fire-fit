@@ -16,6 +16,13 @@ TZ_BR = ZoneInfo("America/Sao_Paulo")
 
 app = Flask(__name__, template_folder=BASE_DIR)
 
+DEFAULT_REFEICOES = [
+    {"nome": "Café da manhã", "horario": "08:00"},
+    {"nome": "Almoço", "horario": "12:30"},
+    {"nome": "Lanche da tarde", "horario": "16:00"},
+    {"nome": "Jantar", "horario": "19:30"}
+]
+
 DEFAULT_DATA = {
     "perfil": {
         "nome": "",
@@ -25,6 +32,13 @@ DEFAULT_DATA = {
     },
     "meta_peso": 75.0,
     "peso_atual": None,
+    "agua": {
+        "meta_ml": 2500,
+        "consumido_ml": 0,
+        "data_ref": "",
+        "historico": []
+    },
+    "refeicoes": DEFAULT_REFEICOES,
     "balanca": [],
     "treinos": [],
     "glicemia": [],
@@ -38,8 +52,16 @@ DEFAULT_DATA = {
 }
 
 
+def agora_br_dt():
+    return datetime.now(TZ_BR)
+
+
 def agora_br():
-    return datetime.now(TZ_BR).strftime("%d/%m %H:%M")
+    return agora_br_dt().strftime("%d/%m %H:%M")
+
+
+def hoje_br():
+    return agora_br_dt().strftime("%Y-%m-%d")
 
 
 def normalizar_dados(raw):
@@ -52,6 +74,19 @@ def normalizar_dados(raw):
             for pk, pv in DEFAULT_DATA["perfil"].items():
                 if pk in raw["perfil"]:
                     data["perfil"][pk] = raw["perfil"][pk]
+        if isinstance(raw.get("agua"), dict):
+            for ak, av in DEFAULT_DATA["agua"].items():
+                if ak in raw["agua"]:
+                    data["agua"][ak] = raw["agua"][ak]
+        if not isinstance(data.get("refeicoes"), list) or not data["refeicoes"]:
+            data["refeicoes"] = json.loads(json.dumps(DEFAULT_REFEICOES))
+
+    # Zera o consumo diário de água quando muda o dia no fuso do Brasil
+    hoje = hoje_br()
+    if data["agua"].get("data_ref") and data["agua"].get("data_ref") != hoje:
+        data["agua"]["consumido_ml"] = 0
+        data["agua"]["historico"] = []
+    data["agua"]["data_ref"] = hoje
     return data
 
 
@@ -188,17 +223,83 @@ def get_estado():
     perfil = data.get("perfil", {})
     diferenca = round(peso - meta, 1) if (peso is not None and meta is not None) else None
     return jsonify({
+        "hora_servidor_br": agora_br_dt().strftime("%H:%M"),
         "perfil": perfil,
         "peso_atual": peso,
         "meta_peso": meta,
         "diferenca_meta": diferenca,
         "orientacao": orientacao_instrutor(perfil, peso, meta),
+        "agua": data.get("agua", DEFAULT_DATA["agua"]),
+        "refeicoes": data.get("refeicoes", DEFAULT_REFEICOES),
         "balanca": data.get("balanca", []),
         "treinos": data.get("treinos", []),
         "glicemia": data.get("glicemia", []),
         "prato": data.get("prato", []),
         "alimentos": data.get("alimentos", [])
     })
+
+
+@app.route("/api/agua", methods=["POST"])
+def atualizar_agua():
+    payload = request.get_json(force=True) or {}
+    data = load_data()
+    agua = data.get("agua", json.loads(json.dumps(DEFAULT_DATA["agua"])))
+
+    if "meta_ml" in payload and payload["meta_ml"] not in (None, ""):
+        agua["meta_ml"] = max(250, int(payload["meta_ml"]))
+
+    if payload.get("resetar"):
+        agua["consumido_ml"] = 0
+        agua["historico"] = []
+    elif "add_ml" in payload and payload["add_ml"] not in (None, ""):
+        add_val = int(payload["add_ml"])
+        agua["consumido_ml"] = max(0, int(agua.get("consumido_ml", 0)) + add_val)
+        agua.setdefault("historico", []).insert(0, {
+            "hora": agora_br_dt().strftime("%H:%M"),
+            "ml": add_val
+        })
+
+    agua["data_ref"] = hoje_br()
+    data["agua"] = agua
+    save_data(data)
+    return jsonify({"ok": True})
+
+
+@app.route("/api/agua/excluir/<int:idx>", methods=["DELETE"])
+def excluir_agua(idx):
+    data = load_data()
+    agua = data.get("agua", json.loads(json.dumps(DEFAULT_DATA["agua"])))
+    hist = agua.get("historico", [])
+    if 0 <= idx < len(hist):
+        removido = hist.pop(idx)
+        agua["consumido_ml"] = max(0, int(agua.get("consumido_ml", 0)) - int(removido.get("ml", 0)))
+        agua["historico"] = hist
+        data["agua"] = agua
+        save_data(data)
+    return jsonify({"ok": True})
+
+
+@app.route("/api/refeicoes", methods=["POST"])
+def add_refeicao():
+    payload = request.get_json(force=True) or {}
+    data = load_data()
+    nome = str(payload.get("nome", "")).strip() or "Refeição"
+    horario = str(payload.get("horario", "12:00")).strip() or "12:00"
+    data.setdefault("refeicoes", []).append({"nome": nome, "horario": horario})
+    data["refeicoes"].sort(key=lambda x: x.get("horario", ""))
+    save_data(data)
+    return jsonify({"ok": True})
+
+
+@app.route("/api/refeicoes/excluir/<int:idx>", methods=["DELETE"])
+def excluir_refeicao(idx):
+    data = load_data()
+    lista = data.get("refeicoes", [])
+    if 0 <= idx < len(lista):
+        lista.pop(idx)
+        data["refeicoes"] = lista
+        save_data(data)
+    return jsonify({"ok": True})
 
 
 @app.route("/api/perfil", methods=["POST"])
