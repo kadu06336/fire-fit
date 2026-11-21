@@ -1,0 +1,106 @@
+{
+  "alimentos": [
+    {
+      "id": "ali-1",
+      "nome": "Arroz branco cozido",
+      "estado": "Cozido",
+      "kcal_100g": 128.0,
+      "carb_100g": 28.1,
+      "prot_100g": 2.5,
+      "gord_100g": 0.2,
+      "favorito": true
+    },
+    {
+      "id": "ali-2",
+      "nome": "Feijão carioca cozido",
+      "estado": "Cozido",
+      "kcal_100g": 76.0,
+      "carb_100g": 13.6,
+      "prot_100g": 4.8,
+      "gord_100g": 0.5,
+      "favorito": true
+    },
+    {
+      "id": "ali-3",
+      "nome": "Peito de frango grelhado",
+      "estado": "Grelhado",
+      "kcal_100g": 159.0,
+      "carb_100g": 0.0,
+      "prot_100g": 32.0,
+      "gord_100g": 2.5,
+      "favorito": true
+    },
+    {
+      "id": "ali-4",
+      "nome": "Batata inglesa cozida",
+      "estado": "Cozido",
+      "kcal_100g": 52.0,
+      "carb_100g": 11.9,
+      "prot_100g": 1.2,
+      "gord_100g": 0.1,
+      "favorito": false
+    },
+    {
+      "id": "ali-5",
+      "nome": "Batata-doce cozida",
+      "estado": "Cozido",
+      "kcal_100g": 77.0,
+      "carb_100g": 18.4,
+      "prot_100g": 0.6,
+      "gord_100g": 0.1,
+      "favorito": true
+    },
+    {
+      "id": "ali-6",
+      "nome": "Pão francês",
+      "estado": "Pronto",
+      "kcal_100g": 300.0,
+      "carb_100g": 58.6,
+      "prot_100g": 8.0,
+      "gord_100g": 3.1,
+      "favorito": true
+    },
+    {
+      "id": "ali-7",
+      "nome": "Ovo inteiro cozido",
+      "estado": "Cozido",
+      "kcal_100g": 146.0,
+      "carb_100g": 0.6,
+      "prot_100g": 13.3,
+      "gord_100g": 9.5,
+      "favorito": true
+    },
+    {
+      "id": "ali-8",
+      "nome": "Banana nanica",
+      "estado": "In natura",
+      "kcal_100g": 92.0,
+      "carb_100g": 23.8,
+      "prot_100g": 1.4,
+      "gord_100g": 0.1,
+      "favorito": false
+    },
+    {
+      "id": "ali-9",
+      "nome": "Aveia em flocos",
+      "estado": "Seco",
+      "kcal_100g": 394.0,
+      "carb_100g": 66.6,
+      "prot_100g": 13.9,
+      "gord_100g": 8.5,
+      "favorito": false
+    },
+    {
+      "id": "ali-10",
+      "nome": "Carne patinho moída refogada",
+      "estado": "Cozido",
+      "kcal_100g": 219.0,
+      "carb_100g": 0.0,
+      "prot_100g": 35.9,
+      "gord_100g": 7.3,
+      "favorito": false
+    }
+  ],
+  "pratos_prontos": [],
+  "refeicoes": []
+}
