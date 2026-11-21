@@ -14,6 +14,10 @@
     .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
     .alerta-banner { background: #431407; border: 1px solid #ea580c; color: #fed7aa; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-size: 0.9rem; display: none; }
     .alerta-banner.ativo { display: block; }
+    .alerta-kcal-box { padding: 12px; border-radius: 10px; font-size: 0.92rem; font-weight: 600; margin-top: 10px; border: 1px solid #475569; background: #0f172a; color: #e2e8f0; }
+    .alerta-kcal-box.passou { background: #450a0a; border-color: #ef4444; color: #fecaca; }
+    .alerta-kcal-box.faltando { background: #172554; border-color: #38bdf8; color: #bae6fd; }
+    .alerta-kcal-box.na_meta { background: #052e16; border-color: #22c55e; color: #bbf7d0; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
     label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 4px; }
@@ -29,6 +33,7 @@
     .barra-saude { background: #22c55e; }
     .barra-treino { background: #fb923c; }
     .barra-kcal { background: #facc15; }
+    .barra-kcal.passou { background: #ef4444; }
     .crono-display { font-size: 2rem; font-weight: 800; text-align: center; color: #fdba74; letter-spacing: 1px; margin: 6px 0 12px; font-variant-numeric: tabular-nums; }
     .sub { font-size: 0.88rem; color: #cbd5e1; margin-top: 6px; line-height: 1.35; }
     .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #334155; font-size: 0.88rem; }
@@ -40,7 +45,7 @@
     .aba { display: none; }
     .aba.ativa { display: block; }
     nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 6px 2px; overflow-x: auto; }
-    nav button { background: transparent; color: #94a3b8; font-size: 0.66rem; padding: 6px 2px; border-radius: 6px; min-width: 46px; }
+    nav button { background: transparent; color: #94a3b8; font-size: 0.64rem; padding: 6px 2px; border-radius: 6px; min-width: 44px; }
     nav button.ativa { background: #334155; color: #fb923c; }
   </style>
 </head>
@@ -67,6 +72,7 @@
           </div>
         </div>
         <div class="sub" id="kpi-diff">Diferença para meta: --</div>
+        <div class="sub" id="kpi-meta-kcal">Meta diária do instrutor: 1500 kcal/dia</div>
         <div class="sub" id="base-instrutor"></div>
       </div>
 
@@ -96,13 +102,70 @@
           </div>
         </div>
 
-        <label for="p-objetivo">Programa / Objetivo</label>
-        <select id="p-objetivo">
+        <div class="grid-2">
+          <div>
+            <label for="p-objetivo">Programa / Objetivo</label>
+            <select id="p-objetivo">
+              <option value="perda">Perda de peso</option>
+              <option value="ganho">Ganho de massa</option>
+            </select>
+          </div>
+          <div>
+            <label for="p-meta-kcal">Meta diária de calorias (instrutor)</label>
+            <input id="p-meta-kcal" type="number" step="10" inputmode="numeric" placeholder="Ex: 1500" />
+          </div>
+        </div>
+
+        <button onclick="salvarPerfilCompleto()">Salvar dados e meta</button>
+      </div>
+    </section>
+
+    <section id="aba-calorias" class="aba">
+      <div class="card">
+        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Controle Diário de Calorias (Instrutor)</div>
+
+        <div class="grid-2">
+          <div>
+            <label>Precisa ingerir (meta/dia)</label>
+            <div class="kpi" id="cal-aba-meta">1500 kcal</div>
+          </div>
+          <div>
+            <label>Já ingeriu hoje</label>
+            <div class="kpi" id="cal-aba-ingerido">0 kcal</div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:8px;">
+          <div>
+            <label>Falta / Passou</label>
+            <div class="kpi" id="cal-aba-saldo">Faltam 1500 kcal</div>
+          </div>
+          <div>
+            <label>Status de saúde</label>
+            <div class="kpi" id="cal-aba-saude">Aguardando</div>
+          </div>
+        </div>
+
+        <div class="barra-bg"><div class="barra-fill barra-kcal" id="cal-aba-barra"></div></div>
+        <div id="cal-aba-alerta" class="alerta-kcal-box faltando">Faltam 1500 kcal para atingir 1500 kcal.</div>
+      </div>
+
+      <div class="card">
+        <label for="cal-aba-input-meta">Definir meta diária de calorias (instrutor)</label>
+        <input id="cal-aba-input-meta" type="number" step="10" inputmode="numeric" placeholder="Ex: 1500" />
+
+        <label for="cal-aba-input-obj">Objetivo da pessoa</label>
+        <select id="cal-aba-input-obj">
           <option value="perda">Perda de peso</option>
           <option value="ganho">Ganho de massa</option>
         </select>
 
-        <button onclick="salvarPerfilCompleto()">Salvar dados e meta</button>
+        <button type="button" onclick="salvarMetaCaloriasAba()">Salvar meta diária de calorias</button>
+      </div>
+
+      <div class="card">
+        <label>Refeições e calorias registradas hoje</label>
+        <div id="cal-aba-lista"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
       </div>
     </section>
 
@@ -215,6 +278,7 @@
           <span id="resumo-data-hoje" style="font-size:0.82rem; color:#94a3b8;">--/--/----</span>
         </div>
         <div class="sub" id="resumo-avaliacao-alim">Nenhuma alimentação registrada hoje ainda.</div>
+        <div id="alerta-kcal-box" class="alerta-kcal-box faltando">Faltam 1500 kcal para atingir 1500 kcal.</div>
 
         <div class="grid-2" style="margin-top:12px;">
           <div>
@@ -222,8 +286,8 @@
             <div class="kpi" id="dash-agua">0 / 2500 ml</div>
           </div>
           <div>
-            <label>Calorias do dia</label>
-            <div class="kpi" id="dash-kcal">0 kcal</div>
+            <label>Calorias / Meta do instrutor</label>
+            <div class="kpi" id="dash-kcal">0 / 1500 kcal</div>
           </div>
           <div>
             <label>Tempo de treino hoje</label>
@@ -257,8 +321,8 @@
 
         <div class="chart-row">
           <div class="chart-head">
-            <span>Volume calórico do dia (ref. 2.000 kcal)</span>
-            <span id="grafico-kcal-txt">0 kcal (0%)</span>
+            <span id="grafico-kcal-label">Calorias do dia (meta 1.500 kcal)</span>
+            <span id="grafico-kcal-txt">0 / 1500 kcal (0%)</span>
           </div>
           <div class="barra-bg"><div class="barra-fill barra-kcal" id="grafico-kcal-bar"></div></div>
         </div>
@@ -286,6 +350,7 @@
 
   <nav>
     <button onclick="abrirAba('painel', this)">Painel</button>
+    <button onclick="abrirAba('calorias', this)">Calorias</button>
     <button onclick="abrirAba('rotina', this)">Água/Ref.</button>
     <button onclick="abrirAba('balanca', this)">Balança</button>
     <button onclick="abrirAba('treinos', this)">Treinos</button>
@@ -361,6 +426,7 @@
 
       const agua = estado.agua || { consumido_ml: 0, meta_ml: 2500 };
       const faltamAgua = Math.max(0, (agua.meta_ml || 2500) - (agua.consumido_ml || 0));
+      const alertaKcal = (estado.resumo_dia && estado.resumo_dia.alerta_kcal) || null;
 
       const refeicoes = estado.refeicoes || [];
       const refAgora = refeicoes.filter(r => r.horario === horaAtual);
@@ -378,6 +444,9 @@
             dispararNotificacao('Fire Fit — Horário de refeição', `Chegou a hora de: ${r.nome} (${r.horario})`);
           }
         });
+      } else if (alertaKcal && alertaKcal.status === 'passou') {
+        banner.textContent = `${alertaKcal.mensagem} ${faltamAgua > 0 ? `Faltam ${faltamAgua} ml de água.` : ''}`.trim();
+        banner.classList.add('ativo');
       } else if (proximas.length > 0) {
         const proxTxt = proximas.map(r => `${r.nome} às ${r.horario}`).join(' • ');
         const aguaTxt = faltamAgua > 0 ? `Faltam ${faltamAgua} ml de água hoje.` : 'Meta de água de hoje concluída!';
@@ -388,7 +457,67 @@
       }
     }
 
-    function renderizarDashboardDia(res) {
+    function renderizarAbaCalorias(res, perfil) {
+      const r = res || {};
+      const kcalHoje = r.kcal_hoje || 0;
+      const metaKcal = Math.max(1, r.meta_kcal_dia || 1500);
+      const pctKcal = Math.min(100, Math.round((kcalHoje / metaKcal) * 100));
+      const alerta = r.alerta_kcal || {
+        status: 'faltando',
+        faltam: metaKcal,
+        passou: 0,
+        saude_texto: 'Aguardando',
+        mensagem: `Faltam ${metaKcal} kcal para atingir ${metaKcal} kcal.`
+      };
+
+      document.getElementById('cal-aba-meta').textContent = `${metaKcal} kcal`;
+      document.getElementById('cal-aba-ingerido').textContent = `${kcalHoje} kcal`;
+
+      if ((alerta.passou || 0) > 0) {
+        document.getElementById('cal-aba-saldo').textContent = `Passou ${alerta.passou} kcal`;
+      } else if ((alerta.faltam || 0) > 0) {
+        document.getElementById('cal-aba-saldo').textContent = `Faltam ${alerta.faltam} kcal`;
+      } else {
+        document.getElementById('cal-aba-saldo').textContent = `0 kcal (Na meta)`;
+      }
+
+      document.getElementById('cal-aba-saude').textContent = alerta.saude_texto || 'Saudável';
+
+      const barra = document.getElementById('cal-aba-barra');
+      barra.className = `barra-fill barra-kcal ${alerta.status === 'passou' ? 'passou' : ''}`;
+      barra.style.width = `${Math.max(4, pctKcal)}%`;
+
+      const box = document.getElementById('cal-aba-alerta');
+      box.className = `alerta-kcal-box ${alerta.status || 'faltando'}`;
+      box.textContent = alerta.mensagem;
+
+      document.getElementById('cal-aba-input-meta').value = metaKcal;
+      document.getElementById('cal-aba-input-obj').value = (perfil && perfil.objetivo) || r.objetivo || 'perda';
+
+      const alimHoje = r.alimentos_hoje || [];
+      document.getElementById('cal-aba-lista').innerHTML = alimHoje.length
+        ? alimHoje.map(x => {
+            const tag = x.saudavel !== false
+              ? '<span class="badge-ok">Saudável</span>'
+              : '<span class="badge-warn">Não saudável</span>';
+            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b> (${x.kcal} kcal)</span>${tag}</div>`;
+          }).join('')
+        : '<div class="item"><span>Nenhuma alimentação registrada hoje.</span></div>';
+    }
+
+    async function salvarMetaCaloriasAba() {
+      await fetch('/api/perfil', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          meta_kcal_dia: document.getElementById('cal-aba-input-meta').value,
+          objetivo: document.getElementById('cal-aba-input-obj').value
+        })
+      });
+      carregarEstado();
+    }
+
+    function renderizarDashboardDia(res, perfil) {
       const agora = new Date();
       const dataPadrao = agora.toLocaleDateString('pt-BR');
       const r = res || {};
@@ -400,7 +529,16 @@
       const pctAgua = Math.min(100, Math.round((aguaMl / metaAgua) * 100));
 
       const kcalHoje = r.kcal_hoje || 0;
-      const pctKcal = Math.min(100, Math.round((kcalHoje / 2000) * 100));
+      const metaKcal = Math.max(1, r.meta_kcal_dia || 1500);
+      const pctKcal = Math.min(100, Math.round((kcalHoje / metaKcal) * 100));
+
+      const alertaKcal = r.alerta_kcal || {
+        status: 'faltando',
+        mensagem: `Faltam ${metaKcal} kcal para atingir ${metaKcal} kcal.`
+      };
+      const boxKcal = document.getElementById('alerta-kcal-box');
+      boxKcal.className = `alerta-kcal-box ${alertaKcal.status || 'faltando'}`;
+      boxKcal.textContent = alertaKcal.mensagem;
 
       const minTreino = r.minutos_treino_hoje || 0;
       const pctTreino = Math.min(100, Math.round((minTreino / 45) * 100));
@@ -411,7 +549,7 @@
       const pctSaude = totalItensAlim > 0 ? Math.round((qtdSaud / totalItensAlim) * 100) : 0;
 
       document.getElementById('dash-agua').textContent = `${aguaMl} / ${metaAgua} ml`;
-      document.getElementById('dash-kcal').textContent = `${kcalHoje} kcal`;
+      document.getElementById('dash-kcal').textContent = `${kcalHoje} / ${metaKcal} kcal`;
       document.getElementById('dash-treino').textContent = `${minTreino} min`;
       document.getElementById('dash-destros').textContent = `${r.destros_hoje || 0}`;
 
@@ -423,8 +561,11 @@
         : 'Sem registros hoje';
       document.getElementById('grafico-saude-bar').style.width = `${Math.max(4, pctSaude)}%`;
 
-      document.getElementById('grafico-kcal-txt').textContent = `${kcalHoje} kcal (${pctKcal}%)`;
-      document.getElementById('grafico-kcal-bar').style.width = `${Math.max(4, pctKcal)}%`;
+      document.getElementById('grafico-kcal-label').textContent = `Calorias do dia (meta ${metaKcal} kcal)`;
+      document.getElementById('grafico-kcal-txt').textContent = `${kcalHoje} / ${metaKcal} kcal (${pctKcal}%)`;
+      const kcalBar = document.getElementById('grafico-kcal-bar');
+      kcalBar.className = `barra-fill barra-kcal ${alertaKcal.status === 'passou' ? 'passou' : ''}`;
+      kcalBar.style.width = `${Math.max(4, pctKcal)}%`;
 
       document.getElementById('grafico-treino-txt').textContent = `${minTreino} min (${pctTreino}%)`;
       document.getElementById('grafico-treino-bar').style.width = `${Math.max(4, pctTreino)}%`;
@@ -456,6 +597,8 @@
       document.getElementById('dash-lista-atividades').innerHTML = linhasAtividades.length
         ? linhasAtividades.join('')
         : '<div class="item"><span>Nenhuma atividade registrada hoje ainda.</span></div>';
+
+      renderizarAbaCalorias(r, perfil);
     }
 
     async function excluirItem(categoria, idx) {
@@ -514,7 +657,7 @@
     }
 
     async function carregarEstado() {
-      renderizarDashboardDia(ultimoEstado ? ultimoEstado.resumo_dia : null);
+      renderizarDashboardDia(ultimoEstado ? ultimoEstado.resumo_dia : null, ultimoEstado ? ultimoEstado.perfil : null);
       try {
         const res = await fetch('/api/estado');
         if (!res.ok) return;
@@ -532,6 +675,10 @@
         document.getElementById('kpi-meta').textContent = d.meta_peso != null ? d.meta_peso + ' kg' : '--';
         document.getElementById('kpi-diff').textContent =
           d.diferenca_meta != null ? 'Diferença para meta: ' + d.diferenca_meta + ' kg' : 'Diferença para meta: --';
+
+        const metaKcal = d.meta_kcal_dia || 1500;
+        document.getElementById('kpi-meta-kcal').textContent = `Meta diária do instrutor: ${metaKcal} kcal/dia`;
+        document.getElementById('p-meta-kcal').value = metaKcal;
 
         const ori = d.orientacao || {};
         document.getElementById('base-instrutor').textContent =
@@ -613,7 +760,7 @@
               </div>`;
           }).join('') || '<div class="item"><span>Sem alimentos cadastrados.</span></div>';
 
-        renderizarDashboardDia(d.resumo_dia);
+        renderizarDashboardDia(d.resumo_dia, p);
         verificarAlertas(d);
       } catch (e) {}
     }
@@ -627,6 +774,7 @@
           idade: document.getElementById('p-idade').value,
           altura_cm: document.getElementById('p-altura').value,
           objetivo: document.getElementById('p-objetivo').value,
+          meta_kcal_dia: document.getElementById('p-meta-kcal').value,
           peso_atual: document.getElementById('painel-peso').value,
           meta_peso: document.getElementById('painel-meta').value
         })
