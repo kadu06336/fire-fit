@@ -1,56 +1,136 @@
 ﻿import json
 import os
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from flask import Flask, jsonify, render_template, request
+
+try:
+    import psycopg2
+except ImportError:
+    psycopg2 = None
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_FILE = os.path.join(BASE_DIR, "dados_fire_fit.json")
+DATABASE_URL = os.environ.get("DATABASE_URL", "").strip()
+TZ_BR = ZoneInfo("America/Sao_Paulo")
 
 app = Flask(__name__, template_folder=BASE_DIR)
 
+DEFAULT_DATA = {
+    "perfil": {
+        "nome": "",
+        "idade": None,
+        "altura_cm": None,
+        "objetivo": "perda"
+    },
+    "meta_peso": 75.0,
+    "peso_atual": None,
+    "balanca": [],
+    "treinos": [],
+    "glicemia": [],
+    "prato": [],
+    "alimentos": [
+        {"nome": "Arroz integral (100g)", "kcal": 124},
+        {"nome": "Peito de frango grelhado (100g)", "kcal": 159},
+        {"nome": "Ovo cozido (1 un)", "kcal": 78},
+        {"nome": "Banana prata (1 un)", "kcal": 87}
+    ]
+}
+
+
+def agora_br():
+    return datetime.now(TZ_BR).strftime("%d/%m %H:%M")
+
+
+def normalizar_dados(raw):
+    data = json.loads(json.dumps(DEFAULT_DATA))
+    if isinstance(raw, dict):
+        for k, v in DEFAULT_DATA.items():
+            if k in raw and raw[k] is not None:
+                data[k] = raw[k]
+        if isinstance(raw.get("perfil"), dict):
+            for pk, pv in DEFAULT_DATA["perfil"].items():
+                if pk in raw["perfil"]:
+                    data["perfil"][pk] = raw["perfil"][pk]
+    return data
+
+
+def _pg_conn():
+    if not DATABASE_URL or psycopg2 is None:
+        return None
+    sslmode = "disable" if ("localhost" in DATABASE_URL or "127.0.0.1" in DATABASE_URL) else "require"
+    return psycopg2.connect(DATABASE_URL, sslmode=sslmode)
+
+
+def _garantir_tabela_pg(conn):
+    with conn.cursor() as cur:
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS fire_fit_estado (
+                id INTEGER PRIMARY KEY,
+                payload JSONB NOT NULL,
+                atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        cur.execute("SELECT payload FROM fire_fit_estado WHERE id = 1")
+        row = cur.fetchone()
+        if row is None:
+            cur.execute(
+                "INSERT INTO fire_fit_estado (id, payload) VALUES (1, %s::jsonb)",
+                (json.dumps(DEFAULT_DATA, ensure_ascii=False),)
+            )
+    conn.commit()
+
 
 def load_data():
-    default = {
-        "perfil": {
-            "nome": "",
-            "idade": None,
-            "altura_cm": None,
-            "objetivo": "perda"
-        },
-        "meta_peso": 75.0,
-        "peso_atual": None,
-        "balanca": [],
-        "treinos": [],
-        "glicemia": [],
-        "prato": [],
-        "alimentos": [
-            {"nome": "Arroz integral (100g)", "kcal": 124},
-            {"nome": "Peito de frango grelhado (100g)", "kcal": 159},
-            {"nome": "Ovo cozido (1 un)", "kcal": 78},
-            {"nome": "Banana prata (1 un)", "kcal": 87}
-        ]
-    }
+    if DATABASE_URL:
+        conn = _pg_conn()
+        if conn is not None:
+            try:
+                _garantir_tabela_pg(conn)
+                with conn.cursor() as cur:
+                    cur.execute("SELECT payload FROM fire_fit_estado WHERE id = 1")
+                    row = cur.fetchone()
+                if row and row[0] is not None:
+                    return normalizar_dados(row[0])
+                return normalizar_dados(DEFAULT_DATA)
+            finally:
+                conn.close()
+
     if not os.path.exists(DATA_FILE):
-        save_data(default)
-        return default
+        save_data(DEFAULT_DATA)
+        return normalizar_dados(DEFAULT_DATA)
     try:
         with open(DATA_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        for k, v in default.items():
-            if k not in data:
-                data[k] = v
-        if isinstance(data.get("perfil"), dict):
-            for pk, pv in default["perfil"].items():
-                if pk not in data["perfil"]:
-                    data["perfil"][pk] = pv
-        return data
+            raw = json.load(f)
+        return normalizar_dados(raw)
     except Exception:
-        return default
+        return normalizar_dados(DEFAULT_DATA)
 
 
 def save_data(data):
+    limpo = normalizar_dados(data)
+    if DATABASE_URL:
+        conn = _pg_conn()
+        if conn is not None:
+            try:
+                _garantir_tabela_pg(conn)
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """
+                        INSERT INTO fire_fit_estado (id, payload, atualizado_em)
+                        VALUES (1, %s::jsonb, CURRENT_TIMESTAMP)
+                        ON CONFLICT (id) DO UPDATE
+                        SET payload = EXCLUDED.payload, atualizado_em = CURRENT_TIMESTAMP
+                        """,
+                        (json.dumps(limpo, ensure_ascii=False),)
+                    )
+                conn.commit()
+                return
+            finally:
+                conn.close()
+
     with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+        json.dump(limpo, f, ensure_ascii=False, indent=2)
 
 
 def orientacao_instrutor(perfil, peso, meta):
@@ -148,7 +228,7 @@ def salvar_perfil():
         peso_val = float(payload["peso_atual"])
         data["peso_atual"] = peso_val
         data["balanca"].insert(0, {
-            "data": datetime.now().strftime("%d/%m %H:%M"),
+            "data": agora_br(),
             "peso": peso_val,
             "meta": data["meta_peso"]
         })
@@ -167,7 +247,7 @@ def add_balanca():
         data["meta_peso"] = float(payload["meta_peso"])
     data["peso_atual"] = peso_val
     data["balanca"].insert(0, {
-        "data": datetime.now().strftime("%d/%m %H:%M"),
+        "data": agora_br(),
         "peso": peso_val,
         "meta": data["meta_peso"]
     })
@@ -180,7 +260,7 @@ def add_treino():
     payload = request.get_json(force=True) or {}
     data = load_data()
     data["treinos"].insert(0, {
-        "data": datetime.now().strftime("%d/%m %H:%M"),
+        "data": agora_br(),
         "descricao": str(payload.get("descricao", "")).strip(),
         "minutos": int(payload.get("minutos", 0) or 0),
         "tempo_fmt": str(payload.get("tempo_fmt", "")).strip()
@@ -194,7 +274,7 @@ def add_glicemia():
     payload = request.get_json(force=True) or {}
     data = load_data()
     data["glicemia"].insert(0, {
-        "data": datetime.now().strftime("%d/%m %H:%M"),
+        "data": agora_br(),
         "valor": float(payload.get("valor", 0) or 0),
         "momento": str(payload.get("momento", "Registro")).strip()
     })
@@ -207,7 +287,7 @@ def add_prato():
     payload = request.get_json(force=True) or {}
     data = load_data()
     data["prato"].insert(0, {
-        "data": datetime.now().strftime("%d/%m %H:%M"),
+        "data": agora_br(),
         "item": str(payload.get("item", "")).strip(),
         "kcal": int(payload.get("kcal", 0) or 0)
     })
