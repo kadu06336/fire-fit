@@ -19,9 +19,12 @@
     input, select { background: #0f172a; color: #f8fafc; margin-bottom: 10px; }
     button { background: #ea580c; color: #fff; border: none; font-weight: 600; cursor: pointer; }
     button:active { opacity: 0.85; }
+    .btn-sec { background: #334155; color: #f8fafc; }
+    .btn-del { width: auto; background: #991b1b; color: #fecaca; font-size: 0.75rem; padding: 5px 9px; border-radius: 6px; margin-left: 8px; flex-shrink: 0; }
     .kpi { font-size: 1.2rem; font-weight: 700; color: #fdba74; }
+    .crono-display { font-size: 2rem; font-weight: 800; text-align: center; color: #fdba74; letter-spacing: 1px; margin: 6px 0 12px; font-variant-numeric: tabular-nums; }
     .sub { font-size: 0.88rem; color: #cbd5e1; margin-top: 6px; line-height: 1.35; }
-    .item { padding: 8px 0; border-bottom: 1px solid #334155; font-size: 0.88rem; }
+    .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #334155; font-size: 0.88rem; }
     .item:last-child { border-bottom: none; }
     .aba { display: none; }
     .aba.ativa { display: block; }
@@ -103,8 +106,19 @@
 
     <section id="aba-treinos" class="aba">
       <div class="card">
+        <label>Cronômetro do treino</label>
+        <div class="crono-display" id="crono-display">00:00:00</div>
+        <div class="grid-3" style="margin-bottom: 10px;">
+          <button type="button" onclick="iniciarCrono()">Iniciar</button>
+          <button type="button" class="btn-sec" onclick="pausarCrono()">Pausar</button>
+          <button type="button" class="btn-sec" onclick="zerarCrono()">Zerar</button>
+        </div>
+        <button type="button" class="btn-sec" onclick="usarTempoCrono()">Usar tempo no treino</button>
+      </div>
+
+      <div class="card">
         <label for="tr-desc">Treino</label>
-        <input id="tr-desc" type="text" placeholder="Ex: Caminhada leve" />
+        <input id="tr-desc" type="text" placeholder="Ex: Caminhada leve / Musculação" />
         <label for="tr-min">Duração (min)</label>
         <input id="tr-min" type="number" inputmode="numeric" placeholder="Ex: 30" />
         <button onclick="registrarTreino()">Salvar treino</button>
@@ -156,11 +170,52 @@
   </nav>
 
   <script>
+    let cronoSegundos = 0;
+    let cronoTimer = null;
+
+    function formatarCrono(seg) {
+      const h = String(Math.floor(seg / 3600)).padStart(2, '0');
+      const m = String(Math.floor((seg % 3600) / 60)).padStart(2, '0');
+      const s = String(seg % 60).padStart(2, '0');
+      return `${h}:${m}:${s}`;
+    }
+
+    function iniciarCrono() {
+      if (cronoTimer) return;
+      cronoTimer = setInterval(() => {
+        cronoSegundos++;
+        document.getElementById('crono-display').textContent = formatarCrono(cronoSegundos);
+      }, 1000);
+    }
+
+    function pausarCrono() {
+      if (cronoTimer) {
+        clearInterval(cronoTimer);
+        cronoTimer = null;
+      }
+    }
+
+    function zerarCrono() {
+      pausarCrono();
+      cronoSegundos = 0;
+      document.getElementById('crono-display').textContent = '00:00:00';
+    }
+
+    function usarTempoCrono() {
+      const mins = Math.max(1, Math.round(cronoSegundos / 60));
+      document.getElementById('tr-min').value = mins;
+    }
+
     function abrirAba(nome, btn) {
       document.querySelectorAll('.aba').forEach(el => el.classList.remove('ativa'));
       document.querySelectorAll('nav button').forEach(b => b.classList.remove('ativa'));
       document.getElementById('aba-' + nome).classList.add('ativa');
       if (btn) btn.classList.add('ativa');
+    }
+
+    async function excluirItem(categoria, idx) {
+      await fetch(`/api/excluir/${categoria}/${idx}`, { method: 'DELETE' });
+      carregarEstado();
     }
 
     async function carregarEstado() {
@@ -197,18 +252,45 @@
       if (d.peso_atual != null) {
         document.getElementById('painel-peso').value = d.peso_atual;
         document.getElementById('bal-peso').value = d.peso_atual;
+      } else {
+        document.getElementById('painel-peso').value = '';
+        document.getElementById('bal-peso').value = '';
       }
 
       document.getElementById('lista-balanca').innerHTML =
-        (d.balanca || []).map(x => `<div class="item">${x.data} — <b>${x.peso} kg</b> (Meta: ${x.meta} kg)</div>`).join('') || '<div class="item">Sem registros ainda.</div>';
+        (d.balanca || []).map((x, i) => `
+          <div class="item">
+            <span>${x.data} — <b>${x.peso} kg</b> (Meta: ${x.meta} kg)</span>
+            <button type="button" class="btn-del" onclick="excluirItem('balanca', ${i})">Excluir</button>
+          </div>`).join('') || '<div class="item"><span>Sem registros ainda.</span></div>';
+
       document.getElementById('lista-treinos').innerHTML =
-        (d.treinos || []).map(x => `<div class="item">${x.data} — <b>${x.descricao}</b> (${x.minutos} min)</div>`).join('') || '<div class="item">Sem treinos ainda.</div>';
+        (d.treinos || []).map((x, i) => `
+          <div class="item">
+            <span>${x.data} — <b>${x.descricao}</b> (${x.minutos} min${x.tempo_fmt ? ' • ' + x.tempo_fmt : ''})</span>
+            <button type="button" class="btn-del" onclick="excluirItem('treinos', ${i})">Excluir</button>
+          </div>`).join('') || '<div class="item"><span>Sem treinos ainda.</span></div>';
+
       document.getElementById('lista-glicemia').innerHTML =
-        (d.glicemia || []).map(x => `<div class="item">${x.data} — <b>${x.valor} mg/dL</b> (${x.momento})</div>`).join('') || '<div class="item">Sem medições ainda.</div>';
+        (d.glicemia || []).map((x, i) => `
+          <div class="item">
+            <span>${x.data} — <b>${x.valor} mg/dL</b> (${x.momento})</span>
+            <button type="button" class="btn-del" onclick="excluirItem('glicemia', ${i})">Excluir</button>
+          </div>`).join('') || '<div class="item"><span>Sem medições ainda.</span></div>';
+
       document.getElementById('lista-prato').innerHTML =
-        (d.prato || []).map(x => `<div class="item">${x.data} — <b>${x.item}</b> (${x.kcal} kcal)</div>`).join('') || '<div class="item">Prato vazio.</div>';
+        (d.prato || []).map((x, i) => `
+          <div class="item">
+            <span>${x.data} — <b>${x.item}</b> (${x.kcal} kcal)</span>
+            <button type="button" class="btn-del" onclick="excluirItem('prato', ${i})">Excluir</button>
+          </div>`).join('') || '<div class="item"><span>Prato vazio.</span></div>';
+
       document.getElementById('lista-alimentos').innerHTML =
-        (d.alimentos || []).map(x => `<div class="item"><b>${x.nome}</b> — ${x.kcal} kcal</div>`).join('') || '<div class="item">Sem alimentos cadastrados.</div>';
+        (d.alimentos || []).map((x, i) => `
+          <div class="item">
+            <span><b>${x.nome}</b> — ${x.kcal} kcal</span>
+            <button type="button" class="btn-del" onclick="excluirItem('alimentos', ${i})">Excluir</button>
+          </div>`).join('') || '<div class="item"><span>Sem alimentos cadastrados.</span></div>';
     }
 
     async function salvarPerfilCompleto() {
@@ -240,14 +322,21 @@
     }
 
     async function registrarTreino() {
+      const tempoFmt = cronoSegundos > 0 ? formatarCrono(cronoSegundos) : '';
+      const minsInput = document.getElementById('tr-min').value;
+      const minsFinal = minsInput ? minsInput : (cronoSegundos > 0 ? Math.max(1, Math.round(cronoSegundos / 60)) : 0);
       await fetch('/api/treinos', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           descricao: document.getElementById('tr-desc').value,
-          minutos: document.getElementById('tr-min').value
+          minutos: minsFinal,
+          tempo_fmt: tempoFmt
         })
       });
+      document.getElementById('tr-desc').value = '';
+      document.getElementById('tr-min').value = '';
+      zerarCrono();
       carregarEstado();
     }
 
@@ -260,6 +349,8 @@
           momento: document.getElementById('gl-mom').value
         })
       });
+      document.getElementById('gl-val').value = '';
+      document.getElementById('gl-mom').value = '';
       carregarEstado();
     }
 
@@ -272,6 +363,8 @@
           kcal: document.getElementById('pr-kcal').value
         })
       });
+      document.getElementById('pr-item').value = '';
+      document.getElementById('pr-kcal').value = '';
       carregarEstado();
     }
 
@@ -284,6 +377,8 @@
           kcal: document.getElementById('al-kcal').value
         })
       });
+      document.getElementById('al-nome').value = '';
+      document.getElementById('al-kcal').value = '';
       carregarEstado();
     }
 

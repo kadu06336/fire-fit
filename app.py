@@ -141,29 +141,9 @@ def salvar_perfil():
     if "objetivo" in payload and payload.get("objetivo") in ("perda", "ganho"):
         perfil["objetivo"] = payload.get("objetivo")
 
-    if "meta_peso" in payload and payload.get("meta_peso") not in (None, ""):
-        data["meta_peso"] = float(payload.get("meta_peso"))
-
-    if "peso_atual" in payload and payload.get("peso_atual") not in (None, ""):
-        peso_val = float(payload.get("peso_atual"))
-        data["peso_atual"] = peso_val
-        data["balanca"].insert(0, {
-            "data": datetime.now().strftime("%d/%m %H:%M"),
-            "peso": peso_val,
-            "meta": data["meta_peso"]
-        })
-
-    data["perfil"] = perfil
-    save_data(data)
-    return jsonify({"ok": True})
-
-
-@app.route("/api/meta-peso", methods=["POST"])
-def salvar_meta_peso():
-    payload = request.get_json(force=True) or {}
-    data = load_data()
     if "meta_peso" in payload and payload["meta_peso"] not in (None, ""):
         data["meta_peso"] = float(payload["meta_peso"])
+
     if "peso_atual" in payload and payload["peso_atual"] not in (None, ""):
         peso_val = float(payload["peso_atual"])
         data["peso_atual"] = peso_val
@@ -172,6 +152,8 @@ def salvar_meta_peso():
             "peso": peso_val,
             "meta": data["meta_peso"]
         })
+
+    data["perfil"] = perfil
     save_data(data)
     return jsonify({"ok": True})
 
@@ -200,7 +182,8 @@ def add_treino():
     data["treinos"].insert(0, {
         "data": datetime.now().strftime("%d/%m %H:%M"),
         "descricao": str(payload.get("descricao", "")).strip(),
-        "minutos": int(payload.get("minutos", 0) or 0)
+        "minutos": int(payload.get("minutos", 0) or 0),
+        "tempo_fmt": str(payload.get("tempo_fmt", "")).strip()
     })
     save_data(data)
     return jsonify({"ok": True})
@@ -241,6 +224,22 @@ def add_alimento():
         "kcal": int(payload.get("kcal", 0) or 0)
     })
     save_data(data)
+    return jsonify({"ok": True})
+
+
+@app.route("/api/excluir/<categoria>/<int:idx>", methods=["DELETE"])
+def excluir_item(categoria, idx):
+    permitidos = {"balanca", "treinos", "glicemia", "prato", "alimentos"}
+    if categoria not in permitidos:
+        return jsonify({"ok": False, "erro": "Categoria inválida"}), 400
+    data = load_data()
+    lista = data.get(categoria, [])
+    if 0 <= idx < len(lista):
+        lista.pop(idx)
+        data[categoria] = lista
+        if categoria == "balanca":
+            data["peso_atual"] = lista[0]["peso"] if lista else None
+        save_data(data)
     return jsonify({"ok": True})
 
 
