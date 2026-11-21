@@ -6,11 +6,11 @@
   <title>Fire Fit</title>
   <style>
     * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-    body { margin: 0; background: #0f172a; color: #f8fafc; padding-bottom: 78px; }
+    body { margin: 0; background: #0f172a; color: #f8fafc; padding-bottom: 84px; }
     header { background: #1e293b; padding: 14px 16px; border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 10; }
     h1 { margin: 0; font-size: 1.2rem; color: #fb923c; }
     .aviso { font-size: 0.78rem; color: #cbd5e1; margin-top: 4px; }
-    main { padding: 14px; max-width: 680px; margin: 0 auto; }
+    main { padding: 14px; max-width: 720px; margin: 0 auto; }
     .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
     .alerta-banner { background: #431407; border: 1px solid #ea580c; color: #fed7aa; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-size: 0.9rem; display: none; }
     .alerta-banner.ativo { display: block; }
@@ -23,17 +23,24 @@
     button:active { opacity: 0.85; }
     .btn-sec { background: #334155; color: #f8fafc; }
     .btn-del { width: auto; background: #991b1b; color: #fecaca; font-size: 0.75rem; padding: 5px 9px; border-radius: 6px; margin-left: 8px; flex-shrink: 0; }
-    .kpi { font-size: 1.2rem; font-weight: 700; color: #fdba74; }
-    .barra-bg { width: 100%; height: 12px; background: #0f172a; border-radius: 999px; overflow: hidden; border: 1px solid #334155; margin: 8px 0 10px; }
+    .kpi { font-size: 1.15rem; font-weight: 700; color: #fdba74; }
+    .barra-bg { width: 100%; height: 12px; background: #0f172a; border-radius: 999px; overflow: hidden; border: 1px solid #334155; margin: 6px 0 10px; }
     .barra-fill { height: 100%; background: #38bdf8; width: 0%; transition: width 0.25s; }
+    .barra-saude { background: #22c55e; }
+    .barra-treino { background: #fb923c; }
+    .barra-kcal { background: #facc15; }
     .crono-display { font-size: 2rem; font-weight: 800; text-align: center; color: #fdba74; letter-spacing: 1px; margin: 6px 0 12px; font-variant-numeric: tabular-nums; }
     .sub { font-size: 0.88rem; color: #cbd5e1; margin-top: 6px; line-height: 1.35; }
     .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #334155; font-size: 0.88rem; }
     .item:last-child { border-bottom: none; }
+    .badge-ok { background: #14532d; color: #86efac; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
+    .badge-warn { background: #7c2d12; color: #fed7aa; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
+    .chart-row { margin-bottom: 12px; }
+    .chart-head { display: flex; justify-content: space-between; font-size: 0.82rem; color: #e2e8f0; }
     .aba { display: none; }
     .aba.ativa { display: block; }
-    nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 6px 2px; }
-    nav button { background: transparent; color: #94a3b8; font-size: 0.68rem; padding: 6px 2px; border-radius: 6px; }
+    nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 6px 2px; overflow-x: auto; }
+    nav button { background: transparent; color: #94a3b8; font-size: 0.64rem; padding: 6px 2px; border-radius: 6px; min-width: 44px; }
     nav button.ativa { background: #334155; color: #fb923c; }
   </style>
 </head>
@@ -181,9 +188,21 @@
     <section id="aba-prato" class="aba">
       <div class="card">
         <label for="pr-item">Item do prato</label>
-        <input id="pr-item" type="text" placeholder="Ex: Frango + arroz" />
-        <label for="pr-kcal">Calorias (kcal)</label>
-        <input id="pr-kcal" type="number" inputmode="numeric" placeholder="Ex: 320" />
+        <input id="pr-item" type="text" placeholder="Ex: Frango + arroz integral" />
+        <div class="grid-2">
+          <div>
+            <label for="pr-kcal">Calorias (kcal)</label>
+            <input id="pr-kcal" type="number" inputmode="numeric" placeholder="Ex: 320" />
+          </div>
+          <div>
+            <label for="pr-saude">Tipo de alimentação</label>
+            <select id="pr-saude">
+              <option value="auto">Automático (pelo item)</option>
+              <option value="saudavel">Saudável</option>
+              <option value="nao_saudavel">Não saudável / Livre</option>
+            </select>
+          </div>
+        </div>
         <button onclick="registrarPrato()">Adicionar ao prato</button>
       </div>
       <div class="card" id="lista-prato"></div>
@@ -199,6 +218,81 @@
       </div>
       <div class="card" id="lista-alimentos"></div>
     </section>
+
+    <section id="aba-resumo" class="aba">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-weight:700; font-size:1rem;">Dashboard do Dia</span>
+          <span id="resumo-data-hoje" style="font-size:0.82rem; color:#94a3b8;">--/--/----</span>
+        </div>
+        <div class="sub" id="resumo-avaliacao-alim">Carregando resumo...</div>
+
+        <div class="grid-2" style="margin-top:12px;">
+          <div>
+            <label>Água tomada hoje</label>
+            <div class="kpi" id="dash-agua">0 ml</div>
+          </div>
+          <div>
+            <label>Calorias do dia</label>
+            <div class="kpi" id="dash-kcal">0 kcal</div>
+          </div>
+          <div>
+            <label>Tempo de treino hoje</label>
+            <div class="kpi" id="dash-treino">0 min</div>
+          </div>
+          <div>
+            <label>Registros de destros hoje</label>
+            <div class="kpi" id="dash-destros">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <label>Gráfico comparativo do dia</label>
+
+        <div class="chart-row">
+          <div class="chart-head">
+            <span>Hidratação (meta diária)</span>
+            <span id="grafico-agua-txt">0%</span>
+          </div>
+          <div class="barra-bg"><div class="barra-fill" id="grafico-agua-bar"></div></div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-head">
+            <span>Proporção de itens saudáveis no prato</span>
+            <span id="grafico-saude-txt">0%</span>
+          </div>
+          <div class="barra-bg"><div class="barra-fill barra-saude" id="grafico-saude-bar"></div></div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-head">
+            <span>Volume calórico do dia (ref. 2.000 kcal)</span>
+            <span id="grafico-kcal-txt">0 kcal</span>
+          </div>
+          <div class="barra-bg"><div class="barra-fill barra-kcal" id="grafico-kcal-bar"></div></div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-head">
+            <span>Tempo de treino hoje (ref. 45 min)</span>
+            <span id="grafico-treino-txt">0 min</span>
+          </div>
+          <div class="barra-bg"><div class="barra-fill barra-treino" id="grafico-treino-bar"></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <label>O que você comeu hoje (e classificação)</label>
+        <div id="dash-lista-prato"></div>
+      </div>
+
+      <div class="card">
+        <label>Água, treinos e destros registrados hoje</label>
+        <div id="dash-lista-atividades"></div>
+      </div>
+    </section>
   </main>
 
   <nav>
@@ -208,7 +302,8 @@
     <button onclick="abrirAba('treinos', this)">Treinos</button>
     <button onclick="abrirAba('glicemia', this)">Glicemia</button>
     <button onclick="abrirAba('prato', this)">Prato</button>
-    <button onclick="abrirAba('alimentos', this)">Alimentos</button>
+    <button onclick="abrirAba('alimentos', this)">Alim.</button>
+    <button onclick="abrirAba('resumo', this)">Resumo</button>
   </nav>
 
   <script>
@@ -303,6 +398,74 @@
       } else {
         banner.classList.remove('ativo');
       }
+    }
+
+    function renderizarDashboardDia(res) {
+      if (!res) return;
+      document.getElementById('resumo-data-hoje').textContent = res.data_hoje || '--/--/----';
+      document.getElementById('resumo-avaliacao-alim').textContent = res.avaliacao_alimentacao || '';
+
+      const aguaMl = res.agua_ml || 0;
+      const metaAgua = Math.max(1, res.meta_agua_ml || 2500);
+      const pctAgua = Math.min(100, Math.round((aguaMl / metaAgua) * 100));
+
+      const kcalHoje = res.kcal_hoje || 0;
+      const pctKcal = Math.min(100, Math.round((kcalHoje / 2000) * 100));
+
+      const minTreino = res.minutos_treino_hoje || 0;
+      const pctTreino = Math.min(100, Math.round((minTreino / 45) * 100));
+
+      const qtdSaud = res.qtd_saudaveis || 0;
+      const qtdNaoSaud = res.qtd_nao_saudaveis || 0;
+      const totalItensAlim = qtdSaud + qtdNaoSaud;
+      const pctSaude = totalItensAlim > 0 ? Math.round((qtdSaud / totalItensAlim) * 100) : 0;
+
+      document.getElementById('dash-agua').textContent = `${aguaMl} / ${metaAgua} ml`;
+      document.getElementById('dash-kcal').textContent = `${kcalHoje} kcal`;
+      document.getElementById('dash-treino').textContent = `${minTreino} min`;
+      document.getElementById('dash-destros').textContent = `${res.destros_hoje || 0}`;
+
+      document.getElementById('grafico-agua-txt').textContent = `${pctAgua}% (${aguaMl} ml)`;
+      document.getElementById('grafico-agua-bar').style.width = `${pctAgua}%`;
+
+      document.getElementById('grafico-saude-txt').textContent = totalItensAlim > 0
+        ? `${pctSaude}% saudáveis (${qtdSaud}/${totalItensAlim})`
+        : 'Sem itens hoje';
+      document.getElementById('grafico-saude-bar').style.width = `${pctSaude}%`;
+
+      document.getElementById('grafico-kcal-txt').textContent = `${kcalHoje} kcal (${pctKcal}%)`;
+      document.getElementById('grafico-kcal-bar').style.width = `${pctKcal}%`;
+
+      document.getElementById('grafico-treino-txt').textContent = `${minTreino} min (${pctTreino}%)`;
+      document.getElementById('grafico-treino-bar').style.width = `${pctTreino}%`;
+
+      const pratoHoje = res.prato_hoje || [];
+      document.getElementById('dash-lista-prato').innerHTML = pratoHoje.length
+        ? pratoHoje.map(x => {
+            const tag = x.saudavel !== false
+              ? '<span class="badge-ok">Saudável</span>'
+              : '<span class="badge-warn">Não saudável</span>';
+            return `<div class="item"><span>${x.data} — <b>${x.item}</b> (${x.kcal} kcal)</span>${tag}</div>`;
+          }).join('')
+        : '<div class="item"><span>Nenhuma refeição registrada hoje.</span></div>';
+
+      const linhasAtividades = [];
+      (res.agua_historico || []).forEach(a => {
+        linhasAtividades.push(`<div class="item"><span>Água às ${a.hora} — <b>+${a.ml} ml</b></span><span class="badge-ok">Água</span></div>`);
+      });
+      (res.treinos_hoje || []).forEach(t => {
+        linhasAtividades.push(`<div class="item"><span>${t.data} — Treino <b>${t.descricao}</b> (${t.minutos} min${t.tempo_fmt ? ' • ' + t.tempo_fmt : ''})</span><span class="badge-warn">Treino</span></div>`);
+      });
+      (res.balanca_hoje || []).forEach(b => {
+        linhasAtividades.push(`<div class="item"><span>${b.data} — Destro / Balança: <b>${b.peso} kg</b> (Meta: ${b.meta} kg)</span><span class="badge-ok">Destro</span></div>`);
+      });
+      (res.glicemia_hoje || []).forEach(g => {
+        linhasAtividades.push(`<div class="item"><span>${g.data} — Glicemia: <b>${g.valor} mg/dL</b> (${g.momento})</span><span class="badge-ok">Glicemia</span></div>`);
+      });
+
+      document.getElementById('dash-lista-atividades').innerHTML = linhasAtividades.length
+        ? linhasAtividades.join('')
+        : '<div class="item"><span>Nenhuma atividade registrada hoje ainda.</span></div>';
     }
 
     async function excluirItem(categoria, idx) {
@@ -446,11 +609,16 @@
           </div>`).join('') || '<div class="item"><span>Sem medições ainda.</span></div>';
 
       document.getElementById('lista-prato').innerHTML =
-        (d.prato || []).map((x, i) => `
-          <div class="item">
-            <span>${x.data} — <b>${x.item}</b> (${x.kcal} kcal)</span>
-            <button type="button" class="btn-del" onclick="excluirItem('prato', ${i})">Excluir</button>
-          </div>`).join('') || '<div class="item"><span>Prato vazio.</span></div>';
+        (d.prato || []).map((x, i) => {
+          const badge = x.saudavel !== false
+            ? '<span class="badge-ok">Saudável</span>'
+            : '<span class="badge-warn">Não saudável</span>';
+          return `
+            <div class="item">
+              <span>${x.data} — <b>${x.item}</b> (${x.kcal} kcal) ${badge}</span>
+              <button type="button" class="btn-del" onclick="excluirItem('prato', ${i})">Excluir</button>
+            </div>`;
+        }).join('') || '<div class="item"><span>Prato vazio.</span></div>';
 
       document.getElementById('lista-alimentos').innerHTML =
         (d.alimentos || []).map((x, i) => `
@@ -459,6 +627,7 @@
             <button type="button" class="btn-del" onclick="excluirItem('alimentos', ${i})">Excluir</button>
           </div>`).join('') || '<div class="item"><span>Sem alimentos cadastrados.</span></div>';
 
+      renderizarDashboardDia(d.resumo_dia);
       verificarAlertas(d);
     }
 
@@ -529,7 +698,8 @@
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           item: document.getElementById('pr-item').value,
-          kcal: document.getElementById('pr-kcal').value
+          kcal: document.getElementById('pr-kcal').value,
+          saude_tipo: document.getElementById('pr-saude').value
         })
       });
       document.getElementById('pr-item').value = '';

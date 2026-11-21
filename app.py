@@ -44,12 +44,40 @@ DEFAULT_DATA = {
     "glicemia": [],
     "prato": [],
     "alimentos": [
-        {"nome": "Arroz integral (100g)", "kcal": 124},
-        {"nome": "Peito de frango grelhado (100g)", "kcal": 159},
-        {"nome": "Ovo cozido (1 un)", "kcal": 78},
-        {"nome": "Banana prata (1 un)", "kcal": 87}
+        {"nome": "Arroz integral (100g)", "kcal": 124, "saudavel": True},
+        {"nome": "Peito de frango grelhado (100g)", "kcal": 159, "saudavel": True},
+        {"nome": "Ovo cozido (1 un)", "kcal": 78, "saudavel": True},
+        {"nome": "Banana prata (1 un)", "kcal": 87, "saudavel": True}
     ]
 }
+
+PALAVRAS_SAUDAVEIS = [
+    "arroz integral", "frango", "peito de frango", "ovo", "ovos", "banana", "fruta",
+    "frutas", "salada", "legume", "legumes", "brocolis", "brócolis", "aveia",
+    "peixe", "tilapia", "tilápia", "atum", "batata doce", "feijao", "feijão",
+    "iogurte natural", "castanha", "abacate", "morango", "maca", "maçã", "whey",
+    "salmao", "salmão", "carne magra", "patinho", "alface", "tomate", "pepino"
+]
+
+PALAVRAS_NAO_SAUDAVEIS = [
+    "fritura", "frito", "frita", "doce", "chocolate", "sorvete", "refrigerante",
+    "refri", "pizza", "hamburguer", "hambúrguer", "burger", "salgado", "coxinha",
+    "pastel", "empada", "biscoito", "bolacha", "bolo", "pudim", "cerveja",
+    "alcool", "álcool", "fast food", "bacon", "maionese", "chantilly", "leite condensado"
+]
+
+
+def classificar_saude(item_nome, tipo_informado=None):
+    if tipo_informado in ("saudavel", "nao_saudavel"):
+        return tipo_informado == "saudavel"
+    texto = (item_nome or "").lower()
+    for p in PALAVRAS_NAO_SAUDAVEIS:
+        if p in texto:
+            return False
+    for p in PALAVRAS_SAUDAVEIS:
+        if p in texto:
+            return True
+    return True
 
 
 def agora_br_dt():
@@ -62,6 +90,10 @@ def agora_br():
 
 def hoje_br():
     return agora_br_dt().strftime("%Y-%m-%d")
+
+
+def hoje_br_curto():
+    return agora_br_dt().strftime("%d/%m")
 
 
 def normalizar_dados(raw):
@@ -81,12 +113,16 @@ def normalizar_dados(raw):
         if not isinstance(data.get("refeicoes"), list) or not data["refeicoes"]:
             data["refeicoes"] = json.loads(json.dumps(DEFAULT_REFEICOES))
 
-    # Zera o consumo diário de água quando muda o dia no fuso do Brasil
     hoje = hoje_br()
     if data["agua"].get("data_ref") and data["agua"].get("data_ref") != hoje:
         data["agua"]["consumido_ml"] = 0
         data["agua"]["historico"] = []
     data["agua"]["data_ref"] = hoje
+
+    for item in data.get("prato", []):
+        if "saudavel" not in item:
+            item["saudavel"] = classificar_saude(item.get("item", ""))
+
     return data
 
 
@@ -210,6 +246,51 @@ def orientacao_instrutor(perfil, peso, meta):
     }
 
 
+def montar_resumo_dia(data):
+    prefixo_hoje = hoje_br_curto() + " "
+
+    prato_hoje = [x for x in data.get("prato", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
+    treinos_hoje = [x for x in data.get("treinos", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
+    balanca_hoje = [x for x in data.get("balanca", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
+    glicemia_hoje = [x for x in data.get("glicemia", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
+    agua = data.get("agua", DEFAULT_DATA["agua"])
+
+    kcal_total = sum(int(x.get("kcal", 0) or 0) for x in prato_hoje)
+    qtd_saudaveis = sum(1 for x in prato_hoje if x.get("saudavel", True))
+    qtd_nao_saudaveis = sum(1 for x in prato_hoje if not x.get("saudavel", True))
+
+    if not prato_hoje:
+        avaliacao_alimentacao = "Sem refeições registradas hoje."
+    elif qtd_nao_saudaveis == 0:
+        avaliacao_alimentacao = "Alimentação do dia dentro do saudável."
+    elif qtd_saudaveis >= qtd_nao_saudaveis:
+        avaliacao_alimentacao = f"Predomínio saudável ({qtd_saudaveis} saudáveis vs. {qtd_nao_saudaveis} fora do padrão)."
+    else:
+        avaliacao_alimentacao = f"Atenção: mais itens fora do saudável hoje ({qtd_nao_saudaveis} vs. {qtd_saudaveis} saudáveis)."
+
+    minutos_treino_hoje = sum(int(x.get("minutos", 0) or 0) for x in treinos_hoje)
+    destros_hoje = len(balanca_hoje)
+    ultimo_peso_hoje = balanca_hoje[0]["peso"] if balanca_hoje else data.get("peso_atual")
+
+    return {
+        "data_hoje": hoje_br_dt().strftime("%d/%m/%Y"),
+        "agua_ml": int(agua.get("consumido_ml", 0) or 0),
+        "meta_agua_ml": int(agua.get("meta_ml", 2500) or 2500),
+        "agua_historico": agua.get("historico", []),
+        "kcal_hoje": kcal_total,
+        "qtd_saudaveis": qtd_saudaveis,
+        "qtd_nao_saudaveis": qtd_nao_saudaveis,
+        "avaliacao_alimentacao": avaliacao_alimentacao,
+        "prato_hoje": prato_hoje,
+        "minutos_treino_hoje": minutos_treino_hoje,
+        "treinos_hoje": treinos_hoje,
+        "destros_hoje": destros_hoje,
+        "ultimo_peso_hoje": ultimo_peso_hoje,
+        "balanca_hoje": balanca_hoje,
+        "glicemia_hoje": glicemia_hoje
+    }
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -235,7 +316,8 @@ def get_estado():
         "treinos": data.get("treinos", []),
         "glicemia": data.get("glicemia", []),
         "prato": data.get("prato", []),
-        "alimentos": data.get("alimentos", [])
+        "alimentos": data.get("alimentos", []),
+        "resumo_dia": montar_resumo_dia(data)
     })
 
 
@@ -387,10 +469,13 @@ def add_glicemia():
 def add_prato():
     payload = request.get_json(force=True) or {}
     data = load_data()
+    item_nome = str(payload.get("item", "")).strip()
+    saudavel_flag = classificar_saude(item_nome, payload.get("saude_tipo"))
     data["prato"].insert(0, {
         "data": agora_br(),
-        "item": str(payload.get("item", "")).strip(),
-        "kcal": int(payload.get("kcal", 0) or 0)
+        "item": item_nome,
+        "kcal": int(payload.get("kcal", 0) or 0),
+        "saudavel": saudavel_flag
     })
     save_data(data)
     return jsonify({"ok": True})
@@ -400,9 +485,11 @@ def add_prato():
 def add_alimento():
     payload = request.get_json(force=True) or {}
     data = load_data()
+    nome_alimento = str(payload.get("nome", "")).strip()
     data["alimentos"].insert(0, {
-        "nome": str(payload.get("nome", "")).strip(),
-        "kcal": int(payload.get("kcal", 0) or 0)
+        "nome": nome_alimento,
+        "kcal": int(payload.get("kcal", 0) or 0),
+        "saudavel": classificar_saude(nome_alimento, payload.get("saude_tipo"))
     })
     save_data(data)
     return jsonify({"ok": True})
