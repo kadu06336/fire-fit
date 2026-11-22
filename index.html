@@ -63,6 +63,15 @@
       .grid-3 { grid-template-columns: 1fr; }
     }
   </style>
+
+<style id="firefit-excel-style">
+  .excel-box { margin-top: 10px; overflow-x: auto; border: 1px solid #334155; border-radius: 10px; background: #0f172a; }
+  .excel-tab { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+  .excel-tab th, .excel-tab td { border-bottom: 1px solid #334155; padding: 8px 10px; text-align: left; }
+  .excel-tab th { background: #1e293b; color: #fdba74; font-weight: 700; }
+  .excel-tab tr.total-row td { background: #1e293b; color: #fb923c; font-weight: 700; border-bottom: none; }
+</style>
+
 </head>
 <body>
   <header>
@@ -2035,5 +2044,153 @@ window.somarItensExatos = function(itens) {
   }, 0);
 };
 </script>
+<script>
+window.TABELA_100G = window.TABELA_100G || {};
+
+window.normTabelaItem = function(s) {
+  return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+};
+
+window.acharBase100g = function(nomeAlimento) {
+  var chave = window.normTabelaItem(nomeAlimento);
+  if (!chave) return null;
+  var tabela = window.TABELA_100G || {};
+  var nomes = Object.keys(tabela).sort(function(a, b) { return b.length - a.length; });
+  for (var i = 0; i < nomes.length; i++) {
+    var itemNorm = window.normTabelaItem(nomes[i]);
+    if (chave === itemNorm || chave.indexOf(itemNorm) !== -1 || itemNorm.indexOf(chave) !== -1) {
+      var val = Number(tabela[nomes[i]]);
+      if (!isNaN(val) && val > 0) return val;
+    }
+  }
+  return null;
+};
+
+window.calcularAlimentoTabela = function(nomeAlimento, gramas) {
+  var base = window.acharBase100g(nomeAlimento);
+  var g = Number(String(gramas || "").replace(",", ".").replace(/[^0-9.]/g, ""));
+  if (base === null || isNaN(g) || g <= 0) {
+    return { ok: false, kcal: 0, base100g: base, gramas: g };
+  }
+  return { ok: true, kcal: Math.round((g / 100) * base), base100g: base, gramas: g };
+};
+
+window.somarTotalTabela = function(itens) {
+  return (itens || []).reduce(function(total, item) {
+    return total + (Number(item.kcal) || 0);
+  }, 0);
+};
+</script>
+<script>
+window.calcPorGramasLivre = function(alimento, gramas, kcal100g) {
+  var g = Number(String(gramas || "").replace(",", ".").replace(/[^0-9.]/g, ""));
+  var base = Number(String(kcal100g || "").replace(",", ".").replace(/[^0-9.]/g, ""));
+  if (isNaN(g) || g <= 0 || isNaN(base) || base < 0) {
+    return { ok: false, alimento: (alimento || "").trim(), gramas: g, kcal100g: base, kcal: 0 };
+  }
+  return {
+    ok: true,
+    alimento: (alimento || "").trim(),
+    gramas: g,
+    kcal100g: base,
+    kcal: Math.round((g / 100) * base)
+  };
+};
+
+window.somarTotalPrato = function(itens) {
+  return (itens || []).reduce(function(acc, item) {
+    return acc + (Number(item.kcal) || 0);
+  }, 0);
+};
+</script>
+<script>
+window.calcularFacil = function(alimento, gramas, kcal100g, fallback100g) {
+  var g = Number(String(gramas || "").replace(",", ".").replace(/[^0-9.]/g, ""));
+  var base = Number(String(kcal100g !== "" && kcal100g !== undefined ? kcal100g : (fallback100g || "")).replace(",", ".").replace(/[^0-9.]/g, ""));
+  if (isNaN(g) || g <= 0 || isNaN(base) || base < 0) {
+    return { ok: false, alimento: (alimento || "").trim(), gramas: g, kcal100g: base, kcal: 0 };
+  }
+  return {
+    ok: true,
+    alimento: (alimento || "").trim(),
+    gramas: g,
+    kcal100g: base,
+    kcal: Math.round((g / 100) * base)
+  };
+};
+
+window.somarFacil = function(itens) {
+  return (itens || []).reduce(function(soma, item) {
+    return soma + (Number(item.kcal) || 0);
+  }, 0);
+};
+</script>
+
+<script id="firefit-excel-js">
+(function() {
+  if (typeof window.abrirAba !== "function") {
+    window.abrirAba = function(nome, btn) {
+      document.querySelectorAll(".aba").forEach(function(e) { e.classList.remove("ativa"); });
+      document.querySelectorAll("nav button").forEach(function(b) { b.classList.remove("ativa"); });
+      var sec = document.getElementById("aba-" + nome);
+      if (sec) sec.classList.add("ativa");
+      if (btn) btn.classList.add("ativa");
+    };
+  }
+
+  window.montarTabelaExcel = function(itens, tituloTotal) {
+    var lista = itens || [];
+    var totKcal = 0;
+    var totGramas = 0;
+    var linhasHtml = lista.map(function(it) {
+      var nome = it.alimento || it.nome || "Alimento";
+      var g = Number(it.gramas != null ? it.gramas : (it.quantidade || 0)) || 0;
+      var kcal = Number(it.kcal != null ? it.kcal : (it.valor_calorico || 0)) || 0;
+      totGramas += g;
+      totKcal += kcal;
+      return "<tr><td>" + nome + "</td><td>" + g + "g</td><td>" + kcal + " kcal</td><td>-</td></tr>";
+    }).join("");
+
+    if (!linhasHtml) {
+      linhasHtml = "<tr><td colspan='4'>Nenhum alimento na fileira ainda.</td></tr>";
+    }
+
+    return "<div class='excel-box'><table class='excel-tab'><thead><tr>" +
+      "<th>alimento</th><th>quantidade</th><th>valor calorico</th><th>total de calorias no prato</th>" +
+      "</tr></thead><tbody>" + linhasHtml +
+      "<tr class='total-row'><td>" + (tituloTotal || "Total no prato") + "</td><td>" + totGramas + "g</td><td>-</td><td>" + totKcal + " kcal</td></tr>" +
+      "</tbody></table></div>";
+  };
+
+  function atualizarGrades() {
+    var alvoCardapio = document.getElementById("lista-porcoes-rascunho");
+    if (alvoCardapio && typeof porcoesRascunho !== "undefined") {
+      var boxC = document.getElementById("excel-grade-cardapio");
+      if (!boxC) {
+        boxC = document.createElement("div");
+        boxC.id = "excel-grade-cardapio";
+        alvoCardapio.parentNode.insertBefore(boxC, alvoCardapio.nextSibling);
+      }
+      boxC.innerHTML = window.montarTabelaExcel(porcoesRascunho, "Total no prato");
+    }
+
+    var alvoAlim = document.getElementById("lista-alimentos");
+    if (alvoAlim) {
+      var boxA = document.getElementById("excel-grade-alimentos");
+      if (!boxA) {
+        boxA = document.createElement("div");
+        boxA.id = "excel-grade-alimentos";
+        alvoAlim.parentNode.insertBefore(boxA, alvoAlim.nextSibling);
+      }
+      var listaSalva = (typeof ultimoEstado !== "undefined" && ultimoEstado && ultimoEstado.alimentos) ? ultimoEstado.alimentos : [];
+      boxA.innerHTML = window.montarTabelaExcel(listaSalva, "Total de calorias");
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", atualizarGrades);
+  setInterval(atualizarGrades, 1000);
+})();
+</script>
+
 </body>
 </html>
