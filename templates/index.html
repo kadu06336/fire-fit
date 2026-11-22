@@ -1429,7 +1429,7 @@ if (-not (Test-Path .\templates)) {
       const h = String(Math.floor(seg / 3600)).padStart(2, '0');
       const m = String(Math.floor((seg % 3600) / 60)).padStart(2, '0');
       const s = String(seg % 60).padStart(2, '0');
-      return `${h}:${m}:${s}`;
+      return `${h}:${m}:${s}`);
     }
 
     function iniciarCrono() {
@@ -1485,7 +1485,7 @@ if (-not (Test-Path .\templates)) {
       const agora = new Date();
       const hh = String(agora.getHours()).padStart(2, '0');
       const mm = String(agora.getMinutes()).padStart(2, '0');
-      const horaAtual = `${hh}:${mm}`;
+      const horaAtual = `${hh}:${mm}`);
       const diaKey = agora.toISOString().slice(0, 10);
 
       const agua = estado.agua || { consumido_ml: 0, meta_ml: 2500 };
@@ -1502,7 +1502,7 @@ if (-not (Test-Path .\templates)) {
         banner.textContent = `Hora da refeição: ${nomes}! Lembre-se também de beber água.`;
         banner.classList.add('ativo');
         refAgora.forEach(r => {
-          const chave = `${diaKey}-${r.nome}-${r.horario}`;
+          const chave = `${diaKey}-${r.nome}-${r.horario}`);
           if (!alertasDisparadosHoje.has(chave)) {
             alertasDisparadosHoje.add(chave);
             dispararNotificacao('Fire Fit — Horário de refeição', `Chegou a hora de: ${r.nome} (${r.horario})`);
@@ -1514,7 +1514,7 @@ if (-not (Test-Path .\templates)) {
       } else if (proximas.length > 0) {
         const proxTxt = proximas.map(r => `${r.nome} às ${r.horario}`).join(' • ');
         const aguaTxt = faltamAgua > 0 ? `Faltam ${faltamAgua} ml de água hoje.` : 'Meta de água de hoje concluída!';
-        banner.textContent = `Próximas refeições: ${proxTxt} — ${aguaTxt}`;
+        banner.textContent = `Próximas refeições: ${proxTxt} — ${aguaTxt}`);
         banner.classList.add('ativo');
       } else {
         banner.classList.remove('ativo');
@@ -1599,12 +1599,12 @@ if (-not (Test-Path .\templates)) {
     }
 
     async function excluirCardapio(idx) {
-      await fetch(`/api/cardapio/excluir/${idx}`, { method: 'DELETE' });
+      await fetch(`/api/cardapio/excluir/${idx}`, { method: 'DELETE' })
       carregarEstado();
     }
 
     async function consumirCardapio(idx, abrirCalorias) {
-      await fetch(`/api/cardapio/consumir/${idx}`, { method: 'POST' });
+      await fetch(`/api/cardapio/consumir/${idx}`, { method: 'POST' })
       await carregarEstado();
       if (abrirCalorias) abrirAba('calorias', null);
     }
@@ -1635,11 +1635,11 @@ if (-not (Test-Path .\templates)) {
       document.getElementById('cal-aba-saude').textContent = alerta.saude_texto || 'Saudável';
 
       const barra = document.getElementById('cal-aba-barra');
-      barra.className = `barra-fill barra-kcal ${alerta.status === 'passou' ? 'passou' : ''}`;
+      barra.className = `barra-fill barra-kcal ${alerta.status === 'passou' ? 'passou' : ''}`);
       barra.style.width = `${Math.max(4, pctKcal)}%`;
 
       const box = document.getElementById('cal-aba-alerta');
-      box.className = `alerta-kcal-box ${alerta.status || 'faltando'}`;
+      box.className = `alerta-kcal-box ${alerta.status || 'faltando'}`);
       box.textContent = alerta.mensagem;
 
       document.getElementById('cal-aba-input-meta').value = metaKcal;
@@ -1689,7 +1689,7 @@ if (-not (Test-Path .\templates)) {
         mensagem: `Já consumiu 0 kcal de ${metaKcal} kcal — faltam ${metaKcal} kcal.`
       };
       const boxKcal = document.getElementById('alerta-kcal-box');
-      boxKcal.className = `alerta-kcal-box ${alertaKcal.status || 'faltando'}`;
+      boxKcal.className = `alerta-kcal-box ${alertaKcal.status || 'faltando'}`);
       boxKcal.textContent = alertaKcal.mensagem;
 
       const minTreino = r.minutos_treino_hoje || 0;
@@ -1703,7 +1703,7 @@ if (-not (Test-Path .\templates)) {
       document.getElementById('dash-agua').textContent = `${aguaMl} / ${metaAgua} ml`;
       document.getElementById('dash-kcal').textContent = `${kcalHoje} / ${metaKcal} kcal`;
       document.getElementById('dash-treino').textContent = `${minTreino} min`;
-      document.getElementById('dash-destros').textContent = `${r.destros_hoje || 0}`;
+      document.getElementById('dash-destros').textContent = `${r.destros_hoje || 0}`);
 
       document.getElementById('grafico-agua-txt').textContent = `${pctAgua}% (${aguaMl} ml)`;
       document.getElementById('grafico-agua-bar').style.width = `${Math.max(4, pctAgua)}%`;
@@ -1716,7 +1716,7 @@ if (-not (Test-Path .\templates)) {
       document.getElementById('grafico-kcal-label').textContent = `Calorias do dia (meta ${metaKcal} kcal)`;
       document.getElementById('grafico-kcal-txt').textContent = `${kcalHoje} / ${metaKcal} kcal (${pctKcal}%)`;
       const kcalBar = document.getElementById('grafico-kcal-bar');
-      kcalBar.className = `barra-fill barra-kcal ${alertaKcal.status === 'passou' ? 'passou' : ''}`;
+      kcalBar.className = `barra-fill barra-kcal ${alertaKcal.status === 'passou' ? 'passou' : ''}`);
       kcalBar.style.width = `${Math.max(4, pctKcal)}%`;
 
       document.getElementById('grafico-treino-txt').textContent = `${minTreino} min (${pctTreino}%)`;
@@ -1746,27 +1746,27 @@ if (-not (Test-Path .\templates)) {
     }
 
     async function excluirItem(categoria, idx) {
-      await fetch(`/api/excluir/${categoria}/${idx}`, { method: 'DELETE' });
+      await fetch(`/api/excluir/${categoria}/${idx}`, { method: 'DELETE' })
       carregarEstado();
     }
 
     async function addAgua(ml) {
-      await fetch('/api/agua', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ add_ml: ml }) });
+      await fetch('/api/agua', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ add_ml: ml }) })
       carregarEstado();
     }
 
     async function resetAgua() {
-      await fetch('/api/agua', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ resetar: true }) });
+      await fetch('/api/agua', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ resetar: true }) })
       carregarEstado();
     }
 
     async function salvarMetaAgua() {
-      await fetch('/api/agua', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ meta_ml: document.getElementById('agua-meta').value }) });
+      await fetch('/api/agua', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ meta_ml: document.getElementById('agua-meta').value }) })
       carregarEstado();
     }
 
     async function excluirAgua(idx) {
-      await fetch(`/api/agua/excluir/${idx}`, { method: 'DELETE' });
+      await fetch(`/api/agua/excluir/${idx}`, { method: 'DELETE' })
       carregarEstado();
     }
 
@@ -1781,14 +1781,14 @@ if (-not (Test-Path .\templates)) {
     }
 
     async function excluirRefeicao(idx) {
-      await fetch(`/api/refeicoes/excluir/${idx}`, { method: 'DELETE' });
+      await fetch(`/api/refeicoes/excluir/${idx}`, { method: 'DELETE' })
       carregarEstado();
     }
 
     async function carregarEstado() {
       renderizarDashboardDia(ultimoEstado ? ultimoEstado.resumo_dia : null, ultimoEstado ? ultimoEstado.perfil : null);
       try {
-        const res = await fetch('/api/estado');
+        const res = await fetch('/api/estado')
         if (!res.ok) return;
         const d = await res.json();
         ultimoEstado = d;
@@ -1975,5 +1975,16 @@ if (-not (Test-Path .\templates)) {
     carregarEstado();
     setInterval(() => verificarAlertas(ultimoEstado), 30000);
   </script>
+<script>
+if (typeof window.abrirAba !== "function") {
+  window.abrirAba = function(nome, btn) {
+    document.querySelectorAll(".aba").forEach(function(el) { el.classList.remove("ativa"); });
+    document.querySelectorAll("nav button").forEach(function(b) { b.classList.remove("ativa"); });
+    var sec = document.getElementById("aba-" + nome);
+    if (sec) sec.classList.add("ativa");
+    if (btn) btn.classList.add("ativa");
+  };
+}
+</script>
 </body>
 </html>
