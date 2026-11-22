@@ -146,80 +146,43 @@
 
     <section id="aba-cardapio" class="aba">
       <div class="card">
-        <div style="font-weight:700; font-size:1rem; margin-bottom:8px;">Pesagem Individual por Alimento (Cardápio)</div>
-        <div class="sub" style="margin-bottom:10px;">Escreva em linha (ex.: <b>arroz 100g 50 calorias</b> ou <b>arroz 100g feijao 200g</b>) ou em bloco (uma linha por alimento). Mostra o valor individual e no final soma tudo.</div>
-
-        <div class="grid-2">
-          <div>
-            <label for="prato-dia">Dia da semana</label>
-            <select id="prato-dia">
-              <option value="Segunda">Segunda</option>
-              <option value="Terça">Terça</option>
-              <option value="Quarta">Quarta</option>
-              <option value="Quinta">Quinta</option>
-              <option value="Sexta">Sexta</option>
-              <option value="Sábado">Sábado</option>
-              <option value="Domingo">Domingo</option>
-            </select>
-          </div>
-          <div>
-            <label for="prato-refeicao">Refeição</label>
-            <select id="prato-refeicao">
-              <option value="Café da manhã">Café da manhã</option>
-              <option value="Almoço">Almoço</option>
-              <option value="Lanche da tarde">Lanche da tarde</option>
-              <option value="Jantar">Jantar</option>
-            </select>
-          </div>
-        </div>
-
-        <label for="porcao-alimento">Alimento(s) — em linha ou em bloco</label>
-        <textarea id="porcao-alimento" placeholder="Ex: arroz 100g 50 calorias&#10;feijao 200g&#10;ou na mesma linha: arroz 100g 50calorias feijao 200g" oninput="atualizarPreviewPorcao()"></textarea>
+        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Tabela do Prato (Estilo Excel)</div>
 
         <div class="grid-3">
           <div>
-            <label for="porcao-qtd">Peso individual (g)</label>
-            <input id="porcao-qtd" type="number" step="1" inputmode="decimal" placeholder="Ex: 100" oninput="atualizarPreviewPorcao()" />
+            <label for="ex-alimento">Alimento</label>
+            <input id="ex-alimento" type="text" placeholder="Ex: arroz" />
           </div>
           <div>
-            <label for="porcao-kcal">Calorias item (kcal)</label>
-            <input id="porcao-kcal" type="number" inputmode="numeric" placeholder="Calcula auto" oninput="marcarKcalManual('porcao')" />
+            <label for="ex-gramas">Quantidade (g)</label>
+            <input id="ex-gramas" type="number" step="1" inputmode="decimal" placeholder="Ex: 100" />
           </div>
           <div>
-            <label for="porcao-saude">Tipo do alimento</label>
-            <select id="porcao-saude">
-              <option value="auto">Automático</option>
-              <option value="saudavel">Saudável</option>
-              <option value="nao_saudavel">Não saudável</option>
-            </select>
+            <label for="ex-kcal100">Kcal por 100g</label>
+            <input id="ex-kcal100" type="number" step="1" inputmode="decimal" placeholder="Ex: 128" />
           </div>
-        </div>
-
-        <div class="calc-preview" id="porcao-preview">Digite em linha ou em bloco para ver o valor individual de cada alimento e a soma final.</div>
-        <button type="button" class="btn-sec" style="margin-bottom:10px;" onclick="adicionarPorcaoAoPrato()">+ Adicionar alimento(s) ao prato</button>
-
-        <div id="lista-porcoes-rascunho">
-          <div class="item"><span>Nenhum alimento adicionado ao prato ainda.</span></div>
-        </div>
-
-        <div class="soma-prato-box">
-          <span>Soma final do prato:</span>
-          <span id="soma-prato-kcal">0 kcal</span>
         </div>
 
         <div class="grid-2">
-          <button type="button" onclick="salvarPratoNoCardapio(false)">Salvar no Cardápio</button>
-          <button type="button" class="btn-ok" style="width:100%; margin-left:0; padding:10px; font-size:0.9rem;" onclick="salvarPratoNoCardapio(true)">Salvar e ir p/ Calorias</button>
+          <button type="button" onclick="addLinhaExcel()">+ Adicionar linha</button>
+          <button type="button" class="btn-sec" onclick="limparLinhasExcel()">Limpar tabela</button>
         </div>
-      </div>
 
-      <div class="card" id="lista-cardapio-semana">
-        <div class="item"><span>Nenhum prato cadastrado no cardápio da semana.</span></div>
-      </div>
-
-      <div class="soma-prato-box" id="cardapio-soma-geral-box">
-        <span>Soma total de todos os itens do cardápio:</span>
-        <span id="cardapio-soma-geral-kcal">0 kcal</span>
+        <div class="excel-box" style="margin-top:12px;">
+          <table class="excel-tab">
+            <thead>
+              <tr>
+                <th>alimento</th>
+                <th>quantidade</th>
+                <th>valor calorico</th>
+                <th>total de calorias no prato</th>
+              </tr>
+            </thead>
+            <tbody id="excel-linhas-body">
+              <tr><td colspan="4">Nenhuma linha adicionada ainda.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
 
@@ -2192,5 +2155,83 @@ window.somarFacil = function(itens) {
 })();
 </script>
 
+<script id="firefit-excel-simples">
+(function() {
+  var linhasPrato = [];
+
+  window.addLinhaExcel = function() {
+    var nomeEl = document.getElementById("ex-alimento");
+    var gramasEl = document.getElementById("ex-gramas");
+    var kcal100El = document.getElementById("ex-kcal100");
+    if (!nomeEl || !gramasEl || !kcal100El) return;
+
+    var alimento = (nomeEl.value || "").trim();
+    var gramas = parseFloat(String(gramasEl.value || "").replace(",", "."));
+    var kcal100 = parseFloat(String(kcal100El.value || "").replace(",", "."));
+
+    if (!alimento || isNaN(gramas) || gramas <= 0 || isNaN(kcal100) || kcal100 < 0) return;
+
+    var valorCalorico = Math.round((gramas / 100) * kcal100);
+    linhasPrato.push({
+      alimento: alimento,
+      gramas: gramas,
+      valorCalorico: valorCalorico
+    });
+
+    nomeEl.value = "";
+    gramasEl.value = "";
+    kcal100El.value = "";
+    nomeEl.focus();
+    renderExcelPrato();
+  };
+
+  window.limparLinhasExcel = function() {
+    linhasPrato = [];
+    renderExcelPrato();
+  };
+
+  window.removerLinhaExcel = function(idx) {
+    linhasPrato.splice(idx, 1);
+    renderExcelPrato();
+  };
+
+  function renderExcelPrato() {
+    var tbody = document.getElementById("excel-linhas-body");
+    if (!tbody) return;
+
+    if (!linhasPrato.length) {
+      tbody.innerHTML = "<tr><td colspan='4'>Nenhuma linha adicionada ainda.</td></tr>";
+      return;
+    }
+
+    var totalKcal = 0;
+    var totalGramas = 0;
+    var html = "";
+
+    for (var i = 0; i < linhasPrato.length; i++) {
+      var item = linhasPrato[i];
+      totalGramas += item.gramas;
+      totalKcal += item.valorCalorico;
+      html += "<tr>" +
+        "<td>" + item.alimento + " <button type='button' class='btn-del' style='padding:2px 6px;font-size:0.7rem;' onclick='removerLinhaExcel(" + i + ")'>x</button></td>" +
+        "<td>" + item.gramas + "g</td>" +
+        "<td>" + item.valorCalorico + " kcal</td>" +
+        "<td>-</td>" +
+        "</tr>";
+    }
+
+    html += "<tr class='total-row'>" +
+      "<td>Total no prato</td>" +
+      "<td>" + totalGramas + "g</td>" +
+      "<td>-</td>" +
+      "<td>" + totalKcal + " kcal</td>" +
+      "</tr>";
+
+    tbody.innerHTML = html;
+  }
+
+  document.addEventListener("DOMContentLoaded", renderExcelPrato);
+})();
+</script>
 </body>
 </html>
