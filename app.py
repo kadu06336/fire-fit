@@ -4,6 +4,7 @@ import os
 import re
 from zoneinfo import ZoneInfo
 from flask import Flask, jsonify, render_template, request
+from werkzeug.security import check_password_hash, generate_password_hash
 
 try:
     import psycopg2
@@ -414,6 +415,45 @@ def montar_resumo_dia(data):
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/api/auth/registrar", methods=["POST"])
+def api_auth_registrar():
+    payload = request.get_json(force=True) or {}
+    email = str(payload.get("email") or "").strip().lower()
+    senha = str(payload.get("senha") or "")
+    nome = str(payload.get("nome") or "").strip()
+    if "@" not in email or "." not in email.split("@")[-1]:
+        return jsonify({"ok": False, "erro": "E-mail invalido."}), 400
+    if len(senha) < 4:
+        return jsonify({"ok": False, "erro": "Senha minima de 4 caracteres."}), 400
+    store = load_store()
+    chave = "u_" + hashlib.sha256(email.encode("utf-8")).hexdigest()[:16]
+    if (store["usuarios"].get(chave) or {}).get("conta", {}).get("senha_hash"):
+        return jsonify({"ok": False, "erro": "E-mail ja cadastrado."}), 400
+    d = criar_estado_vazio(nome or email.split("@")[0].capitalize())
+    d["conta"] = {"email": email, "senha_hash": generate_password_hash(senha)}
+    store["usuarios"][chave] = d
+    store["usuario_ativo"] = chave
+    save_store(store)
+    return jsonify({"ok": True, "usuario_ativo": chave,
+        "email_ativo": (data.get("conta") or {}).get("email") or "", "email": email})
+
+
+@app.route("/api/auth/login", methods=["POST"])
+def api_auth_login():
+    payload = request.get_json(force=True) or {}
+    email = str(payload.get("email") or "").strip().lower()
+    senha = str(payload.get("senha") or "")
+    store = load_store()
+    chave = "u_" + hashlib.sha256(email.encode("utf-8")).hexdigest()[:16]
+    d = store["usuarios"].get(chave) or {}
+    h = (d.get("conta") or {}).get("senha_hash") or ""
+    if not h or not check_password_hash(h, senha):
+        return jsonify({"ok": False, "erro": "Credenciais invalidas."}), 401
+    store["usuario_ativo"] = chave
+    save_store(store)
+    return jsonify({"ok": True, "usuario_ativo": chave, "email": email})
 
 
 @app.route("/api/estado", methods=["GET"])
