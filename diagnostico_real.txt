@@ -1,0 +1,1950 @@
+﻿=== HTML: .\templates\index.html ===
+
+  templates\index.html:14:    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+  templates\index.html:15:    .alerta-banner { background: #431407; border: 1px solid #ea580c; color: #fed7aa; border-radius: 12px; padding: 12px 14px; 
+margin-bottom: 12px; font-size: 0.9rem; display: none; }
+  templates\index.html:16:    .alerta-banner.ativo { display: block; }
+> templates\index.html:17:    .alerta-kcal-box { padding: 12px; border-radius: 10px; font-size: 0.92rem; font-weight: 600; margin-top: 10px; border: 1px solid 
+#475569; background: #0f172a; color: #e2e8f0; }
+> templates\index.html:18:    .alerta-kcal-box.passou { background: #450a0a; border-color: #ef4444; color: #fecaca; }
+> templates\index.html:19:    .alerta-kcal-box.faltando { background: #172554; border-color: #38bdf8; color: #bae6fd; }
+> templates\index.html:20:    .alerta-kcal-box.na_meta { background: #052e16; border-color: #22c55e; color: #bbf7d0; }
+  templates\index.html:21:    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  templates\index.html:22:    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  templates\index.html:23:    label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 4px; }
+  templates\index.html:24:    input, select, textarea, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #475569; font-size: 0.95rem; }
+  templates\index.html:35:    .barra-fill { height: 100%; background: #38bdf8; min-width: 6px; width: 6%; transition: width 0.25s; }
+  templates\index.html:36:    .barra-saude { background: #22c55e; }
+  templates\index.html:37:    .barra-treino { background: #fb923c; }
+> templates\index.html:38:    .barra-kcal { background: #facc15; }
+> templates\index.html:39:    .barra-kcal.passou { background: #ef4444; }
+  templates\index.html:40:    .crono-display { font-size: 2rem; font-weight: 800; text-align: center; color: #fdba74; letter-spacing: 1px; margin: 6px 0 12px; 
+font-variant-numeric: tabular-nums; }
+  templates\index.html:41:    .sub { font-size: 0.88rem; color: #cbd5e1; margin-top: 6px; line-height: 1.35; }
+  templates\index.html:42:    .calc-preview { font-size: 0.86rem; color: #86efac; background: #052e16; border: 1px solid #166534; border-radius: 8px; padding: 9px 
+10px; margin-bottom: 10px; line-height: 1.45; }
+> templates\index.html:43:    .soma-prato-box { font-size: 0.95rem; font-weight: 700; color: #fdba74; background: #0f172a; border: 1px solid #ea580c; 
+border-radius: 10px; padding: 10px 12px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+  templates\index.html:44:    .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid 
+#334155; font-size: 0.88rem; }
+  templates\index.html:45:    .item:last-child { border-bottom: none; }
+  templates\index.html:46:    .dia-bloco { border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; background: #0f172a; }
+  templates\index.html:47:    .dia-bloco:last-child { margin-bottom: 0; }
+  templates\index.html:48:    .dia-topo { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  templates\index.html:49:    .dia-titulo { font-weight: 700; color: #fb923c; font-size: 0.92rem; }
+> templates\index.html:50:    .dia-kcal { font-size: 0.82rem; font-weight: 600; color: #e2e8f0; }
+> templates\index.html:51:    .prato-card { border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-top: 8px; background: #1e293b; }
+> templates\index.html:52:    .prato-cab { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+  templates\index.html:53:    .badge-ok { background: #14532d; color: #86efac; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
+  templates\index.html:54:    .badge-warn { background: #7c2d12; color: #fed7aa; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
+  templates\index.html:55:    .chart-row { margin-bottom: 12px; }
+  templates\index.html:56:    .chart-head { display: flex; justify-content: space-between; font-size: 0.82rem; color: #e2e8f0; }
+  templates\index.html:96:          </div>
+  templates\index.html:97:        </div>
+  templates\index.html:98:        <div class="sub" id="kpi-diff">Diferença para meta: --</div>
+> templates\index.html:99:        <div class="sub" id="kpi-meta-kcal">Meta diária do instrutor: 1500 kcal/dia</div>
+  templates\index.html:100:        <div class="sub" id="base-instrutor"></div>
+  templates\index.html:101:      </div>
+  templates\index.html:102:
+  templates\index.html:103:      <div class="card">
+  templates\index.html:135:            </select>
+  templates\index.html:136:          </div>
+  templates\index.html:137:          <div>
+> templates\index.html:138:            <label for="p-meta-kcal">Meta diária de calorias (instrutor)</label>
+> templates\index.html:139:            <input id="p-meta-kcal" type="number" step="10" inputmode="numeric" placeholder="Ex: 1500" />
+  templates\index.html:140:          </div>
+  templates\index.html:141:        </div>
+  templates\index.html:142:
+  templates\index.html:143:        <button onclick="salvarPerfilCompleto()">Salvar dados e meta</button>
+  templates\index.html:144:      </div>
+  templates\index.html:145:    </section>
+  templates\index.html:146:
+> templates\index.html:147:    <section id="aba-cardapio" class="aba">
+  templates\index.html:148:      <div class="card">
+> templates\index.html:149:        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Tabela do Prato (Estilo Excel)</div>
+  templates\index.html:150:
+  templates\index.html:151:        <div class="grid-3">
+  templates\index.html:152:          <div>
+  templates\index.html:153:            <label for="ex-alimento">Alimento</label>
+  templates\index.html:158:            <input id="ex-gramas" type="number" step="1" inputmode="decimal" placeholder="Ex: 100" />
+  templates\index.html:159:          </div>
+  templates\index.html:160:          <div>
+> templates\index.html:161:            <label for="ex-kcal100">Kcal por 100g</label>
+> templates\index.html:162:            <input id="ex-kcal100" type="number" step="1" inputmode="decimal" placeholder="Ex: 128" />
+  templates\index.html:163:          </div>
+  templates\index.html:164:        </div>
+  templates\index.html:165:
+  templates\index.html:166:        <div class="grid-2">
+  templates\index.html:167:          <button type="button" onclick="addLinhaExcel()">+ Adicionar linha</button>
+> templates\index.html:168:          <button type="button" class="btn-sec" onclick="limparLinhasExcel()">Limpar tabela</button>
+  templates\index.html:169:        </div>
+  templates\index.html:170:
+  templates\index.html:171:        <div class="excel-box" style="margin-top:12px;">
+  templates\index.html:172:          <table class="excel-tab">
+  templates\index.html:175:                <th>alimento</th>
+  templates\index.html:176:                <th>quantidade</th>
+  templates\index.html:177:                <th>valor calorico</th>
+> templates\index.html:178:                <th>total de calorias no prato</th>
+  templates\index.html:179:              </tr>
+  templates\index.html:180:            </thead>
+  templates\index.html:181:            <tbody id="excel-linhas-body">
+  templates\index.html:182:              <tr><td colspan="4">Nenhuma linha adicionada ainda.</td></tr>
+  templates\index.html:186:      </div>
+  templates\index.html:187:    </section>
+  templates\index.html:188:
+> templates\index.html:189:    <section id="aba-calorias" class="aba">
+  templates\index.html:190:      <div class="card">
+> templates\index.html:191:        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Resumo de Calorias Consumidas Hoje</div>
+  templates\index.html:192:
+  templates\index.html:193:        <div class="grid-2">
+  templates\index.html:194:          <div>
+  templates\index.html:195:            <label>Já consumiu hoje</label>
+> templates\index.html:196:            <div class="kpi" id="cal-aba-ingerido">0 kcal</div>
+  templates\index.html:197:          </div>
+  templates\index.html:198:          <div>
+  templates\index.html:199:            <label>Meta diária (instrutor)</label>
+> templates\index.html:200:            <div class="kpi" id="cal-aba-meta">1500 kcal</div>
+  templates\index.html:201:          </div>
+  templates\index.html:202:        </div>
+  templates\index.html:203:
+  templates\index.html:204:        <div class="grid-2" style="margin-top:8px;">
+  templates\index.html:205:          <div>
+  templates\index.html:206:            <label>Quanto falta / passou</label>
+> templates\index.html:207:            <div class="kpi" id="cal-aba-saldo">Faltam 1500 kcal</div>
+  templates\index.html:208:          </div>
+  templates\index.html:209:          <div>
+  templates\index.html:210:            <label>Status de saúde</label>
+  templates\index.html:211:            <div class="kpi" id="cal-aba-saude">Aguardando</div>
+  templates\index.html:212:          </div>
+  templates\index.html:213:        </div>
+  templates\index.html:214:
+> templates\index.html:215:        <div class="barra-bg"><div class="barra-fill barra-kcal" id="cal-aba-barra"></div></div>
+> templates\index.html:216:        <div id="cal-aba-alerta" class="alerta-kcal-box faltando">Já consumiu 0 kcal de 1500 kcal — faltam 1500 kcal.</div>
+  templates\index.html:217:      </div>
+  templates\index.html:218:
+  templates\index.html:219:      <div class="card">
+> templates\index.html:220:        <label for="cal-aba-input-meta">Definir meta diária de calorias (instrutor)</label>
+  templates\index.html:221:        <input id="cal-aba-input-meta" type="number" step="10" inputmode="numeric" placeholder="Ex: 1500" />
+  templates\index.html:222:
+  templates\index.html:223:        <label for="cal-aba-input-obj">Objetivo da pessoa</label>
+  templates\index.html:224:        <select id="cal-aba-input-obj">
+  templates\index.html:226:          <option value="ganho">Ganho de massa</option>
+  templates\index.html:227:        </select>
+  templates\index.html:228:
+> templates\index.html:229:        <button type="button" onclick="salvarMetaCaloriasAba()">Salvar meta diária de calorias</button>
+  templates\index.html:230:      </div>
+  templates\index.html:231:
+  templates\index.html:232:      <div class="card">
+> templates\index.html:233:        <label>Todas as refeições e alimentos pesados consumidos hoje</label>
+  templates\index.html:234:        <div id="cal-aba-lista"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
+> templates\index.html:235:        <div class="soma-prato-box" style="margin-bottom:0;">
+  templates\index.html:236:          <span>Soma final consumida hoje:</span>
+> templates\index.html:237:          <span id="cal-aba-soma-final">0 kcal</span>
+  templates\index.html:238:        </div>
+  templates\index.html:239:      </div>
+  templates\index.html:240:    </section>
+  templates\index.html:241:
+  templates\index.html:260:      <div class="card" id="lista-agua"></div>
+  templates\index.html:261:
+  templates\index.html:262:      <div class="card">
+> templates\index.html:263:        <label>Alerta de horário das refeições</label>
+  templates\index.html:264:        <div class="sub" style="margin-bottom:10px;">Quando o app estiver aberto no horário configurado, ele exibe um alerta visual e 
+notificação (se permitida).</div>
+  templates\index.html:265:        <button type="button" class="btn-sec" style="margin-bottom:12px;" onclick="pedirPermissaoNotif()">Ativar notificações do 
+navegador</button>
+  templates\index.html:266:
+> templates\index.html:267:        <label for="ref-nome">Refeição</label>
+  templates\index.html:268:        <input id="ref-nome" type="text" placeholder="Ex: Café da manhã / Pré-treino" />
+  templates\index.html:269:        <label for="ref-hora">Horário</label>
+  templates\index.html:270:        <input id="ref-hora" type="time" />
+> templates\index.html:271:        <button type="button" onclick="addRefeicao()">Adicionar horário de refeição</button>
+  templates\index.html:272:      </div>
+  templates\index.html:273:
+> templates\index.html:274:      <div class="card" id="lista-refeicoes"></div>
+  templates\index.html:275:    </section>
+  templates\index.html:276:
+  templates\index.html:277:    <section id="aba-balanca" class="aba">
+  templates\index.html:278:      <div class="card">
+  templates\index.html:312:        <label for="gl-val">Glicemia (mg/dL)</label>
+  templates\index.html:313:        <input id="gl-val" type="number" step="1" inputmode="numeric" placeholder="Ex: 98" />
+  templates\index.html:314:        <label for="gl-mom">Momento</label>
+> templates\index.html:315:        <input id="gl-mom" type="text" placeholder="Ex: Jejum / Pós-refeição" />
+  templates\index.html:316:        <button onclick="registrarGlicemia()">Salvar glicemia</button>
+  templates\index.html:317:      </div>
+  templates\index.html:318:      <div class="card" id="lista-glicemia"></div>
+  templates\index.html:319:    </section>
+  templates\index.html:320:
+> templates\index.html:321:    <section id="aba-alimentos" class="aba">
+  templates\index.html:322:      <div class="card">
+> templates\index.html:323:        <label for="al-nome">Alimento(s) — em linha (ex.: arroz 100g 50 calorias) ou em bloco</label>
+> templates\index.html:324:        <textarea id="al-nome" placeholder="Ex: arroz 100g 50 calorias&#10;feijao 200g&#10;ou em linha: arroz 100g 50calorias feijao 
+200g" oninput="atualizarPreviewAvulso()"></textarea>
+  templates\index.html:325:
+  templates\index.html:326:        <div class="grid-3">
+  templates\index.html:327:          <div>
+  templates\index.html:328:            <label for="al-qtd">Peso individual (g)</label>
+  templates\index.html:329:            <input id="al-qtd" type="number" step="1" inputmode="decimal" placeholder="Ex: 100" oninput="atualizarPreviewAvulso()" />
+  templates\index.html:330:          </div>
+  templates\index.html:331:          <div>
+> templates\index.html:332:            <label for="al-kcal">Calorias item (kcal)</label>
+> templates\index.html:333:            <input id="al-kcal" type="number" inputmode="numeric" placeholder="Calcula auto" oninput="marcarKcalManual('al')" />
+  templates\index.html:334:          </div>
+  templates\index.html:335:          <div>
+  templates\index.html:336:            <label for="al-saude">Tipo</label>
+  templates\index.html:337:            <select id="al-saude">
+  templates\index.html:346:        <button onclick="registrarAlimento()">Salvar alimentação</button>
+  templates\index.html:347:      </div>
+  templates\index.html:348:
+> templates\index.html:349:      <div class="card" id="lista-alimentos"></div>
+  templates\index.html:350:
+> templates\index.html:351:      <div class="soma-prato-box" id="alimentos-soma-final-box">
+> templates\index.html:352:        <span>Soma final de todos os alimentos:</span>
+> templates\index.html:353:        <span id="alimentos-soma-final-kcal">0 kcal</span>
+  templates\index.html:354:      </div>
+  templates\index.html:355:    </section>
+  templates\index.html:356:
+  templates\index.html:357:    <section id="aba-resumo" class="aba ativa">
+  templates\index.html:361:          <span id="resumo-data-hoje" style="font-size:0.82rem; color:#94a3b8;">--/--/----</span>
+  templates\index.html:362:        </div>
+  templates\index.html:363:        <div class="sub" id="resumo-avaliacao-alim">Nenhuma alimentação registrada hoje ainda.</div>
+> templates\index.html:364:        <div id="alerta-kcal-box" class="alerta-kcal-box faltando">Já consumiu 0 kcal de 1500 kcal — faltam 1500 kcal.</div>
+  templates\index.html:365:
+  templates\index.html:366:        <div class="grid-2" style="margin-top:12px;">
+  templates\index.html:367:          <div>
+  templates\index.html:368:            <label>Água tomada hoje</label>
+  templates\index.html:369:            <div class="kpi" id="dash-agua">0 / 2500 ml</div>
+  templates\index.html:370:          </div>
+  templates\index.html:371:          <div>
+> templates\index.html:372:            <label>Calorias / Meta do instrutor</label>
+> templates\index.html:373:            <div class="kpi" id="dash-kcal">0 / 1500 kcal</div>
+  templates\index.html:374:          </div>
+  templates\index.html:375:          <div>
+  templates\index.html:376:            <label>Tempo de treino hoje</label>
+  templates\index.html:377:            <div class="kpi" id="dash-treino">0 min</div>
+  templates\index.html:404:
+  templates\index.html:405:        <div class="chart-row">
+  templates\index.html:406:          <div class="chart-head">
+> templates\index.html:407:            <span id="grafico-kcal-label">Calorias do dia (meta 1.500 kcal)</span>
+> templates\index.html:408:            <span id="grafico-kcal-txt">0 / 1500 kcal (0%)</span>
+  templates\index.html:409:          </div>
+> templates\index.html:410:          <div class="barra-bg"><div class="barra-fill barra-kcal" id="grafico-kcal-bar"></div></div>
+  templates\index.html:411:        </div>
+  templates\index.html:412:
+  templates\index.html:413:        <div class="chart-row">
+  templates\index.html:414:          <div class="chart-head">
+  templates\index.html:421:
+  templates\index.html:422:      <div class="card">
+  templates\index.html:423:        <label>O que você comeu hoje (e classificação)</label>
+> templates\index.html:424:        <div id="dash-lista-prato"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
+  templates\index.html:425:      </div>
+  templates\index.html:426:
+  templates\index.html:427:      <div class="card">
+  templates\index.html:428:        <label>Água, treinos e destros registrados hoje</label>
+  templates\index.html:433:
+  templates\index.html:434:  <nav>
+  templates\index.html:435:    <button onclick="abrirAba('painel', this)">Painel</button>
+> templates\index.html:436:    <button onclick="abrirAba('cardapio', this)">Cardápio</button>
+> templates\index.html:437:    <button onclick="abrirAba('calorias', this)">Calorias</button>
+  templates\index.html:438:    <button onclick="abrirAba('rotina', this)">Água/Ref.</button>
+  templates\index.html:439:    <button onclick="abrirAba('balanca', this)">Balança</button>
+  templates\index.html:440:    <button onclick="abrirAba('treinos', this)">Treinos</button>
+  templates\index.html:441:    <button onclick="abrirAba('glicemia', this)">Glicemia</button>
+> templates\index.html:442:    <button onclick="abrirAba('alimentos', this)">Alim.</button>
+  templates\index.html:443:    <button class="ativa" onclick="abrirAba('resumo', this)">Resumo</button>
+  templates\index.html:444:  </nav>
+  templates\index.html:445:
+  templates\index.html:446:  <script>
+  templates\index.html:457:      "falafel", "esfiha", "pao de queijo", "pão de queijo"
+  templates\index.html:458:    ];
+  templates\index.html:459:
+> templates\index.html:460:    let tabelaKcal100g = {
+  templates\index.html:461:      "arroz branco": 128,
+  templates\index.html:462:      "arroz integral": 124,
+  templates\index.html:463:      "arroz": 128,
+  templates\index.html:464:      "feijao": 76,
+  templates\index.html:485:    let cronoTimer = null;
+  templates\index.html:486:    let ultimoEstado = null;
+  templates\index.html:487:    const alertasDisparadosHoje = new Set();
+> templates\index.html:488:    const kcalManualFlag = { porcao: false, al: false };
+  templates\index.html:489:
+> templates\index.html:490:    function marcarKcalManual(tipo) {
+> templates\index.html:491:      kcalManualFlag[tipo] = true;
+  templates\index.html:492:    }
+  templates\index.html:493:
+  templates\index.html:494:    function normalizarTexto(txt) {
+  templates\index.html:495:      return (txt || "")
+  templates\index.html:499:        .trim();
+  templates\index.html:500:    }
+  templates\index.html:501:
+> templates\index.html:502:    function buscarKcal100g(nome) {
+  templates\index.html:503:      const texto = normalizarTexto(nome);
+> templates\index.html:504:      const chaves = Object.keys(tabelaKcal100g || {}).sort((a, b) => b.length - a.length);
+  templates\index.html:505:      for (const ch of chaves) {
+  templates\index.html:506:        const chNorm = normalizarTexto(ch);
+  templates\index.html:507:        if (texto.includes(chNorm)) {
+> templates\index.html:508:          return Number(tabelaKcal100g[ch]);
+  templates\index.html:509:        }
+  templates\index.html:510:      }
+  templates\index.html:511:      return null;
+  templates\index.html:512:    }
+  templates\index.html:517:      return isNaN(n) ? null : n;
+  templates\index.html:518:    }
+  templates\index.html:519:
+> templates\index.html:520:    // 1) Tenta ler em linha: ex. "arroz 100g 50calorias" ou "arroz 100g 50 kcal" ou "arroz 100g"
+  templates\index.html:521:    function tentarLerEmLinha(textoRaw, qtdFallback) {
+  templates\index.html:522:      let s = (textoRaw || "").trim();
+  templates\index.html:523:      if (!s || /\r?\n|;|,/.test(s)) return null;
+  templates\index.html:524:
+> templates\index.html:525:      let kcalExplicita = null;
+> templates\index.html:526:      const mKcal = s.match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*(?:kcal|calorias?|cal)\b\s*$/i);
+> templates\index.html:527:      if (mKcal) {
+> templates\index.html:528:        kcalExplicita = Math.max(0, Math.round(parseFloat(mKcal[1].replace(",", "."))));
+> templates\index.html:529:        s = s.slice(0, mKcal.index).trim();
+  templates\index.html:530:      }
+  templates\index.html:531:
+  templates\index.html:532:      let gramas = parseNumero(qtdFallback);
+  templates\index.html:533:      let alimento = s;
+  templates\index.html:554:        gramas = null;
+  templates\index.html:555:      }
+  templates\index.html:556:
+> templates\index.html:557:      return { alimento, gramas, kcalExplicita };
+  templates\index.html:558:    }
+  templates\index.html:559:
+  templates\index.html:560:    // 2) Fallback em bloco: quebra por linha, ; ou multiplas ocorrencias "alimento + peso" na mesma linha
+  templates\index.html:561:    function lerEmBloco(textoRaw, qtdFallback) {
+  templates\index.html:564:
+  templates\index.html:565:      let blocos = bruto.split(/\r?\n|;/).map(x => x.trim()).filter(Boolean);
+  templates\index.html:566:      if (blocos.length === 1) {
+> templates\index.html:567:        // Ex: "arroz 100g 50calorias feijao 200g 120calorias"
+> templates\index.html:568:        const matches = bruto.match(/.+?\d+(?:[.,]\d+)?\s*(?:kg|gramas?|grama|g)\b(?:\s+\d+(?:[.,]\d+)?\s*(?:kcal|calorias?|cal)\b)?/gi);
+  templates\index.html:569:        if (matches && matches.length > 1) {
+  templates\index.html:570:          blocos = matches.map(m => m.trim());
+  templates\index.html:571:        } else if (bruto.includes(",")) {
+  templates\index.html:572:          blocos = bruto.split(",").map(m => m.trim()).filter(Boolean);
+  templates\index.html:579:        return {
+  templates\index.html:580:          alimento: parte.replace(/\s+(?:de|da|do|das|dos)\s*$/i, "").trim(),
+  templates\index.html:581:          gramas: idx === 0 ? parseNumero(qtdFallback) : null,
+> templates\index.html:582:          kcalExplicita: null
+  templates\index.html:583:        };
+  templates\index.html:584:      }).filter(x => x.alimento);
+  templates\index.html:585:    }
+  templates\index.html:586:
+> templates\index.html:587:    function calcularAutoKcalGramas(nome, gramasVal) {
+> templates\index.html:588:      const base100 = buscarKcal100g(nome);
+  templates\index.html:589:      if (base100 === null) return 0;
+  templates\index.html:590:      if (gramasVal !== null && gramasVal !== undefined && !isNaN(Number(gramasVal)) && Number(gramasVal) > 0) {
+  templates\index.html:591:        return Math.round((Number(gramasVal) / 100) * base100);
+  templates\index.html:592:      }
+  templates\index.html:593:      return base100;
+  templates\index.html:594:    }
+  templates\index.html:595:
+> templates\index.html:596:    function resolverItens(nomeRaw, qtdRaw, kcalRaw, isManual, tipoSaude) {
+  templates\index.html:597:      const bruto = (nomeRaw || "").trim();
+  templates\index.html:598:      if (!bruto) return [];
+  templates\index.html:599:
+  templates\index.html:600:      const linhaUnica = tentarLerEmLinha(bruto, qtdRaw);
+  templates\index.html:601:      const rawItens = linhaUnica ? [linhaUnica] : lerEmBloco(bruto, qtdRaw);
+> templates\index.html:602:      const manualNum = parseNumero(kcalRaw);
+  templates\index.html:603:
+  templates\index.html:604:      return rawItens.map((item, idx) => {
+> templates\index.html:605:        let kcal = calcularAutoKcalGramas(item.alimento, item.gramas);
+> templates\index.html:606:        if (item.kcalExplicita !== null) {
+> templates\index.html:607:          kcal = item.kcalExplicita;
+  templates\index.html:608:        } else if (Boolean(isManual) && manualNum !== null && rawItens.length === 1) {
+> templates\index.html:609:          kcal = Math.max(0
+  templates\index.html:610:cd C:\Users\Eduardo\fire_fit
+  templates\index.html:611:
+  templates\index.html:612:if (-not (Test-Path .\templates)) {
+  templates\index.html:613:  New-Item -ItemType Directory -Path .\templates | Out-Null
+  templates\index.html:630:    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+  templates\index.html:631:    .alerta-banner { background: #431407; border: 1px solid #ea580c; color: #fed7aa; border-radius: 12px; padding: 12px 14px; 
+margin-bottom: 12px; font-size: 0.9rem; display: none; }
+  templates\index.html:632:    .alerta-banner.ativo { display: block; }
+> templates\index.html:633:    .alerta-kcal-box { padding: 12px; border-radius: 10px; font-size: 0.92rem; font-weight: 600; margin-top: 10px; border: 1px solid 
+#475569; background: #0f172a; color: #e2e8f0; }
+> templates\index.html:634:    .alerta-kcal-box.passou { background: #450a0a; border-color: #ef4444; color: #fecaca; }
+> templates\index.html:635:    .alerta-kcal-box.faltando { background: #172554; border-color: #38bdf8; color: #bae6fd; }
+> templates\index.html:636:    .alerta-kcal-box.na_meta { background: #052e16; border-color: #22c55e; color: #bbf7d0; }
+  templates\index.html:637:    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  templates\index.html:638:    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  templates\index.html:639:    label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 4px; }
+  templates\index.html:640:    input, select, textarea, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #475569; font-size: 0.95rem; }
+  templates\index.html:651:    .barra-fill { height: 100%; background: #38bdf8; min-width: 6px; width: 6%; transition: width 0.25s; }
+  templates\index.html:652:    .barra-saude { background: #22c55e; }
+  templates\index.html:653:    .barra-treino { background: #fb923c; }
+> templates\index.html:654:    .barra-kcal { background: #facc15; }
+> templates\index.html:655:    .barra-kcal.passou { background: #ef4444; }
+  templates\index.html:656:    .crono-display { font-size: 2rem; font-weight: 800; text-align: center; color: #fdba74; letter-spacing: 1px; margin: 6px 0 12px; 
+font-variant-numeric: tabular-nums; }
+  templates\index.html:657:    .sub { font-size: 0.88rem; color: #cbd5e1; margin-top: 6px; line-height: 1.35; }
+  templates\index.html:658:    .calc-preview { font-size: 0.86rem; color: #86efac; background: #052e16; border: 1px solid #166534; border-radius: 8px; padding: 9px 
+10px; margin-bottom: 10px; line-height: 1.45; }
+> templates\index.html:659:    .soma-prato-box { font-size: 0.95rem; font-weight: 700; color: #fdba74; background: #0f172a; border: 1px solid #ea580c; 
+border-radius: 10px; padding: 10px 12px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+  templates\index.html:660:    .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid 
+#334155; font-size: 0.88rem; }
+  templates\index.html:661:    .item:last-child { border-bottom: none; }
+  templates\index.html:662:    .dia-bloco { border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; background: #0f172a; }
+  templates\index.html:663:    .dia-bloco:last-child { margin-bottom: 0; }
+  templates\index.html:664:    .dia-topo { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  templates\index.html:665:    .dia-titulo { font-weight: 700; color: #fb923c; font-size: 0.92rem; }
+> templates\index.html:666:    .dia-kcal { font-size: 0.82rem; font-weight: 600; color: #e2e8f0; }
+> templates\index.html:667:    .prato-card { border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-top: 8px; background: #1e293b; }
+> templates\index.html:668:    .prato-cab { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+  templates\index.html:669:    .badge-ok { background: #14532d; color: #86efac; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
+  templates\index.html:670:    .badge-warn { background: #7c2d12; color: #fed7aa; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
+  templates\index.html:671:    .chart-row { margin-bottom: 12px; }
+  templates\index.html:672:    .chart-head { display: flex; justify-content: space-between; font-size: 0.82rem; color: #e2e8f0; }
+  templates\index.html:703:          </div>
+  templates\index.html:704:        </div>
+  templates\index.html:705:        <div class="sub" id="kpi-diff">Diferença para meta: --</div>
+> templates\index.html:706:        <div class="sub" id="kpi-meta-kcal">Meta diária do instrutor: 1500 kcal/dia</div>
+  templates\index.html:707:        <div class="sub" id="base-instrutor"></div>
+  templates\index.html:708:      </div>
+  templates\index.html:709:
+  templates\index.html:710:      <div class="card">
+  templates\index.html:742:            </select>
+  templates\index.html:743:          </div>
+  templates\index.html:744:          <div>
+> templates\index.html:745:            <label for="p-meta-kcal">Meta diária de calorias (instrutor)</label>
+> templates\index.html:746:            <input id="p-meta-kcal" type="number" step="10" inputmode="numeric" placeholder="Ex: 1500" />
+  templates\index.html:747:          </div>
+  templates\index.html:748:        </div>
+  templates\index.html:749:
+  templates\index.html:750:        <button onclick="salvarPerfilCompleto()">Salvar dados e meta</button>
+  templates\index.html:751:      </div>
+  templates\index.html:752:    </section>
+  templates\index.html:753:
+> templates\index.html:754:    <section id="aba-cardapio" class="aba">
+  templates\index.html:755:      <div class="card">
+> templates\index.html:756:        <div style="font-weight:700; font-size:1rem; margin-bottom:8px;">Pesagem Individual por Alimento (Cardápio)</div>
+> templates\index.html:757:        <div class="sub" style="margin-bottom:10px;">Escreva em linha (ex.: <b>arroz 100g 50 calorias</b> ou <b>arroz 100g feijao 
+200g</b>) ou em bloco (uma linha por alimento). Mostra o valor individual e no final soma tudo.</div>
+  templates\index.html:758:
+  templates\index.html:759:        <div class="grid-2">
+  templates\index.html:760:          <div>
+> templates\index.html:761:            <label for="prato-dia">Dia da semana</label>
+> templates\index.html:762:            <select id="prato-dia">
+  templates\index.html:763:              <option value="Segunda">Segunda</option>
+  templates\index.html:764:              <option value="Terça">Terça</option>
+  templates\index.html:765:              <option value="Quarta">Quarta</option>
+  templates\index.html:766:              <option value="Quinta">Quinta</option>
+  templates\index.html:770:            </select>
+  templates\index.html:771:          </div>
+  templates\index.html:772:          <div>
+> templates\index.html:773:            <label for="prato-refeicao">Refeição</label>
+> templates\index.html:774:            <select id="prato-refeicao">
+  templates\index.html:775:              <option value="Café da manhã">Café da manhã</option>
+  templates\index.html:776:              <option value="Almoço">Almoço</option>
+  templates\index.html:777:              <option value="Lanche da tarde">Lanche da tarde</option>
+  templates\index.html:778:              <option value="Jantar">Jantar</option>
+  templates\index.html:781:        </div>
+  templates\index.html:782:
+  templates\index.html:783:        <label for="porcao-alimento">Alimento(s) — em linha ou em bloco</label>
+> templates\index.html:784:        <textarea id="porcao-alimento" placeholder="Ex: arroz 100g 50 calorias&#10;feijao 200g&#10;ou na mesma linha: arroz 100g 
+50calorias feijao 200g" oninput="atualizarPreviewPorcao()"></textarea>
+  templates\index.html:785:
+  templates\index.html:786:        <div class="grid-3">
+  templates\index.html:787:          <div>
+  templates\index.html:788:            <label for="porcao-qtd">Peso individual (g)</label>
+  templates\index.html:789:            <input id="porcao-qtd" type="number" step="1" inputmode="decimal" placeholder="Ex: 100" oninput="atualizarPreviewPorcao()" />
+  templates\index.html:790:          </div>
+  templates\index.html:791:          <div>
+> templates\index.html:792:            <label for="porcao-kcal">Calorias item (kcal)</label>
+> templates\index.html:793:            <input id="porcao-kcal" type="number" inputmode="numeric" placeholder="Calcula auto" oninput="marcarKcalManual('porcao')" />
+  templates\index.html:794:          </div>
+  templates\index.html:795:          <div>
+  templates\index.html:796:            <label for="porcao-saude">Tipo do alimento</label>
+  templates\index.html:797:            <select id="porcao-saude">
+  templates\index.html:803:        </div>
+  templates\index.html:804:
+  templates\index.html:805:        <div class="calc-preview" id="porcao-preview">Digite em linha ou em bloco para ver o valor individual de cada alimento e a soma 
+final.</div>
+> templates\index.html:806:        <button type="button" class="btn-sec" style="margin-bottom:10px;" onclick="adicionarPorcaoAoPrato()">+ Adicionar alimento(s) ao 
+prato</button>
+  templates\index.html:807:
+  templates\index.html:808:        <div id="lista-porcoes-rascunho">
+> templates\index.html:809:          <div class="item"><span>Nenhum alimento adicionado ao prato ainda.</span></div>
+  templates\index.html:810:        </div>
+  templates\index.html:811:
+> templates\index.html:812:        <div class="soma-prato-box">
+> templates\index.html:813:          <span>Soma final do prato:</span>
+> templates\index.html:814:          <span id="soma-prato-kcal">0 kcal</span>
+  templates\index.html:815:        </div>
+  templates\index.html:816:
+  templates\index.html:817:        <div class="grid-2">
+> templates\index.html:818:          <button type="button" onclick="salvarPratoNoCardapio(false)">Salvar no Cardápio</button>
+> templates\index.html:819:          <button type="button" class="btn-ok" style="width:100%; margin-left:0; padding:10px; font-size:0.9rem;" 
+onclick="salvarPratoNoCardapio(true)">Salvar e ir p/ Calorias</button>
+  templates\index.html:820:        </div>
+  templates\index.html:821:      </div>
+  templates\index.html:822:
+> templates\index.html:823:      <div class="card" id="lista-cardapio-semana">
+> templates\index.html:824:        <div class="item"><span>Nenhum prato cadastrado no cardápio da semana.</span></div>
+  templates\index.html:825:      </div>
+  templates\index.html:826:
+> templates\index.html:827:      <div class="soma-prato-box" id="cardapio-soma-geral-box">
+> templates\index.html:828:        <span>Soma total de todos os itens do cardápio:</span>
+> templates\index.html:829:        <span id="cardapio-soma-geral-kcal">0 kcal</span>
+  templates\index.html:830:      </div>
+  templates\index.html:831:    </section>
+  templates\index.html:832:
+> templates\index.html:833:    <section id="aba-calorias" class="aba">
+  templates\index.html:834:      <div class="card">
+> templates\index.html:835:        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Resumo de Calorias Consumidas Hoje</div>
+  templates\index.html:836:
+  templates\index.html:837:        <div class="grid-2">
+  templates\index.html:838:          <div>
+  templates\index.html:839:            <label>Já consumiu hoje</label>
+> templates\index.html:840:            <div class="kpi" id="cal-aba-ingerido">0 kcal</div>
+  templates\index.html:841:          </div>
+  templates\index.html:842:          <div>
+  templates\index.html:843:            <label>Meta diária (instrutor)</label>
+> templates\index.html:844:            <div class="kpi" id="cal-aba-meta">1500 kcal</div>
+  templates\index.html:845:          </div>
+  templates\index.html:846:        </div>
+  templates\index.html:847:
+  templates\index.html:848:        <div class="grid-2" style="margin-top:8px;">
+  templates\index.html:849:          <div>
+  templates\index.html:850:            <label>Quanto falta / passou</label>
+> templates\index.html:851:            <div class="kpi" id="cal-aba-saldo">Faltam 1500 kcal</div>
+  templates\index.html:852:          </div>
+  templates\index.html:853:          <div>
+  templates\index.html:854:            <label>Status de saúde</label>
+  templates\index.html:855:            <div class="kpi" id="cal-aba-saude">Aguardando</div>
+  templates\index.html:856:          </div>
+  templates\index.html:857:        </div>
+  templates\index.html:858:
+> templates\index.html:859:        <div class="barra-bg"><div class="barra-fill barra-kcal" id="cal-aba-barra"></div></div>
+> templates\index.html:860:        <div id="cal-aba-alerta" class="alerta-kcal-box faltando">Já consumiu 0 kcal de 1500 kcal — faltam 1500 kcal.</div>
+  templates\index.html:861:      </div>
+  templates\index.html:862:
+  templates\index.html:863:      <div class="card">
+> templates\index.html:864:        <label for="cal-aba-input-meta">Definir meta diária de calorias (instrutor)</label>
+  templates\index.html:865:        <input id="cal-aba-input-meta" type="number" step="10" inputmode="numeric" placeholder="Ex: 1500" />
+  templates\index.html:866:
+  templates\index.html:867:        <label for="cal-aba-input-obj">Objetivo da pessoa</label>
+  templates\index.html:868:        <select id="cal-aba-input-obj">
+  templates\index.html:870:          <option value="ganho">Ganho de massa</option>
+  templates\index.html:871:        </select>
+  templates\index.html:872:
+> templates\index.html:873:        <button type="button" onclick="salvarMetaCaloriasAba()">Salvar meta diária de calorias</button>
+  templates\index.html:874:      </div>
+  templates\index.html:875:
+  templates\index.html:876:      <div class="card">
+> templates\index.html:877:        <label>Todas as refeições e alimentos pesados consumidos hoje</label>
+  templates\index.html:878:        <div id="cal-aba-lista"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
+> templates\index.html:879:        <div class="soma-prato-box" style="margin-bottom:0;">
+  templates\index.html:880:          <span>Soma final consumida hoje:</span>
+> templates\index.html:881:          <span id="cal-aba-soma-final">0 kcal</span>
+  templates\index.html:882:        </div>
+  templates\index.html:883:      </div>
+  templates\index.html:884:    </section>
+  templates\index.html:885:
+  templates\index.html:904:      <div class="card" id="lista-agua"></div>
+  templates\index.html:905:
+  templates\index.html:906:      <div class="card">
+> templates\index.html:907:        <label>Alerta de horário das refeições</label>
+  templates\index.html:908:        <div class="sub" style="margin-bottom:10px;">Quando o app estiver aberto no horário configurado, ele exibe um alerta visual e 
+notificação (se permitida).</div>
+  templates\index.html:909:        <button type="button" class="btn-sec" style="margin-bottom:12px;" onclick="pedirPermissaoNotif()">Ativar notificações do 
+navegador</button>
+  templates\index.html:910:
+> templates\index.html:911:        <label for="ref-nome">Refeição</label>
+  templates\index.html:912:        <input id="ref-nome" type="text" placeholder="Ex: Café da manhã / Pré-treino" />
+  templates\index.html:913:        <label for="ref-hora">Horário</label>
+  templates\index.html:914:        <input id="ref-hora" type="time" />
+> templates\index.html:915:        <button type="button" onclick="addRefeicao()">Adicionar horário de refeição</button>
+  templates\index.html:916:      </div>
+  templates\index.html:917:
+> templates\index.html:918:      <div class="card" id="lista-refeicoes"></div>
+  templates\index.html:919:    </section>
+  templates\index.html:920:
+  templates\index.html:921:    <section id="aba-balanca" class="aba">
+  templates\index.html:922:      <div class="card">
+  templates\index.html:956:        <label for="gl-val">Glicemia (mg/dL)</label>
+  templates\index.html:957:        <input id="gl-val" type="number" step="1" inputmode="numeric" placeholder="Ex: 98" />
+  templates\index.html:958:        <label for="gl-mom">Momento</label>
+> templates\index.html:959:        <input id="gl-mom" type="text" placeholder="Ex: Jejum / Pós-refeição" />
+  templates\index.html:960:        <button onclick="registrarGlicemia()">Salvar glicemia</button>
+  templates\index.html:961:      </div>
+  templates\index.html:962:      <div class="card" id="lista-glicemia"></div>
+  templates\index.html:963:    </section>
+  templates\index.html:964:
+> templates\index.html:965:    <section id="aba-alimentos" class="aba">
+  templates\index.html:966:      <div class="card">
+> templates\index.html:967:        <label for="al-nome">Alimento(s) — em linha (ex.: arroz 100g 50 calorias) ou em bloco</label>
+> templates\index.html:968:        <textarea id="al-nome" placeholder="Ex: arroz 100g 50 calorias&#10;feijao 200g&#10;ou em linha: arroz 100g 50calorias feijao 
+200g" oninput="atualizarPreviewAvulso()"></textarea>
+  templates\index.html:969:
+  templates\index.html:970:        <div class="grid-3">
+  templates\index.html:971:          <div>
+  templates\index.html:972:            <label for="al-qtd">Peso individual (g)</label>
+  templates\index.html:973:            <input id="al-qtd" type="number" step="1" inputmode="decimal" placeholder="Ex: 100" oninput="atualizarPreviewAvulso()" />
+  templates\index.html:974:          </div>
+  templates\index.html:975:          <div>
+> templates\index.html:976:            <label for="al-kcal">Calorias item (kcal)</label>
+> templates\index.html:977:            <input id="al-kcal" type="number" inputmode="numeric" placeholder="Calcula auto" oninput="marcarKcalManual('al')" />
+  templates\index.html:978:          </div>
+  templates\index.html:979:          <div>
+  templates\index.html:980:            <label for="al-saude">Tipo</label>
+  templates\index.html:981:            <select id="al-saude">
+  templates\index.html:990:        <button onclick="registrarAlimento()">Salvar alimentação</button>
+  templates\index.html:991:      </div>
+  templates\index.html:992:
+> templates\index.html:993:      <div class="card" id="lista-alimentos"></div>
+  templates\index.html:994:
+> templates\index.html:995:      <div class="soma-prato-box" id="alimentos-soma-final-box">
+> templates\index.html:996:        <span>Soma final de todos os alimentos:</span>
+> templates\index.html:997:        <span id="alimentos-soma-final-kcal">0 kcal</span>
+  templates\index.html:998:      </div>
+  templates\index.html:999:    </section>
+  templates\index.html:1000:
+  templates\index.html:1001:    <section id="aba-resumo" class="aba ativa">
+  templates\index.html:1005:          <span id="resumo-data-hoje" style="font-size:0.82rem; color:#94a3b8;">--/--/----</span>
+  templates\index.html:1006:        </div>
+  templates\index.html:1007:        <div class="sub" id="resumo-avaliacao-alim">Nenhuma alimentação registrada hoje ainda.</div>
+> templates\index.html:1008:        <div id="alerta-kcal-box" class="alerta-kcal-box faltando">Já consumiu 0 kcal de 1500 kcal — faltam 1500 kcal.</div>
+  templates\index.html:1009:
+  templates\index.html:1010:        <div class="grid-2" style="margin-top:12px;">
+  templates\index.html:1011:          <div>
+  templates\index.html:1012:            <label>Água tomada hoje</label>
+  templates\index.html:1013:            <div class="kpi" id="dash-agua">0 / 2500 ml</div>
+  templates\index.html:1014:          </div>
+  templates\index.html:1015:          <div>
+> templates\index.html:1016:            <label>Calorias / Meta do instrutor</label>
+> templates\index.html:1017:            <div class="kpi" id="dash-kcal">0 / 1500 kcal</div>
+  templates\index.html:1018:          </div>
+  templates\index.html:1019:          <div>
+  templates\index.html:1020:            <label>Tempo de treino hoje</label>
+  templates\index.html:1021:            <div class="kpi" id="dash-treino">0 min</div>
+  templates\index.html:1048:
+  templates\index.html:1049:        <div class="chart-row">
+  templates\index.html:1050:          <div class="chart-head">
+> templates\index.html:1051:            <span id="grafico-kcal-label">Calorias do dia (meta 1.500 kcal)</span>
+> templates\index.html:1052:            <span id="grafico-kcal-txt">0 / 1500 kcal (0%)</span>
+  templates\index.html:1053:          </div>
+> templates\index.html:1054:          <div class="barra-bg"><div class="barra-fill barra-kcal" id="grafico-kcal-bar"></div></div>
+  templates\index.html:1055:        </div>
+  templates\index.html:1056:
+  templates\index.html:1057:        <div class="chart-row">
+  templates\index.html:1058:          <div class="chart-head">
+  templates\index.html:1065:
+  templates\index.html:1066:      <div class="card">
+  templates\index.html:1067:        <label>O que você comeu hoje (e classificação)</label>
+> templates\index.html:1068:        <div id="dash-lista-prato"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
+  templates\index.html:1069:      </div>
+  templates\index.html:1070:
+  templates\index.html:1071:      <div class="card">
+  templates\index.html:1072:        <label>Água, treinos e destros registrados hoje</label>
+  templates\index.html:1077:
+  templates\index.html:1078:  <nav>
+  templates\index.html:1079:    <button onclick="abrirAba('painel', this)">Painel</button>
+> templates\index.html:1080:    <button onclick="abrirAba('cardapio', this)">Cardápio</button>
+> templates\index.html:1081:    <button onclick="abrirAba('calorias', this)">Calorias</button>
+  templates\index.html:1082:    <button onclick="abrirAba('rotina', this)">Água/Ref.</button>
+  templates\index.html:1083:    <button onclick="abrirAba('balanca', this)">Balança</button>
+  templates\index.html:1084:    <button onclick="abrirAba('treinos', this)">Treinos</button>
+  templates\index.html:1085:    <button onclick="abrirAba('glicemia', this)">Glicemia</button>
+> templates\index.html:1086:    <button onclick="abrirAba('alimentos', this)">Alim.</button>
+  templates\index.html:1087:    <button class="ativa" onclick="abrirAba('resumo', this)">Resumo</button>
+  templates\index.html:1088:  </nav>
+  templates\index.html:1089:
+  templates\index.html:1090:  <script>
+  templates\index.html:1101:      "falafel", "esfiha", "pao de queijo", "pão de queijo"
+  templates\index.html:1102:    ];
+  templates\index.html:1103:
+> templates\index.html:1104:    let tabelaKcal100g = {
+  templates\index.html:1105:      "arroz branco": 128,
+  templates\index.html:1106:      "arroz integral": 124,
+  templates\index.html:1107:      "arroz": 128,
+  templates\index.html:1108:      "feijao": 76,
+  templates\index.html:1129:    let cronoTimer = null;
+  templates\index.html:1130:    let ultimoEstado = null;
+  templates\index.html:1131:    const alertasDisparadosHoje = new Set();
+> templates\index.html:1132:    const kcalManualFlag = { porcao: false, al: false };
+  templates\index.html:1133:
+> templates\index.html:1134:    function marcarKcalManual(tipo) {
+> templates\index.html:1135:      kcalManualFlag[tipo] = true;
+  templates\index.html:1136:    }
+  templates\index.html:1137:
+  templates\index.html:1138:    function normalizarTexto(txt) {
+  templates\index.html:1139:      return (txt || "")
+  templates\index.html:1143:        .trim();
+  templates\index.html:1144:    }
+  templates\index.html:1145:
+> templates\index.html:1146:    function buscarKcal100g(nome) {
+  templates\index.html:1147:      const texto = normalizarTexto(nome);
+> templates\index.html:1148:      const chaves = Object.keys(tabelaKcal100g || {}).sort((a, b) => b.length - a.length);
+  templates\index.html:1149:      for (const ch of chaves) {
+  templates\index.html:1150:        const chNorm = normalizarTexto(ch);
+  templates\index.html:1151:        if (texto.includes(chNorm)) {
+> templates\index.html:1152:          return Number(tabelaKcal100g[ch]);
+  templates\index.html:1153:        }
+  templates\index.html:1154:      }
+  templates\index.html:1155:      return null;
+  templates\index.html:1156:    }
+  templates\index.html:1161:      return isNaN(n) ? null : n;
+  templates\index.html:1162:    }
+  templates\index.html:1163:
+> templates\index.html:1164:    // 1) Tenta ler em linha: ex. "arroz 100g 50calorias" ou "arroz 100g 50 kcal" ou "arroz 100g"
+  templates\index.html:1165:    function tentarLerEmLinha(textoRaw, qtdFallback) {
+  templates\index.html:1166:      let s = (textoRaw || "").trim();
+  templates\index.html:1167:      if (!s || /\r?\n|;|,/.test(s)) return null;
+  templates\index.html:1168:
+> templates\index.html:1169:      let kcalExplicita = null;
+> templates\index.html:1170:      const mKcal = s.match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*(?:kcal|calorias?|cal)\b\s*$/i);
+> templates\index.html:1171:      if (mKcal) {
+> templates\index.html:1172:        kcalExplicita = Math.max(0, Math.round(parseFloat(mKcal[1].replace(",", "."))));
+> templates\index.html:1173:        s = s.slice(0, mKcal.index).trim();
+  templates\index.html:1174:      }
+  templates\index.html:1175:
+  templates\index.html:1176:      let gramas = parseNumero(qtdFallback);
+  templates\index.html:1177:      let alimento = s;
+  templates\index.html:1198:        gramas = null;
+  templates\index.html:1199:      }
+  templates\index.html:1200:
+> templates\index.html:1201:      return { alimento, gramas, kcalExplicita };
+  templates\index.html:1202:    }
+  templates\index.html:1203:
+  templates\index.html:1204:    // 2) Fallback em bloco: quebra por linha, ; ou multiplas ocorrencias "alimento + peso" na mesma linha
+  templates\index.html:1205:    function lerEmBloco(textoRaw, qtdFallback) {
+  templates\index.html:1208:
+  templates\index.html:1209:      let blocos = bruto.split(/\r?\n|;/).map(x => x.trim()).filter(Boolean);
+  templates\index.html:1210:      if (blocos.length === 1) {
+> templates\index.html:1211:        // Ex: "arroz 100g 50calorias feijao 200g 120calorias"
+> templates\index.html:1212:        const matches = 
+bruto.match(/.+?\d+(?:[.,]\d+)?\s*(?:kg|gramas?|grama|g)\b(?:\s+\d+(?:[.,]\d+)?\s*(?:kcal|calorias?|cal)\b)?/gi);
+  templates\index.html:1213:        if (matches && matches.length > 1) {
+  templates\index.html:1214:          blocos = matches.map(m => m.trim());
+  templates\index.html:1215:        } else if (bruto.includes(",")) {
+  templates\index.html:1216:          blocos = bruto.split(",").map(m => m.trim()).filter(Boolean);
+  templates\index.html:1223:        return {
+  templates\index.html:1224:          alimento: parte.replace(/\s+(?:de|da|do|das|dos)\s*$/i, "").trim(),
+  templates\index.html:1225:          gramas: idx === 0 ? parseNumero(qtdFallback) : null,
+> templates\index.html:1226:          kcalExplicita: null
+  templates\index.html:1227:        };
+  templates\index.html:1228:      }).filter(x => x.alimento);
+  templates\index.html:1229:    }
+  templates\index.html:1230:
+> templates\index.html:1231:    function calcularAutoKcalGramas(nome, gramasVal) {
+> templates\index.html:1232:      const base100 = buscarKcal100g(nome);
+  templates\index.html:1233:      if (base100 === null) return 0;
+  templates\index.html:1234:      if (gramasVal !== null && gramasVal !== undefined && !isNaN(Number(gramasVal)) && Number(gramasVal) > 0) {
+  templates\index.html:1235:        return Math.round((Number(gramasVal) / 100) * base100);
+  templates\index.html:1236:      }
+  templates\index.html:1237:      return base100;
+  templates\index.html:1238:    }
+  templates\index.html:1239:
+> templates\index.html:1240:    function resolverItens(nomeRaw, qtdRaw, kcalRaw, isManual, tipoSaude) {
+  templates\index.html:1241:      const bruto = (nomeRaw || "").trim();
+  templates\index.html:1242:      if (!bruto) return [];
+  templates\index.html:1243:
+  templates\index.html:1244:      const linhaUnica = tentarLerEmLinha(bruto, qtdRaw);
+  templates\index.html:1245:      const rawItens = linhaUnica ? [linhaUnica] : lerEmBloco(bruto, qtdRaw);
+> templates\index.html:1246:      const manualNum = parseNumero(kcalRaw);
+  templates\index.html:1247:
+  templates\index.html:1248:      return rawItens.map((item, idx) => {
+> templates\index.html:1249:        let kcal = calcularAutoKcalGramas(item.alimento, item.gramas);
+> templates\index.html:1250:        if (item.kcalExplicita !== null) {
+> templates\index.html:1251:          kcal = item.kcalExplicita;
+  templates\index.html:1252:        } else if (Boolean(isManual) && manualNum !== null && rawItens.length === 1) {
+> templates\index.html:1253:          kcal = Math.max(0, Math.round(manualNum));
+> templates\index.html:1254:        } else if (idx === 0 && Boolean(isManual) && manualNum !== null && kcal === 0) {
+> templates\index.html:1255:          kcal = Math.max(0, Math.round(manualNum));
+  templates\index.html:1256:        }
+  templates\index.html:1257:
+  templates\index.html:1258:        return {
+  templates\index.html:1259:          alimento: item.alimento,
+  templates\index.html:1260:          unidade: "gramas",
+  templates\index.html:1261:          quantidade: item.gramas,
+  templates\index.html:1262:          gramas: item.gramas,
+> templates\index.html:1263:          kcal,
+  templates\index.html:1264:          saudavel: classificarSaudeJs(item.alimento, tipoSaude)
+  templates\index.html:1265:        };
+  templates\index.html:1266:      });
+  templates\index.html:1267:    }
+  templates\index.html:1276:      return true;
+  templates\index.html:1277:    }
+  templates\index.html:1278:
+> templates\index.html:1279:    function montarPreviewGramas(nomeRaw, qtdRaw, kcalInput, tipoFlag, listaAtual) {
+> templates\index.html:1280:      kcalManualFlag[tipoFlag] = false;
+  templates\index.html:1281:      const itens = resolverItens(nomeRaw, qtdRaw, "", false, "auto");
+> templates\index.html:1282:      const somaLista = (listaAtual || []).reduce((acc, x) => acc + Number(x.kcal || 0), 0);
+  templates\index.html:1283:
+  templates\index.html:1284:      if (!itens.length) {
+> templates\index.html:1285:        if (kcalInput) kcalInput.value = "";
+  templates\index.html:1286:        return somaLista > 0
+> templates\index.html:1287:          ? `Soma atual: ${somaLista} kcal. Digite o próximo item em linha ou em bloco.`
+> templates\index.html:1288:          : 'Digite em linha (ex.: arroz 100g 50calorias) ou em bloco para ver o valor individual e a soma final.';
+  templates\index.html:1289:      }
+  templates\index.html:1290:
+> templates\index.html:1291:      const somaEntrada = itens.reduce((a, b) => a + Number(b.kcal || 0), 0);
+> templates\index.html:1292:      if (kcalInput) kcalInput.value = itens.length === 1 ? itens[0].kcal : somaEntrada;
+  templates\index.html:1293:
+  templates\index.html:1294:      const individuais = itens.map(i => {
+  templates\index.html:1295:        const pesoTxt = i.gramas != null && i.gramas > 0 ? `${i.gramas}g` : "100g";
+> templates\index.html:1296:        return `${i.alimento} (${pesoTxt}) = ${i.kcal} kcal`;
+  templates\index.html:1297:      }).join(" • ");
+  templates\index.html:1298:
+> templates\index.html:1299:      return `${individuais} | Soma desta entrada: ${somaEntrada} kcal (Soma final c/ lista: ${somaLista + somaEntrada} kcal).`;
+  templates\index.html:1300:    }
+  templates\index.html:1301:
+  templates\index.html:1302:    function atualizarPreviewPorcao() {
+  templates\index.html:1303:      document.getElementById('porcao-preview').textContent = montarPreviewGramas(
+  templates\index.html:1304:        document.getElementById('porcao-alimento').value,
+  templates\index.html:1305:        document.getElementById('porcao-qtd').value,
+> templates\index.html:1306:        document.getElementById('porcao-kcal'),
+  templates\index.html:1307:        'porcao',
+  templates\index.html:1308:        porcoesRascunho
+  templates\index.html:1309:      );
+  templates\index.html:1310:    }
+  templates\index.html:1311:
+  templates\index.html:1312:    function atualizarPreviewAvulso() {
+> templates\index.html:1313:      const listaSalva = (ultimoEstado && ultimoEstado.alimentos) || [];
+  templates\index.html:1314:      document.getElementById('al-preview').textContent = montarPreviewGramas(
+  templates\index.html:1315:        document.getElementById('al-nome').value,
+  templates\index.html:1316:        document.getElementById('al-qtd').value,
+> templates\index.html:1317:        document.getElementById('al-kcal'),
+  templates\index.html:1318:        'al',
+  templates\index.html:1319:        listaSalva
+  templates\index.html:1320:      );
+  templates\index.html:1321:    }
+  templates\index.html:1329:    }
+  templates\index.html:1330:
+  templates\index.html:1331:    function renderizarPorcoesRascunho() {
+> templates\index.html:1332:      const total = porcoesRascunho.reduce((acc, x) => acc + Number(x.kcal || 0), 0);
+> templates\index.html:1333:      document.getElementById('soma-prato-kcal').textContent = `${total} kcal`;
+  templates\index.html:1334:
+  templates\index.html:1335:      document.getElementById('lista-porcoes-rascunho').innerHTML = porcoesRascunho.length
+  templates\index.html:1336:        ? porcoesRascunho.map((x, idx) => {
+  templates\index.html:1337:            const badge = x.saudavel
+  templates\index.html:1339:              : '<span class="badge-warn">Não saudável</span>';
+  templates\index.html:1340:            return `
+  templates\index.html:1341:              <div class="item">
+> templates\index.html:1342:                <span>${formatarRotuloGramas(x)} — <b>${x.kcal} kcal</b> ${badge}</span>
+  templates\index.html:1343:                <button type="button" class="btn-del" onclick="removerPorcaoRascunho(${idx})">Tirar</button>
+  templates\index.html:1344:              </div>`;
+  templates\index.html:1345:          }).join('')
+> templates\index.html:1346:        : '<div class="item"><span>Nenhum alimento adicionado ao prato ainda.</span></div>';
+  templates\index.html:1347:    }
+  templates\index.html:1348:
+> templates\index.html:1349:    function adicionarPorcaoAoPrato() {
+  templates\index.html:1350:      const itens = resolverItens(
+  templates\index.html:1351:        document.getElementById('porcao-alimento').value,
+  templates\index.html:1352:        document.getElementById('porcao-qtd').value,
+> templates\index.html:1353:        document.getElementById('porcao-kcal').value,
+> templates\index.html:1354:        kcalManualFlag.porcao,
+  templates\index.html:1355:        document.getElementById('porcao-saude').value
+  templates\index.html:1356:      );
+  templates\index.html:1357:      if (!itens.length) return;
+  templates\index.html:1358:
+  templates\index.html:1359:      itens.forEach(it => porcoesRascunho.push(it));
+  templates\index.html:1360:      document.getElementById('porcao-alimento').value = '';
+  templates\index.html:1361:      document.getElementById('porcao-qtd').value = '';
+> templates\index.html:1362:      document.getElementById('porcao-kcal').value = '';
+> templates\index.html:1363:      kcalManualFlag.porcao = false;
+  templates\index.html:1364:      renderizarPorcoesRascunho();
+> templates\index.html:1365:      const somaPrato = porcoesRascunho.reduce((a, b) => a + Number(b.kcal || 0), 0);
+> templates\index.html:1366:      document.getElementById('porcao-preview').textContent = `Adicionado! Valor individual exibido acima e soma final do prato: 
+${somaPrato} kcal.`;
+  templates\index.html:1367:    }
+  templates\index.html:1368:
+  templates\index.html:1369:    function removerPorcaoRascunho(idx) {
+  templates\index.html:1370:      porcoesRascunho.splice(idx, 1);
+  templates\index.html:1371:      renderizarPorcoesRascunho();
+  templates\index.html:1372:    }
+  templates\index.html:1373:
+> templates\index.html:1374:    async function salvarPratoNoCardapio(irParaCalorias) {
+  templates\index.html:1375:      if (!porcoesRascunho.length && document.getElementById('porcao-alimento').value.trim()) {
+> templates\index.html:1376:        adicionarPorcaoAoPrato();
+  templates\index.html:1377:      }
+  templates\index.html:1378:      if (!porcoesRascunho.length) return;
+  templates\index.html:1379:
+> templates\index.html:1380:      const res = await fetch('/api/cardapio/prato', {
+  templates\index.html:1381:        method: 'POST',
+  templates\index.html:1382:        headers: {'Content-Type': 'application/json'},
+  templates\index.html:1383:        body: JSON.stringify({
+> templates\index.html:1384:          dia: document.getElementById('prato-dia').value,
+> templates\index.html:1385:          refeicao: document.getElementById('prato-refeicao').value,
+  templates\index.html:1386:          porcoes: porcoesRascunho
+  templates\index.html:1387:        })
+  templates\index.html:1388:      });
+  templates\index.html:1389:      const data = await res.json();
+  templates\index.html:1391:      renderizarPorcoesRascunho();
+  templates\index.html:1392:      await carregarEstado();
+  templates\index.html:1393:
+> templates\index.html:1394:      if (irParaCalorias && data && data.ok && ultimoEstado && ultimoEstado.cardapio_semana && ultimoEstado.cardapio_semana.length > 0) 
+{
+> templates\index.html:1395:        const novoIdx = ultimoEstado.cardapio_semana.length - 1;
+> templates\index.html:1396:        await consumirCardapio(novoIdx, true);
+  templates\index.html:1397:      }
+  templates\index.html:1398:    }
+  templates\index.html:1399:
+  templates\index.html:1400:    function formatarCrono(seg) {
+  templates\index.html:1462:
+  templates\index.html:1463:      const agua = estado.agua || { consumido_ml: 0, meta_ml: 2500 };
+  templates\index.html:1464:      const faltamAgua = Math.max(0, (agua.meta_ml || 2500) - (agua.consumido_ml || 0));
+> templates\index.html:1465:      const alertaKcal = (estado.resumo_dia && estado.resumo_dia.alerta_kcal) || null;
+  templates\index.html:1466:
+> templates\index.html:1467:      const refeicoes = estado.refeicoes || [];
+> templates\index.html:1468:      const refAgora = refeicoes.filter(r => r.horario === horaAtual);
+> templates\index.html:1469:      const proximas = refeicoes.filter(r => r.horario >= horaAtual).slice(0, 2);
+  templates\index.html:1470:
+  templates\index.html:1471:      const banner = document.getElementById('alerta-banner');
+  templates\index.html:1472:      if (refAgora.length > 0) {
+  templates\index.html:1473:        const nomes = refAgora.map(r => `${r.nome} (${r.horario})`).join(', ');
+> templates\index.html:1474:        banner.textContent = `Hora da refeição: ${nomes}! Lembre-se também de beber água.`;
+  templates\index.html:1475:        banner.classList.add('ativo');
+  templates\index.html:1476:        refAgora.forEach(r => {
+  templates\index.html:1477:          const chave = `${diaKey}-${r.nome}-${r.horario}`);
+  templates\index.html:1478:          if (!alertasDisparadosHoje.has(chave)) {
+  templates\index.html:1479:            alertasDisparadosHoje.add(chave);
+> templates\index.html:1480:            dispararNotificacao('Fire Fit — Horário de refeição', `Chegou a hora de: ${r.nome} (${r.horario})`);
+  templates\index.html:1481:          }
+  templates\index.html:1482:        });
+> templates\index.html:1483:      } else if (alertaKcal && alertaKcal.status === 'passou') {
+> templates\index.html:1484:        banner.textContent = `${alertaKcal.mensagem} ${faltamAgua > 0 ? `Faltam ${faltamAgua} ml de água.` : ''}`.trim();
+  templates\index.html:1485:        banner.classList.add('ativo');
+  templates\index.html:1486:      } else if (proximas.length > 0) {
+  templates\index.html:1487:        const proxTxt = proximas.map(r => `${r.nome} às ${r.horario}`).join(' • ');
+  templates\index.html:1488:        const aguaTxt = faltamAgua > 0 ? `Faltam ${faltamAgua} ml de água hoje.` : 'Meta de água de hoje concluída!';
+> templates\index.html:1489:        banner.textContent = `Próximas refeições: ${proxTxt} — ${aguaTxt}`);
+  templates\index.html:1490:        banner.classList.add('ativo');
+  templates\index.html:1491:      } else {
+  templates\index.html:1492:        banner.classList.remove('ativo');
+  templates\index.html:1493:      }
+  templates\index.html:1494:    }
+  templates\index.html:1495:
+> templates\index.html:1496:    function obterKcalSalvaPorcao(p) {
+> templates\index.html:1497:      if (p && p.kcal != null && p.kcal !== "" && !isNaN(Number(p.kcal))) return Number(p.kcal);
+  templates\index.html:1498:      const gramas = p && (p.gramas != null ? p.gramas : p.quantidade);
+> templates\index.html:1499:      return calcularAutoKcalGramas(p && p.alimento, gramas);
+  templates\index.html:1500:    }
+  templates\index.html:1501:
+> templates\index.html:1502:    function renderizarCardapioSemana(lista, metaKcal) {
+> templates\index.html:1503:      const pratos = lista || [];
+> templates\index.html:1504:      const meta = Math.max(1, Number(metaKcal || 1500));
+  templates\index.html:1505:      const blocos = [];
+> templates\index.html:1506:      let somaGeralCardapio = 0;
+  templates\index.html:1507:
+  templates\index.html:1508:      DIAS_ORDEM.forEach(dia => {
+> templates\index.html:1509:        const pratosDia = pratos
+> templates\index.html:1510:          .map((prato, idx) => ({ prato, idx }))
+> templates\index.html:1511:          .filter(x => (x.prato.dia || 'Segunda') === dia);
+> templates\index.html:1512:        if (!pratosDia.length) return;
+  templates\index.html:1513:
+> templates\index.html:1514:        const somaDia = pratosDia.reduce((acc, x) => {
+> templates\index.html:1515:          const porcoes = x.prato.porcoes || [];
+> templates\index.html:1516:          const somaPrato = porcoes.length
+> templates\index.html:1517:            ? porcoes.reduce((s, p) => s + obterKcalSalvaPorcao(p), 0)
+> templates\index.html:1518:            : Number(x.prato.total_kcal || 0);
+> templates\index.html:1519:          return acc + somaPrato;
+  templates\index.html:1520:        }, 0);
+  templates\index.html:1521:
+> templates\index.html:1522:        somaGeralCardapio += somaDia;
+  templates\index.html:1523:
+  templates\index.html:1524:        const diff = somaDia - meta;
+> templates\index.html:1525:        let statusDia = `Faltam ${Math.abs(diff)} kcal p/ meta`;
+> templates\index.html:1526:        if (diff > 0) statusDia = `Passou ${diff} kcal da meta`;
+> templates\index.html:1527:        else if (diff === 0) statusDia = `Na meta (${meta} kcal)`;
+  templates\index.html:1528:
+> templates\index.html:1529:        const cardsPratos = pratosDia.map(({ prato, idx }) => {
+> templates\index.html:1530:          const porcoes = prato.porcoes || [];
+> templates\index.html:1531:          const totalPrato = porcoes.length
+> templates\index.html:1532:            ? porcoes.reduce((s, p) => s + obterKcalSalvaPorcao(p), 0)
+> templates\index.html:1533:            : Number(prato.total_kcal || 0);
+  templates\index.html:1534:
+  templates\index.html:1535:          const linhasPorcoes = porcoes.map(p => {
+> templates\index.html:1536:            const kcalItem = obterKcalSalvaPorcao(p);
+  templates\index.html:1537:            const badge = p.saudavel !== false
+  templates\index.html:1538:              ? '<span class="badge-ok">Saudável</span>'
+  templates\index.html:1539:              : '<span class="badge-warn">Não saudável</span>';
+> templates\index.html:1540:            return `<div class="item"><span>${formatarRotuloGramas(p)} — <b>${kcalItem} kcal</b></span>${badge}</div>`;
+  templates\index.html:1541:          }).join('');
+  templates\index.html:1542:
+  templates\index.html:1543:          return `
+> templates\index.html:1544:            <div class="prato-card">
+> templates\index.html:1545:              <div class="prato-cab">
+> templates\index.html:1546:                <span><b>${prato.refeicao || 'Refeição'}</b> • Soma final do prato: <b>${totalPrato} kcal</b></span>
+  templates\index.html:1547:                <span class="acoes-item">
+> templates\index.html:1548:                  <button type="button" class="btn-ok" onclick="consumirCardapio(${idx}, true)">Ir p/ Calorias</button>
+> templates\index.html:1549:                  <button type="button" class="btn-del" onclick="excluirCardapio(${idx})">Excluir</button>
+  templates\index.html:1550:                </span>
+  templates\index.html:1551:              </div>
+  templates\index.html:1552:              ${linhasPorcoes}
+  templates\index.html:1553:            </div>`;
+  templates\index.html:1557:          <div class="dia-bloco">
+  templates\index.html:1558:            <div class="dia-topo">
+  templates\index.html:1559:              <span class="dia-titulo">${dia}</span>
+> templates\index.html:1560:              <span class="dia-kcal">Total do dia: ${somaDia} kcal • ${statusDia}</span>
+  templates\index.html:1561:            </div>
+> templates\index.html:1562:            ${cardsPratos}
+  templates\index.html:1563:          </div>`);
+  templates\index.html:1564:      });
+  templates\index.html:1565:
+> templates\index.html:1566:      document.getElementById('lista-cardapio-semana').innerHTML = blocos.length
+  templates\index.html:1567:        ? blocos.join('')
+> templates\index.html:1568:        : '<div class="item"><span>Nenhum prato cadastrado no cardápio da semana.</span></div>';
+  templates\index.html:1569:
+> templates\index.html:1570:      document.getElementById('cardapio-soma-geral-kcal').textContent = `${somaGeralCardapio} kcal`;
+  templates\index.html:1571:    }
+  templates\index.html:1572:
+> templates\index.html:1573:    async function excluirCardapio(idx) {
+> templates\index.html:1574:      await fetch(`/api/cardapio/excluir/${idx}`, { method: 'DELETE' })
+  templates\index.html:1575:      carregarEstado();
+  templates\index.html:1576:    }
+  templates\index.html:1577:
+> templates\index.html:1578:    async function consumirCardapio(idx, abrirCalorias) {
+> templates\index.html:1579:      await fetch(`/api/cardapio/consumir/${idx}`, { method: 'POST' })
+  templates\index.html:1580:      await carregarEstado();
+> templates\index.html:1581:      if (abrirCalorias) abrirAba('calorias', null);
+  templates\index.html:1582:    }
+  templates\index.html:1583:
+  templates\index.html:1584:    function formatarDetalheItem(x) {
+  templates\index.html:1585:      const gramas = x.gramas != null ? x.gramas : x.quantidade;
+  templates\index.html:1587:      return "";
+  templates\index.html:1588:    }
+  templates\index.html:1589:
+> templates\index.html:1590:    function renderizarAbaCalorias(res, perfil) {
+  templates\index.html:1591:      const r = res || {};
+> templates\index.html:1592:      const alimHoje = r.alimentos_hoje || [];
+> templates\index.html:1593:      const somaListaHoje = alimHoje.reduce((acc, item) => acc + Number(item.kcal || 0), 0);
+> templates\index.html:1594:      const kcalHoje = alimHoje.length ? somaListaHoje : Number(r.kcal_hoje || 0);
+> templates\index.html:1595:      const metaKcal = Math.max(1, r.meta_kcal_dia || 1500);
+> templates\index.html:1596:      const pctKcal = Math.min(100, Math.round((kcalHoje / metaKcal) * 100));
+> templates\index.html:1597:      const alerta = r.alerta_kcal || {
+> templates\index.html:1598:        status: 'faltando', faltam: metaKcal, passou: 0, saude_texto: 'Aguardando',
+> templates\index.html:1599:        mensagem: `Já consumiu ${kcalHoje} kcal de ${metaKcal} kcal.`
+  templates\index.html:1600:      };
+  templates\index.html:1601:
+> templates\index.html:1602:      document.getElementById('cal-aba-ingerido').textContent = `${kcalHoje} kcal`;
+> templates\index.html:1603:      document.getElementById('cal-aba-meta').textContent = `${metaKcal} kcal`;
+> templates\index.html:1604:      if ((alerta.passou || 0) > 0) document.getElementById('cal-aba-saldo').textContent = `Passou ${alerta.passou} kcal`;
+> templates\index.html:1605:      else if ((alerta.faltam || 0) > 0) document.getElementById('cal-aba-saldo').textContent = `Faltam ${alerta.faltam} kcal`;
+> templates\index.html:1606:      else document.getElementById('cal-aba-saldo').textContent = `0 kcal (Na meta)`;
+  templates\index.html:1607:      document.getElementById('cal-aba-saude').textContent = alerta.saude_texto || 'Saudável';
+  templates\index.html:1608:
+  templates\index.html:1609:      const barra = document.getElementById('cal-aba-barra');
+> templates\index.html:1610:      barra.className = `barra-fill barra-kcal ${alerta.status === 'passou' ? 'passou' : ''}`);
+> templates\index.html:1611:      barra.style.width = `${Math.max(4, pctKcal)}%`;
+  templates\index.html:1612:
+  templates\index.html:1613:      const box = document.getElementById('cal-aba-alerta');
+> templates\index.html:1614:      box.className = `alerta-kcal-box ${alerta.status || 'faltando'}`);
+  templates\index.html:1615:      box.textContent = alerta.mensagem;
+  templates\index.html:1616:
+> templates\index.html:1617:      document.getElementById('cal-aba-input-meta').value = metaKcal;
+  templates\index.html:1618:      document.getElementById('cal-aba-input-obj').value = (perfil && perfil.objetivo) || r.objetivo || 'perda';
+  templates\index.html:1619:
+  templates\index.html:1620:      document.getElementById('cal-aba-lista').innerHTML = alimHoje.length
+  templates\index.html:1621:        ? alimHoje.map(x => {
+  templates\index.html:1622:            const tag = x.saudavel !== false
+  templates\index.html:1623:              ? '<span class="badge-ok">Saudável</span>'
+  templates\index.html:1624:              : '<span class="badge-warn">Não saudável</span>';
+> templates\index.html:1625:            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b>${formatarDetalheItem(x)} — <b>${x.kcal} 
+kcal</b></span>${tag}</div>`;
+  templates\index.html:1626:          }).join('')
+  templates\index.html:1627:        : '<div class="item"><span>Nenhuma alimentação registrada hoje.</span></div>';
+  templates\index.html:1628:
+> templates\index.html:1629:      document.getElementById('cal-aba-soma-final').textContent = `${kcalHoje} kcal`;
+  templates\index.html:1630:    }
+  templates\index.html:1631:
+> templates\index.html:1632:    async function salvarMetaCaloriasAba() {
+  templates\index.html:1633:      await fetch('/api/perfil', {
+  templates\index.html:1634:        method: 'POST',
+  templates\index.html:1635:        headers: {'Content-Type': 'application/json'},
+  templates\index.html:1636:        body: JSON.stringify({
+> templates\index.html:1637:          meta_kcal_dia: document.getElementById('cal-aba-input-meta').value,
+  templates\index.html:1638:          objetivo: document.getElementById('cal-aba-input-obj').value
+  templates\index.html:1639:        })
+  templates\index.html:1640:      });
+  templates\index.html:1641:      carregarEstado();
+  templates\index.html:1652:      const metaAgua = Math.max(1, r.meta_agua_ml || 2500);
+  templates\index.html:1653:      const pctAgua = Math.min(100, Math.round((aguaMl / metaAgua) * 100));
+  templates\index.html:1654:
+> templates\index.html:1655:      const kcalHoje = r.kcal_hoje || 0;
+> templates\index.html:1656:      const metaKcal = Math.max(1, r.meta_kcal_dia || 1500);
+> templates\index.html:1657:      const pctKcal = Math.min(100, Math.round((kcalHoje / metaKcal) * 100));
+  templates\index.html:1658:
+> templates\index.html:1659:      const alertaKcal = r.alerta_kcal || {
+  templates\index.html:1660:        status: 'faltando',
+> templates\index.html:1661:        mensagem: `Já consumiu 0 kcal de ${metaKcal} kcal — faltam ${metaKcal} kcal.`
+  templates\index.html:1662:      };
+> templates\index.html:1663:      const boxKcal = document.getElementById('alerta-kcal-box');
+> templates\index.html:1664:      boxKcal.className = `alerta-kcal-box ${alertaKcal.status || 'faltando'}`);
+> templates\index.html:1665:      boxKcal.textContent = alertaKcal.mensagem;
+  templates\index.html:1666:
+  templates\index.html:1667:      const minTreino = r.minutos_treino_hoje || 0;
+  templates\index.html:1668:      const pctTreino = Math.min(100, Math.round((minTreino / 45) * 100));
+  templates\index.html:1669:
+  templates\index.html:1673:      const pctSaude = totalItensAlim > 0 ? Math.round((qtdSaud / totalItensAlim) * 100) : 0;
+  templates\index.html:1674:
+  templates\index.html:1675:      document.getElementById('dash-agua').textContent = `${aguaMl} / ${metaAgua} ml`;
+> templates\index.html:1676:      document.getElementById('dash-kcal').textContent = `${kcalHoje} / ${metaKcal} kcal`;
+  templates\index.html:1677:      document.getElementById('dash-treino').textContent = `${minTreino} min`;
+  templates\index.html:1678:      document.getElementById('dash-destros').textContent = `${r.destros_hoje || 0}`);
+  templates\index.html:1679:
+  templates\index.html:1680:      document.getElementById('grafico-agua-txt').textContent = `${pctAgua}% (${aguaMl} ml)`;
+  templates\index.html:1685:        : 'Sem registros hoje';
+  templates\index.html:1686:      document.getElementById('grafico-saude-bar').style.width = `${Math.max(4, pctSaude)}%`;
+  templates\index.html:1687:
+> templates\index.html:1688:      document.getElementById('grafico-kcal-label').textContent = `Calorias do dia (meta ${metaKcal} kcal)`;
+> templates\index.html:1689:      document.getElementById('grafico-kcal-txt').textContent = `${kcalHoje} / ${metaKcal} kcal (${pctKcal}%)`;
+> templates\index.html:1690:      const kcalBar = document.getElementById('grafico-kcal-bar');
+> templates\index.html:1691:      kcalBar.className = `barra-fill barra-kcal ${alertaKcal.status === 'passou' ? 'passou' : ''}`);
+> templates\index.html:1692:      kcalBar.style.width = `${Math.max(4, pctKcal)}%`;
+  templates\index.html:1693:
+  templates\index.html:1694:      document.getElementById('grafico-treino-txt').textContent = `${minTreino} min (${pctTreino}%)`;
+  templates\index.html:1695:      document.getElementById('grafico-treino-bar').style.width = `${Math.max(4, pctTreino)}%`;
+  templates\index.html:1696:
+> templates\index.html:1697:      const alimHoje = r.alimentos_hoje || [];
+> templates\index.html:1698:      document.getElementById('dash-lista-prato').innerHTML = alimHoje.length
+  templates\index.html:1699:        ? alimHoje.map(x => {
+  templates\index.html:1700:            const tag = x.saudavel !== false
+  templates\index.html:1701:              ? '<span class="badge-ok">Saudável</span>'
+  templates\index.html:1702:              : '<span class="badge-warn">Não saudável</span>';
+> templates\index.html:1703:            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b>${formatarDetalheItem(x)} (${x.kcal} 
+kcal)</span>${tag}</div>`;
+  templates\index.html:1704:          }).join('')
+  templates\index.html:1705:        : '<div class="item"><span>Nenhuma alimentação registrada hoje.</span></div>';
+  templates\index.html:1706:
+  templates\index.html:1707:      const linhasAtividades = [];
+  templates\index.html:1714:        ? linhasAtividades.join('')
+  templates\index.html:1715:        : '<div class="item"><span>Nenhuma atividade registrada hoje ainda.</span></div>';
+  templates\index.html:1716:
+> templates\index.html:1717:      renderizarAbaCalorias(r, perfil);
+  templates\index.html:1718:    }
+  templates\index.html:1719:
+  templates\index.html:1720:    async function excluirItem(categoria, idx) {
+  templates\index.html:1721:      await fetch(`/api/excluir/${categoria}/${idx}`, { method: 'DELETE' })
+  templates\index.html:1742:      carregarEstado();
+  templates\index.html:1743:    }
+  templates\index.html:1744:
+> templates\index.html:1745:    async function addRefeicao() {
+> templates\index.html:1746:      await fetch('/api/refeicoes', {
+  templates\index.html:1747:        method: 'POST',
+  templates\index.html:1748:        headers: {'Content-Type': 'application/json'},
+  templates\index.html:1749:        body: JSON.stringify({ nome: document.getElementById('ref-nome').value, horario: document.getElementById('ref-hora').value })
+  templates\index.html:1750:      });
+  templates\index.html:1752:      carregarEstado();
+  templates\index.html:1753:    }
+  templates\index.html:1754:
+> templates\index.html:1755:    async function excluirRefeicao(idx) {
+> templates\index.html:1756:      await fetch(`/api/refeicoes/excluir/${idx}`, { method: 'DELETE' })
+  templates\index.html:1757:      carregarEstado();
+  templates\index.html:1758:    }
+  templates\index.html:1759:
+  templates\index.html:1760:    async function carregarEstado() {
+  templates\index.html:1764:        if (!res.ok) return;
+  templates\index.html:1765:        const d = await res.json();
+  templates\index.html:1766:        ultimoEstado = d;
+> templates\index.html:1767:        if (d.tabela_kcal_100g && typeof d.tabela_kcal_100g === 'object') {
+> templates\index.html:1768:          tabelaKcal100g = Object.assign({}, tabelaKcal100g, d.tabela_kcal_100g);
+  templates\index.html:1769:        }
+  templates\index.html:1770:        const p = d.perfil || {};
+  templates\index.html:1771:
+  templates\index.html:1772:        const partes = [];
+  templates\index.html:1779:        document.getElementById('kpi-meta').textContent = d.meta_peso != null ? d.meta_peso + ' kg' : '--';
+  templates\index.html:1780:        document.getElementById('kpi-diff').textContent = d.diferenca_meta != null ? 'Diferença para meta: ' + d.diferenca_meta + ' kg' 
+: 'Diferença para meta: --';
+  templates\index.html:1781:
+> templates\index.html:1782:        const metaKcal = d.meta_kcal_dia || 1500;
+> templates\index.html:1783:        document.getElementById('kpi-meta-kcal').textContent = `Meta diária do instrutor: ${metaKcal} kcal/dia`;
+> templates\index.html:1784:        document.getElementById('p-meta-kcal').value = metaKcal;
+  templates\index.html:1785:
+  templates\index.html:1786:        const ori = d.orientacao || {};
+  templates\index.html:1787:        document.getElementById('base-instrutor').textContent =
+  templates\index.html:1788:          (ori.foco ? 'Programa: ' + ori.foco + ' — ' : '') +
+  templates\index.html:1806:          document.getElementById('bal-peso').value = '';
+  templates\index.html:1807:        }
+  templates\index.html:1808:
+> templates\index.html:1809:        renderizarCardapioSemana(d.cardapio_semana, metaKcal);
+  templates\index.html:1810:
+  templates\index.html:1811:        const agua = d.agua || { consumido_ml: 0, meta_ml: 2500, historico: [] };
+  templates\index.html:1812:        const pct = Math.min(100, Math.round(((agua.consumido_ml || 0) / Math.max(1, agua.meta_ml || 2500)) * 100));
+  templates\index.html:1813:        document.getElementById('agua-status').textContent = `${agua.consumido_ml || 0} / ${agua.meta_ml || 2500} ml (${pct}%)`;
+  templates\index.html:1822:          (agua.historico || []).map((x, i) => `<div class="item"><span>${x.hora} — <b>+${x.ml} ml</b></span><button type="button" 
+class="btn-del" onclick="excluirAgua(${i})">Excluir</button></div>`).join('')
+  templates\index.html:1823:          || '<div class="item"><span>Sem copos registrados hoje.</span></div>';
+  templates\index.html:1824:
+> templates\index.html:1825:        document.getElementById('lista-refeicoes').innerHTML =
+> templates\index.html:1826:          (d.refeicoes || []).map((x, i) => `<div class="item"><span><b>${x.horario}</b> — ${x.nome}</span><button type="button" 
+class="btn-del" onclick="excluirRefeicao(${i})">Excluir</button></div>`).join('')
+> templates\index.html:1827:          || '<div class="item"><span>Nenhum horário de refeição cadastrado.</span></div>';
+  templates\index.html:1828:
+  templates\index.html:1829:        document.getElementById('lista-balanca').innerHTML =
+  templates\index.html:1830:          (d.balanca || []).map((x, i) => `<div class="item"><span>${x.data} — <b>${x.peso} kg</b> (Meta: ${x.meta} kg)</span><button 
+type="button" class="btn-del" onclick="excluirItem('balanca', ${i})">Excluir</button></div>`).join('')
+  templates\index.html:1831:          || '<div class="item"><span>Sem registros ainda.</span></div>';
+  templates\index.html:1838:          (d.glicemia || []).map((x, i) => `<div class="item"><span>${x.data} — <b>${x.valor} mg/dL</b> (${x.momento})</span><button 
+type="button" class="btn-del" onclick="excluirItem('glicemia', ${i})">Excluir</button></div>`).join('')
+  templates\index.html:1839:          || '<div class="item"><span>Sem medições ainda.</span></div>';
+  templates\index.html:1840:
+> templates\index.html:1841:        const alimentosLista = d.alimentos || [];
+> templates\index.html:1842:        const somaFinalAlimentos = alimentosLista.reduce((acc, item) => acc + Number(item.kcal || 0), 0);
+  templates\index.html:1843:
+> templates\index.html:1844:        document.getElementById('lista-alimentos').innerHTML =
+> templates\index.html:1845:          alimentosLista.map((x, i) => {
+  templates\index.html:1846:            const badge = x.saudavel !== false
+  templates\index.html:1847:              ? '<span class="badge-ok">Saudável</span>'
+  templates\index.html:1848:              : '<span class="badge-warn">Não saudável</span>';
+> templates\index.html:1849:            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b>${formatarDetalheItem(x)} — <b>${x.kcal} 
+kcal</b> ${badge}</span><button type="button" class="btn-del" onclick="excluirItem('alimentos', ${i})">Excluir</button></div>`;
+  templates\index.html:1850:          }).join('')
+> templates\index.html:1851:          || '<div class="item"><span>Sem alimentos cadastrados.</span></div>';
+  templates\index.html:1852:
+> templates\index.html:1853:        document.getElementById('alimentos-soma-final-kcal').textContent = `${somaFinalAlimentos} kcal`;
+  templates\index.html:1854:
+  templates\index.html:1855:        renderizarDashboardDia(d.resumo_dia, p);
+  templates\index.html:1856:        verificarAlertas(d);
+  templates\index.html:1857:      } catch (e) {}
+  templates\index.html:1866:          idade: document.getElementById('p-idade').value,
+  templates\index.html:1867:          altura_cm: document.getElementById('p-altura').value,
+  templates\index.html:1868:          objetivo: document.getElementById('p-objetivo').value,
+> templates\index.html:1869:          meta_kcal_dia: document.getElementById('p-meta-kcal').value,
+  templates\index.html:1870:          peso_atual: document.getElementById('painel-peso').value,
+  templates\index.html:1871:          meta_peso: document.getElementById('painel-meta').value
+  templates\index.html:1872:        })
+  templates\index.html:1873:      });
+  templates\index.html:1913:      const itens = resolverItens(
+  templates\index.html:1914:        document.getElementById('al-nome').value,
+  templates\index.html:1915:        document.getElementById('al-qtd').value,
+> templates\index.html:1916:        document.getElementById('al-kcal').value,
+> templates\index.html:1917:        kcalManualFlag.al,
+  templates\index.html:1918:        document.getElementById('al-saude').value
+  templates\index.html:1919:      );
+  templates\index.html:1920:      if (!itens.length) return;
+  templates\index.html:1921:
+  templates\index.html:1922:      for (const it of itens) {
+  templates\index.html:1923:        const gramas = it.gramas !== null ? it.gramas : '';
+> templates\index.html:1924:        await fetch('/api/alimentos', {
+  templates\index.html:1925:          method: 'POST',
+  templates\index.html:1926:          headers: {'Content-Type': 'application/json'},
+  templates\index.html:1927:          body: JSON.stringify({
+  templates\index.html:1928:            nome: it.alimento,
+  templates\index.html:1929:            unidade: 'gramas',
+  templates\index.html:1930:            quantidade: gramas,
+  templates\index.html:1931:            gramas: gramas,
+> templates\index.html:1932:            kcal: it.kcal,
+  templates\index.html:1933:            saude_tipo: document.getElementById('al-saude').value
+  templates\index.html:1934:          })
+  templates\index.html:1935:        });
+  templates\index.html:1936:      }
+  templates\index.html:1937:
+  templates\index.html:1938:      document.getElementById('al-nome').value = '';
+  templates\index.html:1939:      document.getElementById('al-qtd').value = '';
+> templates\index.html:1940:      document.getElementById('al-kcal').value = '';
+> templates\index.html:1941:      kcalManualFlag.al = false;
+  templates\index.html:1942:      document.getElementById('al-preview').textContent = 'Alimento(s) salvo(s)! Veja cada valor individual e a soma final abaixo.';
+  templates\index.html:1943:      carregarEstado();
+  templates\index.html:1944:    }
+  templates\index.html:1945:
+  templates\index.html:1959:}
+  templates\index.html:1960:</script>
+  templates\index.html:1961:<script>
+> templates\index.html:1962:window.TABELA_100G = {
+  templates\index.html:1963:  "arroz branco": 128,
+  templates\index.html:1964:  "arroz integral": 124,
+  templates\index.html:1965:  "arroz": 128,
+  templates\index.html:1966:  "feijao": 76,
+  templates\index.html:1983:  return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  templates\index.html:1984:};
+  templates\index.html:1985:
+> templates\index.html:1986:window.kcalPor100g = function(nome) {
+  templates\index.html:1987:  var k = window.normAlimento(nome);
+  templates\index.html:1988:  if (!k) return null;
+> templates\index.html:1989:  var chaves = Object.keys(window.TABELA_100G).sort(function(a, b) { return b.length - a.length; });
+  templates\index.html:1990:  for (var i = 0; i < chaves.length; i++) {
+> templates\index.html:1991:    if (k.indexOf(chaves[i]) !== -1) return window.TABELA_100G[chaves[i]];
+  templates\index.html:1992:  }
+  templates\index.html:1993:  return null;
+  templates\index.html:1994:};
+  templates\index.html:1995:
+  templates\index.html:1996:window.calcularItemExato = function(nome, gramas) {
+> templates\index.html:1997:  var base = window.kcalPor100g(nome);
+  templates\index.html:1998:  var g = Number(gramas);
+> templates\index.html:1999:  if (base === null || isNaN(g) || g <= 0) return { valido: false, kcal: 0, base100g: base, gramas: g };
+> templates\index.html:2000:  var kcal = Math.round((g / 100) * base);
+> templates\index.html:2001:  return { valido: true, kcal: kcal, base100g: base, gramas: g };
+  templates\index.html:2002:};
+  templates\index.html:2003:
+  templates\index.html:2004:window.somarItensExatos = function(itens) {
+  templates\index.html:2005:  return (itens || []).reduce(function(acc, it) {
+> templates\index.html:2006:    return acc + (Number(it.kcal) || 0);
+  templates\index.html:2007:  }, 0);
+  templates\index.html:2008:};
+  templates\index.html:2009:</script>
+  templates\index.html:2010:<script>
+> templates\index.html:2011:window.TABELA_100G = window.TABELA_100G || {};
+  templates\index.html:2012:
+> templates\index.html:2013:window.normTabelaItem = function(s) {
+  templates\index.html:2014:  return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  templates\index.html:2015:};
+  templates\index.html:2016:
+  templates\index.html:2017:window.acharBase100g = function(nomeAlimento) {
+> templates\index.html:2018:  var chave = window.normTabelaItem(nomeAlimento);
+  templates\index.html:2019:  if (!chave) return null;
+> templates\index.html:2020:  var tabela = window.TABELA_100G || {};
+> templates\index.html:2021:  var nomes = Object.keys(tabela).sort(function(a, b) { return b.length - a.length; });
+  templates\index.html:2022:  for (var i = 0; i < nomes.length; i++) {
+> templates\index.html:2023:    var itemNorm = window.normTabelaItem(nomes[i]);
+  templates\index.html:2024:    if (chave === itemNorm || chave.indexOf(itemNorm) !== -1 || itemNorm.indexOf(chave) !== -1) {
+> templates\index.html:2025:      var val = Number(tabela[nomes[i]]);
+  templates\index.html:2026:      if (!isNaN(val) && val > 0) return val;
+  templates\index.html:2027:    }
+  templates\index.html:2028:  }
+  templates\index.html:2029:  return null;
+  templates\index.html:2030:};
+  templates\index.html:2031:
+> templates\index.html:2032:window.calcularAlimentoTabela = function(nomeAlimento, gramas) {
+  templates\index.html:2033:  var base = window.acharBase100g(nomeAlimento);
+  templates\index.html:2034:  var g = Number(String(gramas || "").replace(",", ".").replace(/[^0-9.]/g, ""));
+  templates\index.html:2035:  if (base === null || isNaN(g) || g <= 0) {
+> templates\index.html:2036:    return { ok: false, kcal: 0, base100g: base, gramas: g };
+  templates\index.html:2037:  }
+> templates\index.html:2038:  return { ok: true, kcal: Math.round((g / 100) * base), base100g: base, gramas: g };
+  templates\index.html:2039:};
+  templates\index.html:2040:
+> templates\index.html:2041:window.somarTotalTabela = function(itens) {
+  templates\index.html:2042:  return (itens || []).reduce(function(total, item) {
+> templates\index.html:2043:    return total + (Number(item.kcal) || 0);
+  templates\index.html:2044:  }, 0);
+  templates\index.html:2045:};
+  templates\index.html:2046:</script>
+  templates\index.html:2047:<script>
+> templates\index.html:2048:window.calcPorGramasLivre = function(alimento, gramas, kcal100g) {
+  templates\index.html:2049:  var g = Number(String(gramas || "").replace(",", ".").replace(/[^0-9.]/g, ""));
+> templates\index.html:2050:  var base = Number(String(kcal100g || "").replace(",", ".").replace(/[^0-9.]/g, ""));
+  templates\index.html:2051:  if (isNaN(g) || g <= 0 || isNaN(base) || base < 0) {
+> templates\index.html:2052:    return { ok: false, alimento: (alimento || "").trim(), gramas: g, kcal100g: base, kcal: 0 };
+  templates\index.html:2053:  }
+  templates\index.html:2054:  return {
+  templates\index.html:2055:    ok: true,
+  templates\index.html:2056:    alimento: (alimento || "").trim(),
+  templates\index.html:2057:    gramas: g,
+> templates\index.html:2058:    kcal100g: base,
+> templates\index.html:2059:    kcal: Math.round((g / 100) * base)
+  templates\index.html:2060:  };
+  templates\index.html:2061:};
+  templates\index.html:2062:
+> templates\index.html:2063:window.somarTotalPrato = function(itens) {
+  templates\index.html:2064:  return (itens || []).reduce(function(acc, item) {
+> templates\index.html:2065:    return acc + (Number(item.kcal) || 0);
+  templates\index.html:2066:  }, 0);
+  templates\index.html:2067:};
+  templates\index.html:2068:</script>
+  templates\index.html:2069:<script>
+> templates\index.html:2070:window.calcularFacil = function(alimento, gramas, kcal100g, fallback100g) {
+  templates\index.html:2071:  var g = Number(String(gramas || "").replace(",", ".").replace(/[^0-9.]/g, ""));
+> templates\index.html:2072:  var base = Number(String(kcal100g !== "" && kcal100g !== undefined ? kcal100g : (fallback100g || "")).replace(",", 
+".").replace(/[^0-9.]/g, ""));
+  templates\index.html:2073:  if (isNaN(g) || g <= 0 || isNaN(base) || base < 0) {
+> templates\index.html:2074:    return { ok: false, alimento: (alimento || "").trim(), gramas: g, kcal100g: base, kcal: 0 };
+  templates\index.html:2075:  }
+  templates\index.html:2076:  return {
+  templates\index.html:2077:    ok: true,
+  templates\index.html:2078:    alimento: (alimento || "").trim(),
+  templates\index.html:2079:    gramas: g,
+> templates\index.html:2080:    kcal100g: base,
+> templates\index.html:2081:    kcal: Math.round((g / 100) * base)
+  templates\index.html:2082:  };
+  templates\index.html:2083:};
+  templates\index.html:2084:
+  templates\index.html:2085:window.somarFacil = function(itens) {
+  templates\index.html:2086:  return (itens || []).reduce(function(soma, item) {
+> templates\index.html:2087:    return soma + (Number(item.kcal) || 0);
+  templates\index.html:2088:  }, 0);
+  templates\index.html:2089:};
+  templates\index.html:2090:</script>
+  templates\index.html:2091:
+  templates\index.html:2101:    };
+  templates\index.html:2102:  }
+  templates\index.html:2103:
+> templates\index.html:2104:  window.montarTabelaExcel = function(itens, tituloTotal) {
+  templates\index.html:2105:    var lista = itens || [];
+> templates\index.html:2106:    var totKcal = 0;
+  templates\index.html:2107:    var totGramas = 0;
+  templates\index.html:2108:    var linhasHtml = lista.map(function(it) {
+  templates\index.html:2109:      var nome = it.alimento || it.nome || "Alimento";
+  templates\index.html:2110:      var g = Number(it.gramas != null ? it.gramas : (it.quantidade || 0)) || 0;
+> templates\index.html:2111:      var kcal = Number(it.kcal != null ? it.kcal : (it.valor_calorico || 0)) || 0;
+  templates\index.html:2112:      totGramas += g;
+> templates\index.html:2113:      totKcal += kcal;
+> templates\index.html:2114:      return "<tr><td>" + nome + "</td><td>" + g + "g</td><td>" + kcal + " kcal</td><td>-</td></tr>";
+  templates\index.html:2115:    }).join("");
+  templates\index.html:2116:
+  templates\index.html:2117:    if (!linhasHtml) {
+  templates\index.html:2118:      linhasHtml = "<tr><td colspan='4'>Nenhum alimento na fileira ainda.</td></tr>";
+  templates\index.html:2119:    }
+  templates\index.html:2120:
+  templates\index.html:2121:    return "<div class='excel-box'><table class='excel-tab'><thead><tr>" +
+> templates\index.html:2122:      "<th>alimento</th><th>quantidade</th><th>valor calorico</th><th>total de calorias no prato</th>" +
+  templates\index.html:2123:      "</tr></thead><tbody>" + linhasHtml +
+> templates\index.html:2124:      "<tr class='total-row'><td>" + (tituloTotal || "Total no prato") + "</td><td>" + totGramas + "g</td><td>-</td><td>" + totKcal + " 
+kcal</td></tr>" +
+  templates\index.html:2125:      "</tbody></table></div>";
+  templates\index.html:2126:  };
+  templates\index.html:2127:
+  templates\index.html:2128:  function atualizarGrades() {
+> templates\index.html:2129:    var alvoCardapio = document.getElementById("lista-porcoes-rascunho");
+> templates\index.html:2130:    if (alvoCardapio && typeof porcoesRascunho !== "undefined") {
+> templates\index.html:2131:      var boxC = document.getElementById("excel-grade-cardapio");
+  templates\index.html:2132:      if (!boxC) {
+  templates\index.html:2133:        boxC = document.createElement("div");
+> templates\index.html:2134:        boxC.id = "excel-grade-cardapio";
+> templates\index.html:2135:        alvoCardapio.parentNode.insertBefore(boxC, alvoCardapio.nextSibling);
+  templates\index.html:2136:      }
+> templates\index.html:2137:      boxC.innerHTML = window.montarTabelaExcel(porcoesRascunho, "Total no prato");
+  templates\index.html:2138:    }
+  templates\index.html:2139:
+> templates\index.html:2140:    var alvoAlim = document.getElementById("lista-alimentos");
+  templates\index.html:2141:    if (alvoAlim) {
+> templates\index.html:2142:      var boxA = document.getElementById("excel-grade-alimentos");
+  templates\index.html:2143:      if (!boxA) {
+  templates\index.html:2144:        boxA = document.createElement("div");
+> templates\index.html:2145:        boxA.id = "excel-grade-alimentos";
+> templates\index.html:2146:        alvoAlim.parentNode.insertBefore(boxA, alvoAlim.nextSibling);
+  templates\index.html:2147:      }
+> templates\index.html:2148:      var listaSalva = (typeof ultimoEstado !== "undefined" && ultimoEstado && ultimoEstado.alimentos) ? ultimoEstado.alimentos : [];
+> templates\index.html:2149:      boxA.innerHTML = window.montarTabelaExcel(listaSalva, "Total de calorias");
+  templates\index.html:2150:    }
+  templates\index.html:2151:  }
+  templates\index.html:2152:
+  templates\index.html:2153:  document.addEventListener("DOMContentLoaded", atualizarGrades);
+  templates\index.html:2157:
+  templates\index.html:2158:<script id="firefit-excel-simples">
+  templates\index.html:2159:(function() {
+> templates\index.html:2160:  var linhasPrato = [];
+  templates\index.html:2161:
+  templates\index.html:2162:  window.addLinhaExcel = function() {
+  templates\index.html:2163:    var nomeEl = document.getElementById("ex-alimento");
+  templates\index.html:2164:    var gramasEl = document.getElementById("ex-gramas");
+> templates\index.html:2165:    var kcal100El = document.getElementById("ex-kcal100");
+> templates\index.html:2166:    if (!nomeEl || !gramasEl || !kcal100El) return;
+  templates\index.html:2167:
+  templates\index.html:2168:    var alimento = (nomeEl.value || "").trim();
+  templates\index.html:2169:    var gramas = parseFloat(String(gramasEl.value || "").replace(",", "."));
+> templates\index.html:2170:    var kcal100 = parseFloat(String(kcal100El.value || "").replace(",", "."));
+  templates\index.html:2171:
+> templates\index.html:2172:    if (!alimento || isNaN(gramas) || gramas <= 0 || isNaN(kcal100) || kcal100 < 0) return;
+  templates\index.html:2173:
+> templates\index.html:2174:    var valorCalorico = Math.round((gramas / 100) * kcal100);
+> templates\index.html:2175:    linhasPrato.push({
+  templates\index.html:2176:      alimento: alimento,
+  templates\index.html:2177:      gramas: gramas,
+  templates\index.html:2178:      valorCalorico: valorCalorico
+  templates\index.html:2179:    });
+  templates\index.html:2180:
+  templates\index.html:2181:    nomeEl.value = "";
+  templates\index.html:2182:    gramasEl.value = "";
+> templates\index.html:2183:    kcal100El.value = "";
+  templates\index.html:2184:    nomeEl.focus();
+> templates\index.html:2185:    renderExcelPrato();
+  templates\index.html:2186:  };
+  templates\index.html:2187:
+  templates\index.html:2188:  window.limparLinhasExcel = function() {
+> templates\index.html:2189:    linhasPrato = [];
+> templates\index.html:2190:    renderExcelPrato();
+  templates\index.html:2191:  };
+  templates\index.html:2192:
+  templates\index.html:2193:  window.removerLinhaExcel = function(idx) {
+> templates\index.html:2194:    linhasPrato.splice(idx, 1);
+> templates\index.html:2195:    renderExcelPrato();
+  templates\index.html:2196:  };
+  templates\index.html:2197:
+> templates\index.html:2198:  function renderExcelPrato() {
+  templates\index.html:2199:    var tbody = document.getElementById("excel-linhas-body");
+  templates\index.html:2200:    if (!tbody) return;
+  templates\index.html:2201:
+> templates\index.html:2202:    if (!linhasPrato.length) {
+  templates\index.html:2203:      tbody.innerHTML = "<tr><td colspan='4'>Nenhuma linha adicionada ainda.</td></tr>";
+  templates\index.html:2204:      return;
+  templates\index.html:2205:    }
+  templates\index.html:2206:
+> templates\index.html:2207:    var totalKcal = 0;
+  templates\index.html:2208:    var totalGramas = 0;
+  templates\index.html:2209:    var html = "";
+  templates\index.html:2210:
+> templates\index.html:2211:    for (var i = 0; i < linhasPrato.length; i++) {
+> templates\index.html:2212:      var item = linhasPrato[i];
+  templates\index.html:2213:      totalGramas += item.gramas;
+> templates\index.html:2214:      totalKcal += item.valorCalorico;
+  templates\index.html:2215:      html += "<tr>" +
+  templates\index.html:2216:        "<td>" + item.alimento + " <button type='button' class='btn-del' style='padding:2px 6px;font-size:0.7rem;' 
+onclick='removerLinhaExcel(" + i + ")'>x</button></td>" +
+  templates\index.html:2217:        "<td>" + item.gramas + "g</td>" +
+> templates\index.html:2218:        "<td>" + item.valorCalorico + " kcal</td>" +
+  templates\index.html:2219:        "<td>-</td>" +
+  templates\index.html:2220:        "</tr>";
+  templates\index.html:2221:    }
+  templates\index.html:2222:
+  templates\index.html:2223:    html += "<tr class='total-row'>" +
+> templates\index.html:2224:      "<td>Total no prato</td>" +
+  templates\index.html:2225:      "<td>" + totalGramas + "g</td>" +
+  templates\index.html:2226:      "<td>-</td>" +
+> templates\index.html:2227:      "<td>" + totalKcal + " kcal</td>" +
+  templates\index.html:2228:      "</tr>";
+  templates\index.html:2229:
+  templates\index.html:2230:    tbody.innerHTML = html;
+  templates\index.html:2231:  }
+  templates\index.html:2232:
+> templates\index.html:2233:  document.addEventListener("DOMContentLoaded", renderExcelPrato);
+  templates\index.html:2234:})();
+  templates\index.html:2235:</script>
+  templates\index.html:2236:</body>
+  templates\index.html:2237:</html>
+
+
+
+=== APP.PY ===
+
+  app.py:2:import os
+  app.py:3:from datetime import datetime
+  app.py:4:from zoneinfo import ZoneInfo
+> app.py:5:from flask import Flask, jsonify, render_template, request
+  app.py:6:
+  app.py:7:try:
+  app.py:8:    import psycopg2
+  app.py:9:except ImportError:
+  app.py:26:    "Domingo"
+  app.py:27:]
+  app.py:28:
+> app.py:29:DEFAULT_REFEICOES = [
+  app.py:30:    {"nome": "Café da manhã", "horario": "08:00"},
+  app.py:31:    {"nome": "Almoço", "horario": "12:30"},
+  app.py:32:    {"nome": "Lanche da tarde", "horario": "16:00"},
+  app.py:33:    {"nome": "Jantar", "horario": "19:30"}
+  app.py:34:]
+  app.py:35:
+> app.py:36:TABELA_KCAL_100G = {
+  app.py:37:    # Cereais, massas, tubérculos e grãos
+  app.py:38:    "arroz branco": 128,
+  app.py:39:    "arroz": 128,
+  app.py:40:    "arroz integral": 124,
+  app.py:117:    "omelete": 154,
+  app.py:118:    "clara de ovo": 52,
+  app.py:119:
+> app.py:120:    # Pratos brasileiros e do mundo
+  app.py:121:    "feijoada": 117,
+  app.py:122:    "farofa": 406,
+  app.py:123:    "torresmo": 544,
+  app.py:124:    "estrogonofe de frango": 168,
+  app.py:164:    "queijo cottage": 98,
+  app.py:165:    "queijo mucarela": 300,
+  app.py:166:    "queijo muçarela": 300,
+> app.py:167:    "queijo prato": 360,
+  app.py:168:    "queijo parmesao": 431,
+  app.py:169:    "queijo parmesão": 431,
+  app.py:170:    "requeijao": 257,
+  app.py:171:    "requeijão": 257,
+  app.py:255:    },
+  app.py:256:    "meta_peso": 75.0,
+  app.py:257:    "peso_atual": None,
+> app.py:258:    "meta_kcal_dia": 1500,
+  app.py:259:    "agua": {
+  app.py:260:        "meta_ml": 2500,
+  app.py:261:        "consumido_ml": 0,
+  app.py:262:        "data_ref": "",
+  app.py:263:        "historico": []
+  app.py:264:    },
+> app.py:265:    "refeicoes": DEFAULT_REFEICOES,
+> app.py:266:    "cardapio_semana": [],
+  app.py:267:    "balanca": [],
+  app.py:268:    "treinos": [],
+  app.py:269:    "glicemia": [],
+> app.py:270:    "alimentos": []
+  app.py:271:}
+  app.py:272:
+  app.py:273:PALAVRAS_SAUDAVEIS = [
+  app.py:274:    "arroz integral", "frango", "peito de frango", "frango grelhado", "frango desfiado",
+  app.py:303:]
+  app.py:304:
+  app.py:305:
+> app.py:306:def buscar_kcal_por_100g(nome_alimento):
+> app.py:307:    texto = (nome_alimento or "").lower()
+> app.py:308:    for chave in sorted(TABELA_KCAL_100G.keys(), key=len, reverse=True):
+  app.py:309:        if chave in texto:
+> app.py:310:            return TABELA_KCAL_100G[chave]
+  app.py:311:    return None
+  app.py:312:
+  app.py:313:
+> app.py:314:def calcular_kcal_por_gramas(nome_alimento, gramas, kcal_manual=None):
+> app.py:315:    kcal_100g = buscar_kcal_por_100g(nome_alimento)
+  app.py:316:    try:
+  app.py:317:        g = float(gramas) if gramas not in (None, "") else 0.0
+  app.py:318:    except Exception:
+  app.py:319:        g = 0.0
+  app.py:320:
+> app.py:321:    if kcal_100g is not None and g > 0:
+> app.py:322:        auto_val = int(round((g / 100.0) * kcal_100g))
+> app.py:323:        if kcal_manual not in (None, ""):
+  app.py:324:            try:
+> app.py:325:                manual_val = max(0, int(round(float(kcal_manual))))
+  app.py:326:                return manual_val if manual_val != auto_val else auto_val
+  app.py:327:            except Exception:
+  app.py:328:                pass
+  app.py:329:        return auto_val
+  app.py:330:
+> app.py:331:    if kcal_manual not in (None, ""):
+  app.py:332:        try:
+> app.py:333:            return max(0, int(round(float(kcal_manual))))
+  app.py:334:        except Exception:
+  app.py:335:            pass
+  app.py:336:
+> app.py:337:    if kcal_100g is not None:
+> app.py:338:        return int(kcal_100g)
+  app.py:339:
+  app.py:340:    return 0
+  app.py:341:
+  app.py:342:
+  app.py:369:    return agora_br_dt().strftime("%d/%m")
+  app.py:370:
+  app.py:371:
+> app.py:372:def avaliar_calorias_dia(kcal_consumidas, meta_kcal, objetivo="perda", qtd_nao_saudaveis=0):
+> app.py:373:    consumido = int(kcal_consumidas or 0)
+> app.py:374:    meta = max(1, int(meta_kcal or 1500))
+  app.py:375:    diff = consumido - meta
+  app.py:376:    foco_txt = "ganho de massa" if objetivo == "ganho" else "perda de peso"
+  app.py:377:
+  app.py:378:    if diff > 0:
+  app.py:385:            "passou": passou,
+  app.py:386:            "saude_status": "nao_saudavel",
+  app.py:387:            "saude_texto": saude_txt,
+> app.py:388:            "mensagem": f"Já consumiu {consumido} kcal e passou {passou} kcal da meta de {meta} kcal ({foco_txt}). {saude_txt}!"
+  app.py:389:        }
+  app.py:390:
+  app.py:391:    if diff < 0:
+  app.py:392:        faltam = abs(diff)
+  app.py:398:            "passou": 0,
+  app.py:399:            "saude_status": "nao_saudavel" if qtd_nao_saudaveis > 0 else "saudavel",
+  app.py:400:            "saude_texto": saude_txt,
+> app.py:401:            "mensagem": f"Já consumiu {consumido} kcal de {meta} kcal — faltam {faltam} kcal ({foco_txt})."
+  app.py:402:        }
+  app.py:403:
+  app.py:404:    saude_txt = "Atenção: há item não saudável hoje" if qtd_nao_saudaveis > 0 else "Dentro da meta e saudável"
+  app.py:405:    return {
+  app.py:409:        "passou": 0,
+  app.py:410:        "saude_status": "nao_saudavel" if qtd_nao_saudaveis > 0 else "saudavel",
+  app.py:411:        "saude_texto": saude_txt,
+> app.py:412:        "mensagem": f"Já consumiu {consumido} kcal e atingiu a meta de {meta} kcal ({foco_txt})."
+  app.py:413:    }
+  app.py:414:
+  app.py:415:
+  app.py:416:def normalizar_dados(raw):
+  app.py:427:            for ak, av in DEFAULT_DATA["agua"].items():
+  app.py:428:                if ak in raw["agua"]:
+  app.py:429:                    data["agua"][ak] = raw["agua"][ak]
+> app.py:430:        if not isinstance(data.get("refeicoes"), list) or not data["refeicoes"]:
+> app.py:431:            data["refeicoes"] = json.loads(json.dumps(DEFAULT_REFEICOES))
+> app.py:432:        if not isinstance(data.get("cardapio_semana"), list):
+> app.py:433:            data["cardapio_semana"] = []
+  app.py:434:
+  app.py:435:    try:
+> app.py:436:        data["meta_kcal_dia"] = max(200, int(data.get("meta_kcal_dia") or 1500))
+  app.py:437:    except Exception:
+> app.py:438:        data["meta_kcal_dia"] = 1500
+  app.py:439:
+  app.py:440:    hoje = hoje_br()
+  app.py:441:    if data["agua"].get("data_ref") and data["agua"].get("data_ref") != hoje:
+  app.py:442:        data["agua"]["consumido_ml"] = 0
+  app.py:443:        data["agua"]["historico"] = []
+  app.py:444:    data["agua"]["data_ref"] = hoje
+  app.py:445:
+> app.py:446:    for item in data.get("alimentos", []):
+  app.py:447:        if "saudavel" not in item:
+  app.py:448:            item["saudavel"] = classificar_saude(item.get("nome", ""))
+  app.py:449:        if "data" not in item:
+  app.py:450:            item["data"] = ""
+  app.py:451:        if "gramas" not in item:
+  app.py:452:            item["gramas"] = None
+  app.py:453:
+> app.py:454:    for prato in data.get("cardapio_semana", []):
+> app.py:455:        dia = prato.get("dia", "Segunda")
+  app.py:456:        if dia not in DIAS_SEMANA:
+> app.py:457:            prato["dia"] = "Segunda"
+> app.py:458:        if not prato.get("refeicao"):
+> app.py:459:            prato["refeicao"] = "Almoço"
+> app.py:460:        porcoes = prato.get("porcoes")
+  app.py:461:        if not isinstance(porcoes, list):
+  app.py:462:            porcoes = []
+> app.py:463:            if prato.get("prato"):
+  app.py:464:                porcoes.append({
+> app.py:465:                    "alimento": prato.get("prato"),
+> app.py:466:                    "gramas": prato.get("gramas"),
+> app.py:467:                    "kcal": int(prato.get("kcal", 0) or 0),
+> app.py:468:                    "saudavel": prato.get("saudavel", True)
+  app.py:469:                })
+  app.py:470:        for p in porcoes:
+> app.py:471:            p["kcal"] = int(p.get("kcal", 0) or 0)
+  app.py:472:            if "saudavel" not in p:
+> app.py:473:                p["saudavel"] = classificar_saude(p.get("alimento", ""))
+> app.py:474:        prato["porcoes"] = porcoes
+> app.py:475:        prato["total_kcal"] = sum(int(p.get("kcal", 0) or 0) for p in porcoes)
+  app.py:476:
+  app.py:477:    return data
+  app.py:478:
+  app.py:479:
+  app.py:487:def _garantir_tabela_pg(conn):
+  app.py:488:    with conn.cursor() as cur:
+  app.py:489:        cur.execute("""
+> app.py:490:            CREATE TABLE IF NOT EXISTS fire_fit_estado (
+  app.py:491:                id INTEGER PRIMARY KEY,
+  app.py:492:                payload JSONB NOT NULL,
+  app.py:493:                atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  app.py:494:            )
+  app.py:495:        """)
+> app.py:496:        cur.execute("SELECT payload FROM fire_fit_estado WHERE id = 1")
+  app.py:497:        row = cur.fetchone()
+  app.py:498:        if row is None:
+  app.py:499:            cur.execute(
+> app.py:500:                "INSERT INTO fire_fit_estado (id, payload) VALUES (1, %s::jsonb)",
+  app.py:501:                (json.dumps(DEFAULT_DATA, ensure_ascii=False),)
+  app.py:502:            )
+  app.py:503:    conn.commit()
+  app.py:504:
+  app.py:510:            try:
+  app.py:511:                _garantir_tabela_pg(conn)
+  app.py:512:                with conn.cursor() as cur:
+> app.py:513:                    cur.execute("SELECT payload FROM fire_fit_estado WHERE id = 1")
+  app.py:514:                    row = cur.fetchone()
+  app.py:515:                if row and row[0] is not None:
+  app.py:516:                    return normalizar_dados(row[0])
+  app.py:517:                return normalizar_dados(DEFAULT_DATA)
+  app.py:539:                with conn.cursor() as cur:
+  app.py:540:                    cur.execute(
+  app.py:541:                        """
+> app.py:542:                        INSERT INTO fire_fit_estado (id, payload, atualizado_em)
+  app.py:543:                        VALUES (1, %s::jsonb, CURRENT_TIMESTAMP)
+  app.py:544:                        ON CONFLICT (id) DO UPDATE
+  app.py:545:                        SET payload = EXCLUDED.payload, atualizado_em = CURRENT_TIMESTAMP
+  app.py:546:                        """,
+  app.py:555:        json.dump(limpo, f, ensure_ascii=False, indent=2)
+  app.py:556:
+  app.py:557:
+> app.py:558:def orientacao_instrutor(perfil, peso, meta, meta_kcal):
+  app.py:559:    objetivo = (perfil or {}).get("objetivo", "perda")
+  app.py:560:    diff = round(peso - meta, 1) if (peso is not None and meta is not None) else None
+  app.py:561:
+  app.py:562:    if objetivo == "ganho":
+  app.py:563:        foco = "Ganho de massa"
+> app.py:564:        base = f"Meta diária definida pelo instrutor: {meta_kcal} kcal/dia para ganho de massa."
+  app.py:565:        if diff is not None:
+  app.py:566:            if diff < 0:
+  app.py:567:                meta_txt = f"Faltam {abs(diff)} kg para atingir a meta de ganho."
+  app.py:568:            elif diff > 0:
+  app.py:573:            meta_txt = "Informe peso atual e meta para acompanhar a distância."
+  app.py:574:    else:
+  app.py:575:        foco = "Perda de peso"
+> app.py:576:        base = f"Meta diária definida pelo instrutor: {meta_kcal} kcal/dia para perda de peso."
+  app.py:577:        if diff is not None:
+  app.py:578:            if diff > 0:
+  app.py:579:                meta_txt = f"Restam {diff} kg para chegar à meta de peso."
+  app.py:580:            elif diff < 0:
+  app.py:594:def montar_resumo_dia(data):
+  app.py:595:    prefixo_hoje = hoje_br_curto() + " "
+  app.py:596:
+> app.py:597:    alimentos_hoje = [x for x in data.get("alimentos", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
+  app.py:598:    treinos_hoje = [x for x in data.get("treinos", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
+  app.py:599:    balanca_hoje = [x for x in data.get("balanca", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
+  app.py:600:    glicemia_hoje = [x for x in data.get("glicemia", []) if str(x.get("data", "")).startswith(prefixo_hoje)]
+  app.py:601:    agua = data.get("agua", DEFAULT_DATA["agua"])
+  app.py:602:    objetivo = (data.get("perfil") or {}).get("objetivo", "perda")
+  app.py:603:
+> app.py:604:    kcal_total = sum(int(x.get("kcal", 0) or 0) for x in alimentos_hoje)
+> app.py:605:    qtd_saudaveis = sum(1 for x in alimentos_hoje if x.get("saudavel", True))
+> app.py:606:    qtd_nao_saudaveis = sum(1 for x in alimentos_hoje if not x.get("saudavel", True))
+  app.py:607:
+> app.py:608:    meta_kcal = int(data.get("meta_kcal_dia") or 1500)
+> app.py:609:    alerta_kcal = avaliar_calorias_dia(kcal_total, meta_kcal, objetivo, qtd_nao_saudaveis)
+  app.py:610:
+> app.py:611:    if not alimentos_hoje:
+  app.py:612:        avaliacao_alimentacao = "Nenhuma alimentação registrada hoje ainda."
+  app.py:613:    elif qtd_nao_saudaveis == 0:
+  app.py:614:        avaliacao_alimentacao = "Alimentação do dia dentro do saudável."
+  app.py:615:    elif qtd_saudaveis >= qtd_nao_saudaveis:
+  app.py:626:        "agua_ml": int(agua.get("consumido_ml", 0) or 0),
+  app.py:627:        "meta_agua_ml": int(agua.get("meta_ml", 2500) or 2500),
+  app.py:628:        "agua_historico": agua.get("historico", []),
+> app.py:629:        "kcal_hoje": kcal_total,
+> app.py:630:        "meta_kcal_dia": meta_kcal,
+> app.py:631:        "alerta_kcal": alerta_kcal,
+  app.py:632:        "qtd_saudaveis": qtd_saudaveis,
+  app.py:633:        "qtd_nao_saudaveis": qtd_nao_saudaveis,
+  app.py:634:        "avaliacao_alimentacao": avaliacao_alimentacao,
+> app.py:635:        "alimentos_hoje": alimentos_hoje,
+  app.py:636:        "minutos_treino_hoje": minutos_treino_hoje,
+  app.py:637:        "treinos_hoje": treinos_hoje,
+  app.py:638:        "destros_hoje": destros_hoje,
+  app.py:639:        "balanca_hoje": balanca_hoje,
+  app.py:643:
+  app.py:644:@app.route("/")
+  app.py:645:def index():
+> app.py:646:    return render_template("index.html")
+  app.py:647:
+  app.py:648:
+> app.py:649:@app.route("/api/estado", methods=["GET"])
+> app.py:650:def get_estado():
+  app.py:651:    data = load_data()
+  app.py:652:    peso = data.get("peso_atual")
+  app.py:653:    meta = data.get("meta_peso")
+  app.py:654:    perfil = data.get("perfil", {})
+> app.py:655:    meta_kcal = int(data.get("meta_kcal_dia") or 1500)
+  app.py:656:    diferenca = round(peso - meta, 1) if (peso is not None and meta is not None) else None
+  app.py:657:    return jsonify({
+  app.py:658:        "hora_servidor_br": agora_br_dt().strftime("%H:%M"),
+  app.py:659:        "perfil": perfil,
+  app.py:660:        "peso_atual": peso,
+  app.py:661:        "meta_peso": meta,
+> app.py:662:        "meta_kcal_dia": meta_kcal,
+  app.py:663:        "diferenca_meta": diferenca,
+> app.py:664:        "orientacao": orientacao_instrutor(perfil, peso, meta, meta_kcal),
+> app.py:665:        "tabela_kcal_100g": TABELA_KCAL_100G,
+  app.py:666:        "agua": data.get("agua", DEFAULT_DATA["agua"]),
+> app.py:667:        "refeicoes": data.get("refeicoes", DEFAULT_REFEICOES),
+> app.py:668:        "cardapio_semana": data.get("cardapio_semana", []),
+  app.py:669:        "balanca": data.get("balanca", []),
+  app.py:670:        "treinos": data.get("treinos", []),
+  app.py:671:        "glicemia": data.get("glicemia", []),
+> app.py:672:        "alimentos": data.get("alimentos", []),
+  app.py:673:        "resumo_dia": montar_resumo_dia(data)
+  app.py:674:    })
+  app.py:675:
+  app.py:676:
+> app.py:677:@app.route("/api/cardapio/prato", methods=["POST"])
+> app.py:678:def salvar_prato_cardapio():
+  app.py:679:    payload = request.get_json(force=True) or {}
+  app.py:680:    data = load_data()
+  app.py:681:    dia = str(payload.get("dia", "Segunda")).strip()
+  app.py:682:    if dia not in DIAS_SEMANA:
+  app.py:683:        dia = "Segunda"
+> app.py:684:    refeicao = str(payload.get("refeicao", "Almoço")).strip() or "Almoço"
+  app.py:685:    porcoes_raw = payload.get("porcoes") or []
+  app.py:686:    porcoes = []
+  app.py:687:    for p in porcoes_raw:
+> app.py:688:        alimento = str(p.get("alimento", "")).strip()
+> app.py:689:        if not alimento:
+  app.py:690:            continue
+  app.py:691:        gramas_raw = p.get("gramas")
+  app.py:692:        gramas = int(round(float(gramas_raw))) if gramas_raw not in (None, "") else None
+> app.py:693:        kcal = calcular_kcal_por_gramas(alimento, gramas_raw, p.get("kcal"))
+> app.py:694:        saudavel = classificar_saude(alimento, p.get("saude_tipo"))
+  app.py:695:        porcoes.append({
+> app.py:696:            "alimento": alimento,
+  app.py:697:            "gramas": gramas,
+> app.py:698:            "kcal": kcal,
+  app.py:699:            "saudavel": saudavel
+  app.py:700:        })
+  app.py:701:
+  app.py:702:    if not porcoes:
+> app.py:703:        return jsonify({"ok": False, "erro": "Adicione ao menos uma porção ao prato."}), 400
+  app.py:704:
+> app.py:705:    total_kcal = sum(int(x.get("kcal", 0) or 0) for x in porcoes)
+> app.py:706:    data.setdefault("cardapio_semana", []).append({
+  app.py:707:        "dia": dia,
+> app.py:708:        "refeicao": refeicao,
+  app.py:709:        "porcoes": porcoes,
+> app.py:710:        "total_kcal": total_kcal
+  app.py:711:    })
+  app.py:712:    save_data(data)
+> app.py:713:    return jsonify({"ok": True, "total_kcal": total_kcal})
+  app.py:714:
+  app.py:715:
+> app.py:716:@app.route("/api/cardapio/excluir/<int:idx>", methods=["DELETE"])
+> app.py:717:def excluir_cardapio(idx):
+  app.py:718:    data = load_data()
+> app.py:719:    lista = data.get("cardapio_semana", [])
+  app.py:720:    if 0 <= idx < len(lista):
+  app.py:721:        lista.pop(idx)
+> app.py:722:        data["cardapio_semana"] = lista
+  app.py:723:        save_data(data)
+  app.py:724:    return jsonify({"ok": True})
+  app.py:725:
+  app.py:726:
+> app.py:727:@app.route("/api/cardapio/consumir/<int:idx>", methods=["POST"])
+> app.py:728:def consumir_cardapio(idx):
+  app.py:729:    data = load_data()
+> app.py:730:    lista = data.get("cardapio_semana", [])
+  app.py:731:    if 0 <= idx < len(lista):
+> app.py:732:        prato = lista[idx]
+> app.py:733:        refeicao = str(prato.get("refeicao", "Refeição")).strip()
+> app.py:734:        porcoes = prato.get("porcoes") or []
+  app.py:735:        for p in porcoes:
+> app.py:736:            alimento_nome = str(p.get("alimento", "")).strip()
+> app.py:737:            rotulo = f"{refeicao}: {alimento_nome}" if refeicao else alimento_nome
+> app.py:738:            kcal_item = calcular_kcal_por_gramas(alimento_nome, p.get("gramas"), p.get("kcal"))
+> app.py:739:            data.setdefault("alimentos", []).insert(0, {
+  app.py:740:                "data": agora_br(),
+  app.py:741:                "nome": rotulo,
+  app.py:742:                "gramas": p.get("gramas"),
+> app.py:743:                "kcal": kcal_item,
+  app.py:744:                "saudavel": bool(p.get("saudavel", True))
+  app.py:745:            })
+  app.py:746:        save_data(data)
+  app.py:747:    return jsonify({"ok": True})
+  app.py:787:    return jsonify({"ok": True})
+  app.py:788:
+  app.py:789:
+> app.py:790:@app.route("/api/refeicoes", methods=["POST"])
+> app.py:791:def add_refeicao():
+  app.py:792:    payload = request.get_json(force=True) or {}
+  app.py:793:    data = load_data()
+> app.py:794:    nome = str(payload.get("nome", "")).strip() or "Refeição"
+  app.py:795:    horario = str(payload.get("horario", "12:00")).strip() or "12:00"
+> app.py:796:    data.setdefault("refeicoes", []).append({"nome": nome, "horario": horario})
+> app.py:797:    data["refeicoes"].sort(key=lambda x: x.get("horario", ""))
+  app.py:798:    save_data(data)
+  app.py:799:    return jsonify({"ok": True})
+  app.py:800:
+  app.py:801:
+> app.py:802:@app.route("/api/refeicoes/excluir/<int:idx>", methods=["DELETE"])
+> app.py:803:def excluir_refeicao(idx):
+  app.py:804:    data = load_data()
+> app.py:805:    lista = data.get("refeicoes", [])
+  app.py:806:    if 0 <= idx < len(lista):
+  app.py:807:        lista.pop(idx)
+> app.py:808:        data["refeicoes"] = lista
+  app.py:809:        save_data(data)
+  app.py:810:    return jsonify({"ok": True})
+  app.py:811:
+  app.py:812:
+  app.py:830:    if "objetivo" in payload and payload.get("objetivo") in ("perda", "ganho"):
+  app.py:831:        perfil["objetivo"] = payload.get("objetivo")
+  app.py:832:
+> app.py:833:    if "meta_kcal_dia" in payload and payload["meta_kcal_dia"] not in (None, ""):
+> app.py:834:        data["meta_kcal_dia"] = max(200, int(payload["meta_kcal_dia"]))
+  app.py:835:
+  app.py:836:    if "meta_peso" in payload and payload["meta_peso"] not in (None, ""):
+  app.py:837:        data["meta_peso"] = float(payload["meta_peso"])
+  app.py:838:
+  app.py:894:    return jsonify({"ok": True})
+  app.py:895:
+  app.py:896:
+> app.py:897:@app.route("/api/alimentos", methods=["POST"])
+> app.py:898:def add_alimento():
+  app.py:899:    payload = request.get_json(force=True) or {}
+  app.py:900:    data = load_data()
+> app.py:901:    nome_alimento = str(payload.get("nome", "")).strip()
+  app.py:902:    gramas_raw = payload.get("gramas")
+  app.py:903:    gramas = int(round(float(gramas_raw))) if gramas_raw not in (None, "") else None
+> app.py:904:    kcal = calcular_kcal_por_gramas(nome_alimento, gramas_raw, payload.get("kcal"))
+> app.py:905:    data["alimentos"].insert(0, {
+  app.py:906:        "data": agora_br(),
+> app.py:907:        "nome": nome_alimento,
+  app.py:908:        "gramas": gramas,
+> app.py:909:        "kcal": kcal,
+> app.py:910:        "saudavel": classificar_saude(nome_alimento, payload.get("saude_tipo"))
+  app.py:911:    })
+  app.py:912:    save_data(data)
+> app.py:913:    return jsonify({"ok": True, "kcal": kcal})
+  app.py:914:
+  app.py:915:
+  app.py:916:@app.route("/api/excluir/<categoria>/<int:idx>", methods=["DELETE"])
+  app.py:917:def excluir_item(categoria, idx):
+> app.py:918:    permitidos = {"balanca", "treinos", "glicemia", "alimentos"}
+  app.py:919:    if categoria not in permitidos:
+  app.py:920:        return jsonify({"ok": False, "erro": "Categoria inválida"}), 400
+  app.py:921:    data = load_data()
+  app.py:922:    lista = data.get(categoria, [])
+
+
+
