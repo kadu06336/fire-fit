@@ -1986,5 +1986,54 @@ if (typeof window.abrirAba !== "function") {
   };
 }
 </script>
+<script>
+window.TABELA_100G = {
+  "arroz branco": 128,
+  "arroz integral": 124,
+  "arroz": 128,
+  "feijao": 76,
+  "feijao preto": 77,
+  "feijao carioca": 76,
+  "frango": 159,
+  "peito de frango": 159,
+  "patinho": 219,
+  "alcatra": 241,
+  "batata doce": 77,
+  "batata": 52,
+  "ovo": 146,
+  "macarrao": 124,
+  "aveia": 394,
+  "banana": 89,
+  "maca": 52
+};
+
+window.normAlimento = function(s) {
+  return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+};
+
+window.kcalPor100g = function(nome) {
+  var k = window.normAlimento(nome);
+  if (!k) return null;
+  var chaves = Object.keys(window.TABELA_100G).sort(function(a, b) { return b.length - a.length; });
+  for (var i = 0; i < chaves.length; i++) {
+    if (k.indexOf(chaves[i]) !== -1) return window.TABELA_100G[chaves[i]];
+  }
+  return null;
+};
+
+window.calcularItemExato = function(nome, gramas) {
+  var base = window.kcalPor100g(nome);
+  var g = Number(gramas);
+  if (base === null || isNaN(g) || g <= 0) return { valido: false, kcal: 0, base100g: base, gramas: g };
+  var kcal = Math.round((g / 100) * base);
+  return { valido: true, kcal: kcal, base100g: base, gramas: g };
+};
+
+window.somarItensExatos = function(itens) {
+  return (itens || []).reduce(function(acc, it) {
+    return acc + (Number(it.kcal) || 0);
+  }, 0);
+};
+</script>
 </body>
 </html>
