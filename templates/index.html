@@ -26,7 +26,9 @@
     button { background: #ea580c; color: #fff; border: none; font-weight: 600; cursor: pointer; }
     button:active { opacity: 0.85; }
     .btn-sec { background: #334155; color: #f8fafc; }
-    .btn-del { width: auto; background: #991b1b; color: #fecaca; font-size: 0.75rem; padding: 5px 9px; border-radius: 6px; margin-left: 8px; flex-shrink: 0; }
+    .btn-ok { width: auto; background: #15803d; color: #dcfce7; font-size: 0.75rem; padding: 5px 9px; border-radius: 6px; margin-left: 6px; flex-shrink: 0; }
+    .btn-del { width: auto; background: #991b1b; color: #fecaca; font-size: 0.75rem; padding: 5px 9px; border-radius: 6px; margin-left: 6px; flex-shrink: 0; }
+    .acoes-item { display: flex; align-items: center; flex-shrink: 0; }
     .kpi { font-size: 1.15rem; font-weight: 700; color: #fdba74; }
     .barra-bg { width: 100%; height: 14px; background: #0f172a; border-radius: 999px; overflow: hidden; border: 1px solid #475569; margin: 6px 0 10px; }
     .barra-fill { height: 100%; background: #38bdf8; min-width: 6px; width: 6%; transition: width 0.25s; }
@@ -38,6 +40,11 @@
     .sub { font-size: 0.88rem; color: #cbd5e1; margin-top: 6px; line-height: 1.35; }
     .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #334155; font-size: 0.88rem; }
     .item:last-child { border-bottom: none; }
+    .dia-bloco { border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; background: #0f172a; }
+    .dia-bloco:last-child { margin-bottom: 0; }
+    .dia-topo { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .dia-titulo { font-weight: 700; color: #fb923c; font-size: 0.92rem; }
+    .dia-kcal { font-size: 0.82rem; font-weight: 600; color: #e2e8f0; }
     .badge-ok { background: #14532d; color: #86efac; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
     .badge-warn { background: #7c2d12; color: #fed7aa; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
     .chart-row { margin-bottom: 12px; }
@@ -45,7 +52,7 @@
     .aba { display: none; }
     .aba.ativa { display: block; }
     nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 6px 2px; overflow-x: auto; }
-    nav button { background: transparent; color: #94a3b8; font-size: 0.64rem; padding: 6px 2px; border-radius: 6px; min-width: 44px; }
+    nav button { background: transparent; color: #94a3b8; font-size: 0.62rem; padding: 6px 2px; border-radius: 6px; min-width: 42px; }
     nav button.ativa { background: #334155; color: #fb923c; }
   </style>
 </head>
@@ -117,6 +124,48 @@
         </div>
 
         <button onclick="salvarPerfilCompleto()">Salvar dados e meta</button>
+      </div>
+    </section>
+
+    <section id="aba-cardapio" class="aba">
+      <div class="card">
+        <div style="font-weight:700; font-size:1rem; margin-bottom:8px;">Cardápio da Semana</div>
+        <div class="sub" style="margin-bottom:10px;">Adicione o prato do dia e quantas calorias ele tem. Você também pode mandar o prato direto para a alimentação de hoje.</div>
+
+        <label for="card-dia">Dia da semana</label>
+        <select id="card-dia">
+          <option value="Segunda">Segunda</option>
+          <option value="Terça">Terça</option>
+          <option value="Quarta">Quarta</option>
+          <option value="Quinta">Quinta</option>
+          <option value="Sexta">Sexta</option>
+          <option value="Sábado">Sábado</option>
+          <option value="Domingo">Domingo</option>
+        </select>
+
+        <label for="card-prato">Prato / Refeição</label>
+        <input id="card-prato" type="text" placeholder="Ex: Almoço: Frango grelhado + arroz integral + salada" />
+
+        <div class="grid-2">
+          <div>
+            <label for="card-kcal">Calorias do prato (kcal)</label>
+            <input id="card-kcal" type="number" inputmode="numeric" placeholder="Ex: 450" />
+          </div>
+          <div>
+            <label for="card-saude">Classificação</label>
+            <select id="card-saude">
+              <option value="auto">Automático (pelo prato)</option>
+              <option value="saudavel">Saudável</option>
+              <option value="nao_saudavel">Não saudável / Livre</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="button" onclick="adicionarPratoCardapio()">Adicionar ao cardápio da semana</button>
+      </div>
+
+      <div class="card" id="lista-cardapio-semana">
+        <div class="item"><span>Nenhum prato cadastrado no cardápio da semana.</span></div>
       </div>
     </section>
 
@@ -350,6 +399,7 @@
 
   <nav>
     <button onclick="abrirAba('painel', this)">Painel</button>
+    <button onclick="abrirAba('cardapio', this)">Cardápio</button>
     <button onclick="abrirAba('calorias', this)">Calorias</button>
     <button onclick="abrirAba('rotina', this)">Água/Ref.</button>
     <button onclick="abrirAba('balanca', this)">Balança</button>
@@ -360,6 +410,7 @@
   </nav>
 
   <script>
+    const DIAS_ORDEM = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
     let cronoSegundos = 0;
     let cronoTimer = null;
     let ultimoEstado = null;
@@ -455,6 +506,81 @@
       } else {
         banner.classList.remove('ativo');
       }
+    }
+
+    function renderizarCardapioSemana(lista, metaKcal) {
+      const itens = lista || [];
+      const meta = Math.max(1, Number(metaKcal || 1500));
+      const blocos = [];
+
+      DIAS_ORDEM.forEach(dia => {
+        const pratosDia = itens
+          .map((item, idx) => ({ item, idx }))
+          .filter(x => (x.item.dia || 'Segunda') === dia);
+
+        if (!pratosDia.length) return;
+
+        const somaKcal = pratosDia.reduce((acc, x) => acc + Number(x.item.kcal || 0), 0);
+        const diff = somaKcal - meta;
+        let statusDia = `Faltam ${Math.abs(diff)} kcal p/ meta`;
+        if (diff > 0) statusDia = `Passou ${diff} kcal da meta`;
+        else if (diff === 0) statusDia = `Na meta (${meta} kcal)`;
+
+        const linhasPratos = pratosDia.map(({ item, idx }) => {
+          const badge = item.saudavel !== false
+            ? '<span class="badge-ok">Saudável</span>'
+            : '<span class="badge-warn">Não saudável</span>';
+          return `
+            <div class="item">
+              <span><b>${item.prato}</b> — <b>${item.kcal || 0} kcal</b> ${badge}</span>
+              <span class="acoes-item">
+                <button type="button" class="btn-ok" onclick="consumirCardapio(${idx})">Comer hoje</button>
+                <button type="button" class="btn-del" onclick="excluirCardapio(${idx})">Excluir</button>
+              </span>
+            </div>`;
+        }).join('');
+
+        blocos.push(`
+          <div class="dia-bloco">
+            <div class="dia-topo">
+              <span class="dia-titulo">${dia}</span>
+              <span class="dia-kcal">${somaKcal} kcal • ${statusDia}</span>
+            </div>
+            ${linhasPratos}
+          </div>`);
+      });
+
+      document.getElementById('lista-cardapio-semana').innerHTML = blocos.length
+        ? blocos.join('')
+        : '<div class="item"><span>Nenhum prato cadastrado no cardápio da semana.</span></div>';
+    }
+
+    async function adicionarPratoCardapio() {
+      const prato = document.getElementById('card-prato').value.trim();
+      if (!prato) return;
+      await fetch('/api/cardapio', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          dia: document.getElementById('card-dia').value,
+          prato: prato,
+          kcal: document.getElementById('card-kcal').value,
+          saude_tipo: document.getElementById('card-saude').value
+        })
+      });
+      document.getElementById('card-prato').value = '';
+      document.getElementById('card-kcal').value = '';
+      carregarEstado();
+    }
+
+    async function excluirCardapio(idx) {
+      await fetch(`/api/cardapio/excluir/${idx}`, { method: 'DELETE' });
+      carregarEstado();
+    }
+
+    async function consumirCardapio(idx) {
+      await fetch(`/api/cardapio/consumir/${idx}`, { method: 'POST' });
+      carregarEstado();
     }
 
     function renderizarAbaCalorias(res, perfil) {
@@ -702,6 +828,8 @@
           document.getElementById('painel-peso').value = '';
           document.getElementById('bal-peso').value = '';
         }
+
+        renderizarCardapioSemana(d.cardapio_semana, metaKcal);
 
         const agua = d.agua || { consumido_ml: 0, meta_ml: 2500, historico: [] };
         const pct = Math.min(100, Math.round(((agua.consumido_ml || 0) / Math.max(1, agua.meta_ml || 2500)) * 100));

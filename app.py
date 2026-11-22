@@ -16,6 +16,16 @@ TZ_BR = ZoneInfo("America/Sao_Paulo")
 
 app = Flask(__name__, template_folder=BASE_DIR)
 
+DIAS_SEMANA = [
+    "Segunda",
+    "Terça",
+    "Quarta",
+    "Quinta",
+    "Sexta",
+    "Sábado",
+    "Domingo"
+]
+
 DEFAULT_REFEICOES = [
     {"nome": "Café da manhã", "horario": "08:00"},
     {"nome": "Almoço", "horario": "12:30"},
@@ -40,6 +50,7 @@ DEFAULT_DATA = {
         "historico": []
     },
     "refeicoes": DEFAULT_REFEICOES,
+    "cardapio_semana": [],
     "balanca": [],
     "treinos": [],
     "glicemia": [],
@@ -156,6 +167,8 @@ def normalizar_dados(raw):
                     data["agua"][ak] = raw["agua"][ak]
         if not isinstance(data.get("refeicoes"), list) or not data["refeicoes"]:
             data["refeicoes"] = json.loads(json.dumps(DEFAULT_REFEICOES))
+        if not isinstance(data.get("cardapio_semana"), list):
+            data["cardapio_semana"] = []
 
     try:
         data["meta_kcal_dia"] = max(200, int(data.get("meta_kcal_dia") or 1500))
@@ -173,6 +186,14 @@ def normalizar_dados(raw):
             item["saudavel"] = classificar_saude(item.get("nome", ""))
         if "data" not in item:
             item["data"] = ""
+
+    for item in data.get("cardapio_semana", []):
+        dia = item.get("dia", "Segunda")
+        if dia not in DIAS_SEMANA:
+            item["dia"] = "Segunda"
+        if "saudavel" not in item:
+            item["saudavel"] = classificar_saude(item.get("prato", ""))
+        item["kcal"] = int(item.get("kcal", 0) or 0)
 
     return data
 
@@ -364,12 +385,61 @@ def get_estado():
         "orientacao": orientacao_instrutor(perfil, peso, meta, meta_kcal),
         "agua": data.get("agua", DEFAULT_DATA["agua"]),
         "refeicoes": data.get("refeicoes", DEFAULT_REFEICOES),
+        "cardapio_semana": data.get("cardapio_semana", []),
         "balanca": data.get("balanca", []),
         "treinos": data.get("treinos", []),
         "glicemia": data.get("glicemia", []),
         "alimentos": data.get("alimentos", []),
         "resumo_dia": montar_resumo_dia(data)
     })
+
+
+@app.route("/api/cardapio", methods=["POST"])
+def add_cardapio():
+    payload = request.get_json(force=True) or {}
+    data = load_data()
+    dia = str(payload.get("dia", "Segunda")).strip()
+    if dia not in DIAS_SEMANA:
+        dia = "Segunda"
+    prato = str(payload.get("prato", "")).strip() or "Prato"
+    kcal = max(0, int(payload.get("kcal", 0) or 0))
+    saudavel = classificar_saude(prato, payload.get("saude_tipo"))
+
+    data.setdefault("cardapio_semana", []).append({
+        "dia": dia,
+        "prato": prato,
+        "kcal": kcal,
+        "saudavel": saudavel
+    })
+    save_data(data)
+    return jsonify({"ok": True})
+
+
+@app.route("/api/cardapio/excluir/<int:idx>", methods=["DELETE"])
+def excluir_cardapio(idx):
+    data = load_data()
+    lista = data.get("cardapio_semana", [])
+    if 0 <= idx < len(lista):
+        lista.pop(idx)
+        data["cardapio_semana"] = lista
+        save_data(data)
+    return jsonify({"ok": True})
+
+
+@app.route("/api/cardapio/consumir/<int:idx>", methods=["POST"])
+def consumir_cardapio(idx):
+    data = load_data()
+    lista = data.get("cardapio_semana", [])
+    if 0 <= idx < len(lista):
+        item = lista[idx]
+        data.setdefault("alimentos", []).insert(0, {
+            "data": agora_br(),
+            "nome": str(item.get("prato", "")).strip(),
+            "kcal": int(item.get("kcal", 0) or 0),
+            "saudavel": bool(item.get("saudavel", True))
+        })
+        save_data(data)
+    return jsonify({"ok": True})
 
 
 @app.route("/api/agua", methods=["POST"])
