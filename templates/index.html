@@ -14,7 +14,7 @@
     .auth-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; }
     .auth-grid { display: grid; grid-template-columns: 1fr 1.2fr 1fr auto auto; gap: 8px; align-items: center; }
     .auth-status { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; font-size: 0.85rem; color: #cbd5e1; }
-    .auth-msg { margin-top: 8px; font-size: 0.84rem; color: #fbbf24; min-height: 18px; }
+    .auth-msg { margin-top: 8px; font-size: 0.86rem; font-weight: 600; color: #fbbf24; min-height: 20px; }
     .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
     .aba { display: none; }
     .aba.ativa { display: block; }
@@ -71,8 +71,8 @@
         <input id="auth-nome" type="text" placeholder="Seu nome (cadastro)" />
         <input id="auth-email" type="email" placeholder="seu@email.com" />
         <input id="auth-senha" type="password" placeholder="Senha" />
-        <button type="button" class="btn-ok btn-inline" onclick="entrarConta()">Entrar</button>
-        <button type="button" class="btn-sec btn-inline" onclick="registrarConta()">Criar conta</button>
+        <button type="button" id="btn-entrar" class="btn-ok btn-inline" onclick="entrarConta()">Entrar</button>
+        <button type="button" id="btn-criar-conta" class="btn-sec btn-inline" onclick="registrarConta()">Criar conta</button>
       </div>
       <div class="auth-msg" id="auth-msg"></div>
     </div>
@@ -155,8 +155,37 @@
     let tabelaKcal100g = { "arroz branco": 128, "arroz": 128, "arroz integral": 124, "feijão": 76, "feijao": 76, "peito de frango": 159, "frango grelhado": 159, "frango": 159, "bife": 163, "ovo cozido": 146, "ovo": 146, "batata-doce": 77, "batata doce": 77, "banana": 98, "aveia": 394 };
     let rascunhoPrato = [], ultimoEstado = null, usuarioAtual = localStorage.getItem("fire_fit_usuario") || "eduardo", cronoSegundos = 0, cronoInterval = null;
     function setAuthMsg(msg, cor) { const el = document.getElementById("auth-msg"); el.textContent = msg || ""; el.style.color = cor || "#fbbf24"; }
-    async function entrarConta() { const email = (document.getElementById("auth-email").value || "").trim(); const senha = document.getElementById("auth-senha").value || ""; const resp = await fetch("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, senha }) }); const data = await resp.json(); if (!resp.ok || !data.ok) { setAuthMsg(data.erro || "Falha ao entrar.", "#f87171"); return; } usuarioAtual = data.usuario_ativo; localStorage.setItem("fire_fit_usuario", usuarioAtual); document.getElementById("auth-senha").value = ""; setAuthMsg("Conectado como " + data.email, "#86efac"); await carregarEstado(); }
-    async function registrarConta() { const nome = (document.getElementById("auth-nome").value || "").trim(); const email = (document.getElementById("auth-email").value || "").trim(); const senha = document.getElementById("auth-senha").value || ""; const resp = await fetch("/api/auth/registrar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nome, email, senha }) }); const data = await resp.json(); if (!resp.ok || !data.ok) { setAuthMsg(data.erro || "Falha ao criar conta.", "#f87171"); return; } usuarioAtual = data.usuario_ativo; localStorage.setItem("fire_fit_usuario", usuarioAtual); document.getElementById("auth-senha").value = ""; setAuthMsg("Conta criada para " + data.email, "#86efac"); await carregarEstado(); }
+    async function entrarConta() {
+      const email = (document.getElementById("auth-email").value || "").trim();
+      const senha = document.getElementById("auth-senha").value || "";
+      setAuthMsg("Entrando...", "#cbd5e1");
+      try {
+        const resp = await fetch("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, senha }) });
+        const data = await resp.json();
+        if (!resp.ok || !data.ok) { setAuthMsg(data.erro || "Falha ao entrar.", "#f87171"); return; }
+        usuarioAtual = data.usuario_ativo;
+        localStorage.setItem("fire_fit_usuario", usuarioAtual);
+        document.getElementById("auth-senha").value = "";
+        setAuthMsg("Login realizado com sucesso! Conectado como " + data.email, "#86efac");
+        await carregarEstado();
+      } catch (e) { setAuthMsg("Erro de conexao ao entrar.", "#f87171"); }
+    }
+    async function registrarConta() {
+      const nome = (document.getElementById("auth-nome").value || "").trim();
+      const email = (document.getElementById("auth-email").value || "").trim();
+      const senha = document.getElementById("auth-senha").value || "";
+      setAuthMsg("Criando conta...", "#cbd5e1");
+      try {
+        const resp = await fetch("/api/auth/registrar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nome, email, senha }) });
+        const data = await resp.json();
+        if (!resp.ok || !data.ok) { setAuthMsg(data.erro || "Falha ao criar conta.", "#f87171"); return; }
+        usuarioAtual = data.usuario_ativo;
+        localStorage.setItem("fire_fit_usuario", usuarioAtual);
+        document.getElementById("auth-senha").value = "";
+        setAuthMsg("Cadastro realizado com sucesso! Conta ativa: " + data.email, "#86efac");
+        await carregarEstado();
+      } catch (e) { setAuthMsg("Erro de conexao ao criar conta.", "#f87171"); }
+    }
     function sairConta() { usuarioAtual = "eduardo"; localStorage.setItem("fire_fit_usuario", usuarioAtual); document.getElementById("auth-email").value = ""; document.getElementById("auth-senha").value = ""; setAuthMsg("Digite seu e-mail e senha para entrar ou criar conta.", "#cbd5e1"); carregarEstado(); }
     function formatarCronometro(seg) { const h = String(Math.floor(seg / 3600)).padStart(2, "0"); const m = String(Math.floor((seg % 3600) / 60)).padStart(2, "0"); const s = String(seg % 60).padStart(2, "0"); return h + ":" + m + ":" + s; }
     function renderCronometro() { document.getElementById("crono-display").textContent = formatarCronometro(cronoSegundos); }
