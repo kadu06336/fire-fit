@@ -34,15 +34,19 @@ DEFAULT_REFEICOES = [
 ]
 
 TABELA_KCAL_100G = {
+    # Cereais, massas, tubérculos e grãos
     "arroz branco": 128,
     "arroz": 128,
     "arroz integral": 124,
+    "arroz temperado": 145,
     "feijao": 76,
     "feijão": 76,
     "feijao carioca": 76,
     "feijão carioca": 76,
     "feijao preto": 77,
     "feijão preto": 77,
+    "feijao tropeiro": 195,
+    "feijão tropeiro": 195,
     "lentilha": 93,
     "grao de bico": 164,
     "grão de bico": 164,
@@ -51,6 +55,8 @@ TABELA_KCAL_100G = {
     "batata-doce": 77,
     "batata inglesa": 52,
     "batata": 52,
+    "pure de batata": 113,
+    "purê de batata": 113,
     "mandioca": 125,
     "aipim": 125,
     "macaxeira": 125,
@@ -71,13 +77,21 @@ TABELA_KCAL_100G = {
     "pao integral": 253,
     "pão integral": 253,
     "tapioca": 240,
+
+    # Carnes, aves, peixes e ovos
     "peito de frango": 159,
     "frango": 159,
+    "frango grelhado": 159,
+    "frango assado": 190,
+    "frango desfiado": 165,
     "coxa de frango": 215,
     "sobrecoxa": 232,
     "bife": 219,
+    "bife acebolado": 235,
     "patinho": 219,
     "alcatra": 241,
+    "picanha": 289,
+    "costela": 310,
     "contrafile": 266,
     "contrafilé": 266,
     "acem": 215,
@@ -85,6 +99,7 @@ TABELA_KCAL_100G = {
     "carne moida": 212,
     "carne moída": 212,
     "carne magra": 180,
+    "carne seca": 313,
     "lombo suino": 197,
     "lombo suíno": 197,
     "tilapia": 96,
@@ -94,11 +109,52 @@ TABELA_KCAL_100G = {
     "salmao": 211,
     "salmão": 211,
     "merluza": 89,
+    "bacalhau": 105,
     "camarao": 90,
     "camarão": 90,
     "ovo": 146,
     "ovos": 146,
+    "omelete": 154,
     "clara de ovo": 52,
+
+    # Pratos brasileiros e do mundo
+    "feijoada": 117,
+    "farofa": 406,
+    "torresmo": 544,
+    "estrogonofe de frango": 168,
+    "estrogonofe de carne": 195,
+    "estrogonofe": 180,
+    "lasanha": 165,
+    "macarrao a bolonhesa": 142,
+    "macarrão à bolonhesa": 142,
+    "macarrao ao molho branco": 168,
+    "macarrão ao molho branco": 168,
+    "carbonara": 215,
+    "risoto": 155,
+    "nhoque": 148,
+    "panqueca": 185,
+    "escondidinho": 170,
+    "moqueca": 135,
+    "bobó de camarao": 175,
+    "bobó de camarão": 175,
+    "vatapa": 210,
+    "galinhada": 152,
+    "sushi": 143,
+    "sashimi": 127,
+    "temaki": 165,
+    "yakisoba": 138,
+    "ramen": 120,
+    "taco": 226,
+    "burrito": 206,
+    "quesadilla": 255,
+    "guacamole": 160,
+    "hummus": 166,
+    "falafel": 333,
+    "tabule": 95,
+    "esfiha": 245,
+    "kibe": 195,
+
+    # Laticínios
     "leite integral": 61,
     "leite desnatado": 35,
     "leite semidesnatado": 46,
@@ -109,10 +165,14 @@ TABELA_KCAL_100G = {
     "queijo mucarela": 300,
     "queijo muçarela": 300,
     "queijo prato": 360,
+    "queijo parmesao": 431,
+    "queijo parmesão": 431,
     "requeijao": 257,
     "requeijão": 257,
     "requeijao light": 181,
     "requeijão light": 181,
+
+    # Frutas
     "banana": 89,
     "banana prata": 87,
     "banana nanica": 92,
@@ -133,9 +193,12 @@ TABELA_KCAL_100G = {
     "goiaba": 68,
     "abacate": 96,
     "kiwi": 51,
+
+    # Legumes, verduras e castanhas
     "brocolis": 25,
     "brócolis": 25,
     "couve": 27,
+    "couve refogada": 65,
     "alface": 14,
     "tomate": 15,
     "pepino": 10,
@@ -146,6 +209,7 @@ TABELA_KCAL_100G = {
     "vagem": 25,
     "espinafre": 16,
     "palmito": 23,
+    "salada": 25,
     "castanha de caju": 570,
     "castanha do para": 643,
     "castanha do pará": 643,
@@ -155,15 +219,21 @@ TABELA_KCAL_100G = {
     "chia": 486,
     "linhaca": 495,
     "linhaça": 495,
+
+    # Lanches, embutidos e itens livres
     "peito de peru": 108,
     "presunto": 165,
     "bacon": 541,
     "linguica": 296,
     "linguiça": 296,
     "salsicha": 246,
+    "cachorro quente": 248,
+    "hot dog": 248,
     "pizza": 266,
     "hamburguer": 295,
     "hambúrguer": 295,
+    "nugget": 296,
+    "nuggets": 296,
     "coxinha": 263,
     "pastel": 310,
     "batata frita": 312,
@@ -201,30 +271,35 @@ DEFAULT_DATA = {
 }
 
 PALAVRAS_SAUDAVEIS = [
-    "arroz integral", "frango", "peito de frango", "coxa de frango", "sobrecoxa",
-    "bife", "patinho", "alcatra", "contrafile", "contrafilé", "acem", "acém",
-    "carne moida", "carne moída", "carne magra", "lombo suino", "lombo suíno",
-    "ovo", "ovos", "clara de ovo", "banana", "fruta", "frutas", "salada",
-    "legume", "legumes", "brocolis", "brócolis", "couve", "alface", "tomate",
-    "pepino", "cenoura", "abobrinha", "berinjela", "chuchu", "vagem", "espinafre",
-    "palmito", "aveia", "peixe", "tilapia", "tilápia", "atum", "sardinha",
-    "merluza", "camarao", "camarão", "batata doce", "batata-doce", "feijao", "feijão",
-    "lentilha", "grao de bico", "grão de bico", "ervilha", "iogurte natural",
-    "iogurte grego", "queijo minas", "queijo cottage", "leite desnatado",
-    "leite semidesnatado", "castanha", "amendoim", "amendoa", "amêndoa",
-    "chia", "linhaca", "linhaça", "abacate", "morango", "maca", "maçã",
-    "mamao", "mamão", "melancia", "melao", "melão", "abacaxi", "laranja",
-    "uva", "manga", "pera", "pêra", "goiaba", "kiwi", "whey", "salmao",
-    "salmão", "cuscuz", "mandioca", "aipim", "macaxeira", "inhame", "cara",
-    "cará", "peito de peru", "tapioca"
+    "arroz integral", "frango", "peito de frango", "frango grelhado", "frango desfiado",
+    "coxa de frango", "sobrecoxa", "bife", "patinho", "alcatra", "contrafile",
+    "contrafilé", "acem", "acém", "carne moida", "carne moída", "carne magra",
+    "lombo suino", "lombo suíno", "ovo", "ovos", "omelete", "clara de ovo",
+    "banana", "fruta", "frutas", "salada", "legume", "legumes", "brocolis",
+    "brócolis", "couve", "alface", "tomate", "pepino", "cenoura", "abobrinha",
+    "berinjela", "chuchu", "vagem", "espinafre", "palmito", "aveia", "peixe",
+    "tilapia", "tilápia", "atum", "sardinha", "merluza", "bacalhau", "camarao",
+    "camarão", "batata doce", "batata-doce", "feijao", "feijão", "lentilha",
+    "grao de bico", "grão de bico", "ervilha", "iogurte natural", "iogurte grego",
+    "queijo minas", "queijo cottage", "leite desnatado", "leite semidesnatado",
+    "castanha", "amendoim", "amendoa", "amêndoa", "chia", "linhaca", "linhaça",
+    "abacate", "morango", "maca", "maçã", "mamao", "mamão", "melancia",
+    "melao", "melão", "abacaxi", "laranja", "uva", "manga", "pera", "pêra",
+    "goiaba", "kiwi", "whey", "salmao", "salmão", "cuscuz", "mandioca",
+    "aipim", "macaxeira", "inhame", "cara", "cará", "peito de peru", "tapioca",
+    "sushi", "sashimi", "temaki", "hummus", "tabule"
 ]
 
 PALAVRAS_NAO_SAUDAVEIS = [
+    "feijoada", "farofa", "torresmo", "feijao tropeiro", "feijão tropeiro",
+    "picanha", "costela", "carne seca", "carbonara", "estrogonofe", "lasanha",
     "fritura", "frito", "frita", "batata frita", "doce", "chocolate", "sorvete",
     "refrigerante", "refri", "pizza", "hamburguer", "hambúrguer", "burger",
-    "salgado", "coxinha", "pastel", "empada", "biscoito", "bolacha", "bolo",
-    "pudim", "cerveja", "alcool", "álcool", "fast food", "bacon", "linguica",
-    "linguiça", "salsicha", "presunto", "maionese", "chantilly", "leite condensado"
+    "cachorro quente", "hot dog", "nugget", "nuggets", "salgado", "coxinha",
+    "pastel", "empada", "biscoito", "bolacha", "bolo", "pudim", "cerveja",
+    "alcool", "álcool", "fast food", "bacon", "linguica", "linguiça", "salsicha",
+    "presunto", "maionese", "chantilly", "leite condensado", "quesadilla",
+    "falafel", "esfiha", "pao de queijo", "pão de queijo"
 ]
 
 
@@ -243,18 +318,21 @@ def calcular_kcal_por_gramas(nome_alimento, gramas, kcal_manual=None):
     except Exception:
         g = 0.0
 
+    if kcal_100g is not None and g > 0:
+        auto_val = int(round((g / 100.0) * kcal_100g))
+        if kcal_manual not in (None, ""):
+            try:
+                manual_val = max(0, int(round(float(kcal_manual))))
+                return manual_val if manual_val != auto_val else auto_val
+            except Exception:
+                pass
+        return auto_val
+
     if kcal_manual not in (None, ""):
         try:
-            manual_val = max(0, int(round(float(kcal_manual))))
-            if kcal_100g is not None and g > 0:
-                auto_val = int(round((g / 100.0) * kcal_100g))
-                return manual_val if manual_val != auto_val else auto_val
-            return manual_val
+            return max(0, int(round(float(kcal_manual))))
         except Exception:
             pass
-
-    if kcal_100g is not None and g > 0:
-        return int(round((g / 100.0) * kcal_100g))
 
     if kcal_100g is not None:
         return int(kcal_100g)
@@ -657,11 +735,12 @@ def consumir_cardapio(idx):
         for p in porcoes:
             alimento_nome = str(p.get("alimento", "")).strip()
             rotulo = f"{refeicao}: {alimento_nome}" if refeicao else alimento_nome
+            kcal_item = calcular_kcal_por_gramas(alimento_nome, p.get("gramas"), p.get("kcal"))
             data.setdefault("alimentos", []).insert(0, {
                 "data": agora_br(),
                 "nome": rotulo,
                 "gramas": p.get("gramas"),
-                "kcal": int(p.get("kcal", 0) or 0),
+                "kcal": kcal_item,
                 "saudavel": bool(p.get("saudavel", True))
             })
         save_data(data)
