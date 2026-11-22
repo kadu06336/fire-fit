@@ -1,2407 +1,473 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fire Fit</title>
   <style>
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-    body { margin: 0; background: #0f172a; color: #f8fafc; padding-bottom: 84px; }
-    header { background: #1e293b; padding: 14px 16px; border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 10; }
-    h1 { margin: 0; font-size: 1.2rem; color: #fb923c; }
-    .aviso { font-size: 0.78rem; color: #cbd5e1; margin-top: 4px; }
-    main { padding: 14px; max-width: 720px; margin: 0 auto; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 16px 14px 86px; background: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+    .container { max-width: 820px; margin: 0 auto; }
+    .header-app { margin-bottom: 14px; }
+    .header-app h1 { margin: 0; font-size: 1.35rem; color: #fb923c; }
+    .header-app small { color: #94a3b8; }
     .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
-    .alerta-banner { background: #431407; border: 1px solid #ea580c; color: #fed7aa; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-size: 0.9rem; display: none; }
-    .alerta-banner.ativo { display: block; }
-    .alerta-kcal-box { padding: 12px; border-radius: 10px; font-size: 0.92rem; font-weight: 600; margin-top: 10px; border: 1px solid #475569; background: #0f172a; color: #e2e8f0; }
-    .alerta-kcal-box.passou { background: #450a0a; border-color: #ef4444; color: #fecaca; }
-    .alerta-kcal-box.faltando { background: #172554; border-color: #38bdf8; color: #bae6fd; }
-    .alerta-kcal-box.na_meta { background: #052e16; border-color: #22c55e; color: #bbf7d0; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-    label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 4px; }
-    input, select, textarea, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #475569; font-size: 0.95rem; }
-    input, select, textarea { background: #0f172a; color: #f8fafc; margin-bottom: 10px; }
-    textarea { min-height: 68px; resize: vertical; }
-    button { background: #ea580c; color: #fff; border: none; font-weight: 600; cursor: pointer; }
-    button:active { opacity: 0.85; }
-    .btn-sec { background: #334155; color: #f8fafc; }
-    .btn-ok { width: auto; background: #15803d; color: #dcfce7; font-size: 0.75rem; padding: 6px 10px; border-radius: 6px; margin-left: 6px; flex-shrink: 0; }
-    .btn-del { width: auto; background: #991b1b; color: #fecaca; font-size: 0.75rem; padding: 6px 10px; border-radius: 6px; margin-left: 6px; flex-shrink: 0; }
-    .acoes-item { display: flex; align-items: center; flex-shrink: 0; }
-    .kpi { font-size: 1.15rem; font-weight: 700; color: #fdba74; }
-    .barra-bg { width: 100%; height: 14px; background: #0f172a; border-radius: 999px; overflow: hidden; border: 1px solid #475569; margin: 6px 0 10px; }
-    .barra-fill { height: 100%; background: #38bdf8; min-width: 6px; width: 6%; transition: width 0.25s; }
-    .barra-saude { background: #22c55e; }
-    .barra-treino { background: #fb923c; }
-    .barra-kcal { background: #facc15; }
-    .barra-kcal.passou { background: #ef4444; }
-    .crono-display { font-size: 2rem; font-weight: 800; text-align: center; color: #fdba74; letter-spacing: 1px; margin: 6px 0 12px; font-variant-numeric: tabular-nums; }
-    .sub { font-size: 0.88rem; color: #cbd5e1; margin-top: 6px; line-height: 1.35; }
-    .calc-preview { font-size: 0.86rem; color: #86efac; background: #052e16; border: 1px solid #166534; border-radius: 8px; padding: 9px 10px; margin-bottom: 10px; line-height: 1.45; }
-    .soma-prato-box { font-size: 0.95rem; font-weight: 700; color: #fdba74; background: #0f172a; border: 1px solid #ea580c; border-radius: 10px; padding: 10px 12px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; }
-    .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #334155; font-size: 0.88rem; }
-    .item:last-child { border-bottom: none; }
-    .dia-bloco { border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; background: #0f172a; }
-    .dia-bloco:last-child { margin-bottom: 0; }
-    .dia-topo { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
-    .dia-titulo { font-weight: 700; color: #fb923c; font-size: 0.92rem; }
-    .dia-kcal { font-size: 0.82rem; font-weight: 600; color: #e2e8f0; }
-    .prato-card { border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-top: 8px; background: #1e293b; }
-    .prato-cab { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
-    .badge-ok { background: #14532d; color: #86efac; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
-    .badge-warn { background: #7c2d12; color: #fed7aa; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
-    .chart-row { margin-bottom: 12px; }
-    .chart-head { display: flex; justify-content: space-between; font-size: 0.82rem; color: #e2e8f0; }
     .aba { display: none; }
     .aba.ativa { display: block; }
-    nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 6px 2px; overflow-x: auto; }
-    nav button { background: transparent; color: #94a3b8; font-size: 0.62rem; padding: 6px 2px; border-radius: 6px; min-width: 42px; }
-    nav button.ativa { background: #334155; color: #fb923c; }
-    @media (max-width: 560px) {
-      .grid-3 { grid-template-columns: 1fr; }
-    }
-  </style>
-
-<style id="firefit-excel-style">
-  .excel-box { margin-top: 10px; overflow-x: auto; border: 1px solid #334155; border-radius: 10px; background: #0f172a; }
-  .excel-tab { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
-  .excel-tab th, .excel-tab td { border-bottom: 1px solid #334155; padding: 8px 10px; text-align: left; }
-  .excel-tab th { background: #1e293b; color: #fdba74; font-weight: 700; }
-  .excel-tab tr.total-row td { background: #1e293b; color: #fb923c; font-weight: 700; border-bottom: none; }
-</style>
-
-</head>
-<body>
-  <header>
-    <h1>Fire Fit</h1>
-    <div class="aviso">Apoio educativo no dia a dia — não substitui profissionais de saúde.</div>
-  </header>
-
-  <main>
-    <div id="alerta-banner" class="alerta-banner"></div>
-
-    <section id="aba-painel" class="aba">
-      <div class="card">
-        <div id="resumo-aluno" style="font-weight:700; font-size:1rem; margin-bottom:8px;">Aluno não cadastrado</div>
-        <div class="grid-2">
-          <div>
-            <label>Peso atual (kg)</label>
-            <div class="kpi" id="kpi-peso">--</div>
-          </div>
-          <div>
-            <label>Meta de peso (kg)</label>
-            <div class="kpi" id="kpi-meta">--</div>
-          </div>
-        </div>
-        <div class="sub" id="kpi-diff">Diferença para meta: --</div>
-        <div class="sub" id="kpi-meta-kcal">Meta diária do instrutor: 1500 kcal/dia</div>
-        <div class="sub" id="base-instrutor"></div>
-      </div>
-
-      <div class="card">
-        <label for="p-nome">Nome</label>
-        <input id="p-nome" type="text" placeholder="Nome completo" />
-
-        <div class="grid-2">
-          <div>
-            <label for="p-idade">Idade</label>
-            <input id="p-idade" type="number" inputmode="numeric" placeholder="Ex: 32" />
-          </div>
-          <div>
-            <label for="p-altura">Altura (cm)</label>
-            <input id="p-altura" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 175" />
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div>
-            <label for="painel-peso">Peso atual (kg)</label>
-            <input id="painel-peso" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 82.5" />
-          </div>
-          <div>
-            <label for="painel-meta">Meta de peso (kg)</label>
-            <input id="painel-meta" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 75.0" />
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div>
-            <label for="p-objetivo">Programa / Objetivo</label>
-            <select id="p-objetivo">
-              <option value="perda">Perda de peso</option>
-              <option value="ganho">Ganho de massa</option>
-            </select>
-          </div>
-          <div>
-            <label for="p-meta-kcal">Meta diária de calorias (instrutor)</label>
-            <input id="p-meta-kcal" type="number" step="10" inputmode="numeric" placeholder="Ex: 1500" />
-          </div>
-        </div>
-
-        <button onclick="salvarPerfilCompleto()">Salvar dados e meta</button>
-      </div>
-    </section>
-
-    <section id="aba-cardapio" class="aba">
-      <div class="card">
-        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Prato e Cardapio (Alimentos + Gramas)</div>
-
-        <div class="grid-3">
-          <div>
-            <label for="ex-alimento">Alimento</label>
-            <input id="ex-alimento" type="text" placeholder="Ex: arroz" />
-          </div>
-          <div>
-            <label for="ex-gramas">Quantidade (g)</label>
-            <input id="ex-gramas" type="number" step="1" inputmode="decimal" placeholder="Ex: 100" />
-          </div>
-          <div>
-            <label for="ex-kcal100">Kcal por 100g</label>
-            <input id="ex-kcal100" type="number" step="1" inputmode="decimal" placeholder="Ex: 128" />
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <button type="button" onclick="addLinhaExcel()">+ Adicionar linha</button>
-          <button type="button" class="btn-sec" onclick="limparLinhasExcel()">Limpar tabela</button>
-        </div>
-
-        <div class="excel-box" style="margin-top:12px;">
-          <table class="excel-tab">
-            <thead>
-              <tr>
-                <th>alimento</th>
-                <th>quantidade</th>
-                <th>valor calorico</th>
-                <th>total de calorias no prato</th>
-              </tr>
-            </thead>
-            <tbody id="excel-linhas-body">
-              <tr><td colspan="4">Nenhuma linha adicionada ainda.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    
-      <div class="card" style="border-color:#f97316;">
-        <div style="font-weight:700; font-size:1rem; margin-bottom:8px;">Registro Rapido de Alimentos (Mesma Aba)</div>
-      <div class="card">
-        <label for="al-nome">Alimento(s) — em linha (ex.: arroz 100g 50 calorias) ou em bloco</label>
-        <textarea id="al-nome" placeholder="Ex: arroz 100g 50 calorias&#10;feijao 200g&#10;ou em linha: arroz 100g 50calorias feijao 200g" oninput="atualizarPreviewAvulso()"></textarea>
-
-        <div class="grid-3">
-          <div>
-            <label for="al-qtd">Peso individual (g)</label>
-            <input id="al-qtd" type="number" step="1" inputmode="decimal" placeholder="Ex: 100" oninput="atualizarPreviewAvulso()" />
-          </div>
-          <div>
-            <label for="al-kcal">Calorias item (kcal)</label>
-            <input id="al-kcal" type="number" inputmode="numeric" placeholder="Calcula auto" oninput="marcarKcalManual('al')" />
-          </div>
-          <div>
-            <label for="al-saude">Tipo</label>
-            <select id="al-saude">
-              <option value="auto">Automático</option>
-              <option value="saudavel">Saudável</option>
-              <option value="nao_saudavel">Não saudável</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="calc-preview" id="al-preview">Digite em linha ou em bloco para ver o valor individual e a soma final.</div>
-        <button onclick="registrarAlimento()">Salvar alimentação</button>
-      </div>
-
-      <div class="card" id="lista-alimentos"></div>
-
-      <div class="soma-prato-box" id="alimentos-soma-final-box">
-        <span>Soma final de todos os alimentos:</span>
-        <span id="alimentos-soma-final-kcal">0 kcal</span>
-      </div>
-    
-      </div>
-</section>
-
-    <section id="aba-calorias" class="aba">
-      <div class="card">
-        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Resumo de Calorias Consumidas Hoje</div>
-
-        <div class="grid-2">
-          <div>
-            <label>Já consumiu hoje</label>
-            <div class="kpi" id="cal-aba-ingerido">0 kcal</div>
-          </div>
-          <div>
-            <label>Meta diária (instrutor)</label>
-            <div class="kpi" id="cal-aba-meta">1500 kcal</div>
-          </div>
-        </div>
-
-        <div class="grid-2" style="margin-top:8px;">
-          <div>
-            <label>Quanto falta / passou</label>
-            <div class="kpi" id="cal-aba-saldo">Faltam 1500 kcal</div>
-          </div>
-          <div>
-            <label>Status de saúde</label>
-            <div class="kpi" id="cal-aba-saude">Aguardando</div>
-          </div>
-        </div>
-
-        <div class="barra-bg"><div class="barra-fill barra-kcal" id="cal-aba-barra"></div></div>
-        <div id="cal-aba-alerta" class="alerta-kcal-box faltando">Já consumiu 0 kcal de 1500 kcal — faltam 1500 kcal.</div>
-      </div>
-
-      <div class="card">
-        <label for="cal-aba-input-meta">Definir meta diária de calorias (instrutor)</label>
-        <input id="cal-aba-input-meta" type="number" step="10" inputmode="numeric" placeholder="Ex: 1500" />
-
-        <label for="cal-aba-input-obj">Objetivo da pessoa</label>
-        <select id="cal-aba-input-obj">
-          <option value="perda">Perda de peso</option>
-          <option value="ganho">Ganho de massa</option>
-        </select>
-
-        <button type="button" onclick="salvarMetaCaloriasAba()">Salvar meta diária de calorias</button>
-      </div>
-
-      <div class="card">
-        <label>Todas as refeições e alimentos pesados consumidos hoje</label>
-        <div id="cal-aba-lista"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
-        <div class="soma-prato-box" style="margin-bottom:0;">
-          <span>Soma final consumida hoje:</span>
-          <span id="cal-aba-soma-final">0 kcal</span>
-        </div>
-      </div>
-    </section>
-
-    <section id="aba-rotina" class="aba">
-      <div class="card">
-        <label>Água hoje</label>
-        <div class="kpi" id="agua-status">0 / 2500 ml</div>
-        <div class="barra-bg"><div class="barra-fill" id="agua-barra"></div></div>
-        <div class="sub" id="agua-lembrete">Lembrete de água: beba água aos poucos ao longo do dia.</div>
-
-        <div class="grid-3" style="margin-top: 10px;">
-          <button type="button" onclick="addAgua(250)">+ 250 ml</button>
-          <button type="button" onclick="addAgua(500)">+ 500 ml</button>
-          <button type="button" class="btn-sec" onclick="resetAgua()">Zerar dia</button>
-        </div>
-
-        <label for="agua-meta" style="margin-top: 10px;">Meta diária de água (ml)</label>
-        <input id="agua-meta" type="number" step="50" inputmode="numeric" placeholder="Ex: 2500" />
-        <button type="button" class="btn-sec" onclick="salvarMetaAgua()">Salvar meta de água</button>
-      </div>
-
-      <div class="card" id="lista-agua"></div>
-
-      <div class="card">
-        <label>Alerta de horário das refeições</label>
-        <div class="sub" style="margin-bottom:10px;">Quando o app estiver aberto no horário configurado, ele exibe um alerta visual e notificação (se permitida).</div>
-        <button type="button" class="btn-sec" style="margin-bottom:12px;" onclick="pedirPermissaoNotif()">Ativar notificações do navegador</button>
-
-        <label for="ref-nome">Refeição</label>
-        <input id="ref-nome" type="text" placeholder="Ex: Café da manhã / Pré-treino" />
-        <label for="ref-hora">Horário</label>
-        <input id="ref-hora" type="time" />
-        <button type="button" onclick="addRefeicao()">Adicionar horário de refeição</button>
-      </div>
-
-      <div class="card" id="lista-refeicoes"></div>
-    </section>
-
-    <section id="aba-balanca" class="aba">
-      <div class="card">
-        <label for="bal-peso">Peso (kg)</label>
-        <input id="bal-peso" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 82.5" />
-        <label for="bal-meta">Meta de peso (kg)</label>
-        <input id="bal-meta" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 75.0" />
-        <button onclick="registrarBalanca()">Registrar na balança</button>
-      </div>
-      <div class="card" id="lista-balanca"></div>
-    </section>
-
-    <section id="aba-treinos" class="aba">
-      <div class="card">
-        <label>Cronômetro do treino</label>
-        <div class="crono-display" id="crono-display">00:00:00</div>
-        <div class="grid-3" style="margin-bottom: 10px;">
-          <button type="button" onclick="iniciarCrono()">Iniciar</button>
-          <button type="button" class="btn-sec" onclick="pausarCrono()">Pausar</button>
-          <button type="button" class="btn-sec" onclick="zerarCrono()">Zerar</button>
-        </div>
-        <button type="button" class="btn-sec" onclick="usarTempoCrono()">Usar tempo no treino</button>
-      </div>
-
-      <div class="card">
-        <label for="tr-desc">Treino</label>
-        <input id="tr-desc" type="text" placeholder="Ex: Caminhada leve / Musculação" />
-        <label for="tr-min">Duração (min)</label>
-        <input id="tr-min" type="number" inputmode="numeric" placeholder="Ex: 30" />
-        <button onclick="registrarTreino()">Salvar treino</button>
-      </div>
-      <div class="card" id="lista-treinos"></div>
-    </section>
-
-    <section id="aba-glicemia" class="aba">
-      <div class="card">
-        <label for="gl-val">Glicemia (mg/dL)</label>
-        <input id="gl-val" type="number" step="1" inputmode="numeric" placeholder="Ex: 98" />
-        <label for="gl-mom">Momento</label>
-        <input id="gl-mom" type="text" placeholder="Ex: Jejum / Pós-refeição" />
-        <button onclick="registrarGlicemia()">Salvar glicemia</button>
-      </div>
-      <div class="card" id="lista-glicemia"></div>
-    </section>
-
-    
-
-    <section id="aba-resumo" class="aba ativa">
-      <div class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-weight:700; font-size:1rem;">Dashboard do Dia</span>
-          <span id="resumo-data-hoje" style="font-size:0.82rem; color:#94a3b8;">--/--/----</span>
-        </div>
-        <div class="sub" id="resumo-avaliacao-alim">Nenhuma alimentação registrada hoje ainda.</div>
-        <div id="alerta-kcal-box" class="alerta-kcal-box faltando">Já consumiu 0 kcal de 1500 kcal — faltam 1500 kcal.</div>
-
-        <div class="grid-2" style="margin-top:12px;">
-          <div>
-            <label>Água tomada hoje</label>
-            <div class="kpi" id="dash-agua">0 / 2500 ml</div>
-          </div>
-          <div>
-            <label>Calorias / Meta do instrutor</label>
-            <div class="kpi" id="dash-kcal">0 / 1500 kcal</div>
-          </div>
-          <div>
-            <label>Tempo de treino hoje</label>
-            <div class="kpi" id="dash-treino">0 min</div>
-          </div>
-          <div>
-            <label>Registros de destros hoje</label>
-            <div class="kpi" id="dash-destros">0</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <label>Gráfico comparativo do dia</label>
-
-        <div class="chart-row">
-          <div class="chart-head">
-            <span>Hidratação (meta diária)</span>
-            <span id="grafico-agua-txt">0% (0 ml)</span>
-          </div>
-          <div class="barra-bg"><div class="barra-fill" id="grafico-agua-bar"></div></div>
-        </div>
-
-        <div class="chart-row">
-          <div class="chart-head">
-            <span>Proporção de itens saudáveis</span>
-            <span id="grafico-saude-txt">Sem registros hoje</span>
-          </div>
-          <div class="barra-bg"><div class="barra-fill barra-saude" id="grafico-saude-bar"></div></div>
-        </div>
-
-        <div class="chart-row">
-          <div class="chart-head">
-            <span id="grafico-kcal-label">Calorias do dia (meta 1.500 kcal)</span>
-            <span id="grafico-kcal-txt">0 / 1500 kcal (0%)</span>
-          </div>
-          <div class="barra-bg"><div class="barra-fill barra-kcal" id="grafico-kcal-bar"></div></div>
-        </div>
-
-        <div class="chart-row">
-          <div class="chart-head">
-            <span>Tempo de treino hoje (ref. 45 min)</span>
-            <span id="grafico-treino-txt">0 min (0%)</span>
-          </div>
-          <div class="barra-bg"><div class="barra-fill barra-treino" id="grafico-treino-bar"></div></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <label>O que você comeu hoje (e classificação)</label>
-        <div id="dash-lista-prato"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
-      </div>
-
-      <div class="card">
-        <label>Água, treinos e destros registrados hoje</label>
-        <div id="dash-lista-atividades"><div class="item"><span>Nenhuma atividade registrada hoje ainda.</span></div></div>
-      </div>
-    </section>
-  </main>
-
-  <nav>
-    <button onclick="abrirAba('painel', this)">Painel</button>
-    <button onclick="abrirAba('cardapio', this)">Cardápio</button>
-    <button onclick="abrirAba('calorias', this)">Calorias</button>
-    <button onclick="abrirAba('rotina', this)">Água/Ref.</button>
-    <button onclick="abrirAba('balanca', this)">Balança</button>
-    <button onclick="abrirAba('treinos', this)">Treinos</button>
-    <button onclick="abrirAba('glicemia', this)">Glicemia</button>
-    <button class="ativa" onclick="abrirAba('resumo', this)">Resumo</button>
-  </nav>
-
-  <script>
-    const DIAS_ORDEM = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
-    const PALAVRAS_NAO_SAUD_JS = [
-      "feijoada", "farofa", "torresmo", "feijao tropeiro", "feijão tropeiro",
-      "picanha", "costela", "carne seca", "carbonara", "estrogonofe", "lasanha",
-      "fritura", "frito", "frita", "batata frita", "doce", "chocolate", "sorvete",
-      "refrigerante", "refri", "pizza", "hamburguer", "hambúrguer", "burger",
-      "cachorro quente", "hot dog", "nugget", "nuggets", "salgado", "coxinha",
-      "pastel", "empada", "biscoito", "bolacha", "bolo", "pudim", "cerveja",
-      "alcool", "álcool", "fast food", "bacon", "linguica", "linguiça", "salsicha",
-      "presunto", "maionese", "chantilly", "leite condensado", "quesadilla",
-      "falafel", "esfiha", "pao de queijo", "pão de queijo"
-    ];
-
-    let tabelaKcal100g = {
-      "arroz branco": 128,
-      "arroz integral": 124,
-      "arroz": 128,
-      "feijao": 76,
-      "feijão": 76,
-      "feijao carioca": 76,
-      "feijao preto": 77,
-      "feijoada": 117,
-      "farofa": 406,
-      "torresmo": 544,
-      "frango": 159,
-      "peito de frango": 159,
-      "patinho": 219,
-      "alcatra": 241,
-      "batata doce": 77,
-      "batata": 52,
-      "ovo": 146,
-      "pizza": 266,
-      "bolo": 350,
-      "pastel": 310
-    };
-
-    let porcoesRascunho = [];
-    let cronoSegundos = 0;
-    let cronoTimer = null;
-    let ultimoEstado = null;
-    const alertasDisparadosHoje = new Set();
-    const kcalManualFlag = { porcao: false, al: false };
-
-    function marcarKcalManual(tipo) {
-      kcalManualFlag[tipo] = true;
-    }
-
-    function normalizarTexto(txt) {
-      return (txt || "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .trim();
-    }
-
-    function buscarKcal100g(nome) {
-      const texto = normalizarTexto(nome);
-      const chaves = Object.keys(tabelaKcal100g || {}).sort((a, b) => b.length - a.length);
-      for (const ch of chaves) {
-        const chNorm = normalizarTexto(ch);
-        if (texto.includes(chNorm)) {
-          return Number(tabelaKcal100g[ch]);
-        }
-      }
-      return null;
-    }
-
-    function parseNumero(val) {
-      if (val === "" || val === null || val === undefined) return null;
-      const n = parseFloat(String(val).replace(",", ".").trim());
-      return isNaN(n) ? null : n;
-    }
-
-    // 1) Tenta ler em linha: ex. "arroz 100g 50calorias" ou "arroz 100g 50 kcal" ou "arroz 100g"
-    function tentarLerEmLinha(textoRaw, qtdFallback) {
-      let s = (textoRaw || "").trim();
-      if (!s || /\r?\n|;|,/.test(s)) return null;
-
-      let kcalExplicita = null;
-      const mKcal = s.match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*(?:kcal|calorias?|cal)\b\s*$/i);
-      if (mKcal) {
-        kcalExplicita = Math.max(0, Math.round(parseFloat(mKcal[1].replace(",", "."))));
-        s = s.slice(0, mKcal.index).trim();
-      }
-
-      let gramas = parseNumero(qtdFallback);
-      let alimento = s;
-
-      const mPrefixo = s.match(/^\s*(\d+(?:[.,]\d+)?)\s*(kg|gramas?|grama|g)\b(?:\s+(?:de|da|do|das|dos))?\s+(.+)$/i);
-      const mSufixo = s.match(/^(.+?)\s+(\d+(?:[.,]\d+)?)\s*(kg|gramas?|grama|g)\s*$/i);
-
-      if (mPrefixo) {
-        let g = parseFloat(mPrefixo[1].replace(",", "."));
-        if (mPrefixo[2].toLowerCase() === "kg") g = g * 1000;
-        alimento = mPrefixo[3].trim();
-        if (gramas === null) gramas = g;
-      } else if (mSufixo) {
-        let g = parseFloat(mSufixo[2].replace(",", "."));
-        if (mSufixo[3].toLowerCase() === "kg") g = g * 1000;
-        alimento = mSufixo[1].trim();
-        if (gramas === null) gramas = g;
-      }
-
-      if (!alimento) return null;
-      if (gramas !== null && gramas > 0) {
-        gramas = Math.round(gramas * 10) / 10;
-      } else {
-        gramas = null;
-      }
-
-      return { alimento, gramas, kcalExplicita };
-    }
-
-    // 2) Fallback em bloco: quebra por linha, ; ou multiplas ocorrencias "alimento + peso" na mesma linha
-    function lerEmBloco(textoRaw, qtdFallback) {
-      const bruto = (textoRaw || "").trim();
-      if (!bruto) return [];
-
-      let blocos = bruto.split(/\r?\n|;/).map(x => x.trim()).filter(Boolean);
-      if (blocos.length === 1) {
-        // Ex: "arroz 100g 50calorias feijao 200g 120calorias"
-        const matches = bruto.match(/.+?\d+(?:[.,]\d+)?\s*(?:kg|gramas?|grama|g)\b(?:\s+\d+(?:[.,]\d+)?\s*(?:kcal|calorias?|cal)\b)?/gi);
-        if (matches && matches.length > 1) {
-          blocos = matches.map(m => m.trim());
-        } else if (bruto.includes(",")) {
-          blocos = bruto.split(",").map(m => m.trim()).filter(Boolean);
-        }
-      }
-
-      return blocos.map((parte, idx) => {
-        const emLinha = tentarLerEmLinha(parte, idx === 0 ? qtdFallback : null);
-        if (emLinha) return emLinha;
-        return {
-          alimento: parte.replace(/\s+(?:de|da|do|das|dos)\s*$/i, "").trim(),
-          gramas: idx === 0 ? parseNumero(qtdFallback) : null,
-          kcalExplicita: null
-        };
-      }).filter(x => x.alimento);
-    }
-
-    function calcularAutoKcalGramas(nome, gramasVal) {
-      const base100 = buscarKcal100g(nome);
-      if (base100 === null) return 0;
-      if (gramasVal !== null && gramasVal !== undefined && !isNaN(Number(gramasVal)) && Number(gramasVal) > 0) {
-        return Math.round((Number(gramasVal) / 100) * base100);
-      }
-      return base100;
-    }
-
-    function resolverItens(nomeRaw, qtdRaw, kcalRaw, isManual, tipoSaude) {
-      const bruto = (nomeRaw || "").trim();
-      if (!bruto) return [];
-
-      const linhaUnica = tentarLerEmLinha(bruto, qtdRaw);
-      const rawItens = linhaUnica ? [linhaUnica] : lerEmBloco(bruto, qtdRaw);
-      const manualNum = parseNumero(kcalRaw);
-
-      return rawItens.map((item, idx) => {
-        let kcal = calcularAutoKcalGramas(item.alimento, item.gramas);
-        if (item.kcalExplicita !== null) {
-          kcal = item.kcalExplicita;
-        } else if (Boolean(isManual) && manualNum !== null && rawItens.length === 1) {
-          kcal = Math.max(0
-cd C:\Users\Eduardo\fire_fit
-
-if (-not (Test-Path .\templates)) {
-  New-Item -ItemType Directory -Path .\templates | Out-Null
-}
-
-@'
-<!doctype html>
-<html lang="pt-BR">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fire Fit</title>
-  <style>
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-    body { margin: 0; background: #0f172a; color: #f8fafc; padding-bottom: 84px; }
-    header { background: #1e293b; padding: 14px 16px; border-bottom: 1px solid #334155; position: sticky; top: 0; z-index: 10; }
-    h1 { margin: 0; font-size: 1.2rem; color: #fb923c; }
-    .aviso { font-size: 0.78rem; color: #cbd5e1; margin-top: 4px; }
-    main { padding: 14px; max-width: 720px; margin: 0 auto; }
-    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
-    .alerta-banner { background: #431407; border: 1px solid #ea580c; color: #fed7aa; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; font-size: 0.9rem; display: none; }
-    .alerta-banner.ativo { display: block; }
-    .alerta-kcal-box { padding: 12px; border-radius: 10px; font-size: 0.92rem; font-weight: 600; margin-top: 10px; border: 1px solid #475569; background: #0f172a; color: #e2e8f0; }
-    .alerta-kcal-box.passou { background: #450a0a; border-color: #ef4444; color: #fecaca; }
-    .alerta-kcal-box.faltando { background: #172554; border-color: #38bdf8; color: #bae6fd; }
-    .alerta-kcal-box.na_meta { background: #052e16; border-color: #22c55e; color: #bbf7d0; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-    label { display: block; font-size: 0.8rem; color: #94a3b8; margin-bottom: 4px; }
-    input, select, textarea, button { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #475569; font-size: 0.95rem; }
-    input, select, textarea { background: #0f172a; color: #f8fafc; margin-bottom: 10px; }
-    textarea { min-height: 68px; resize: vertical; }
-    button { background: #ea580c; color: #fff; border: none; font-weight: 600; cursor: pointer; }
-    button:active { opacity: 0.85; }
-    .btn-sec { background: #334155; color: #f8fafc; }
-    .btn-ok { width: auto; background: #15803d; color: #dcfce7; font-size: 0.75rem; padding: 6px 10px; border-radius: 6px; margin-left: 6px; flex-shrink: 0; }
-    .btn-del { width: auto; background: #991b1b; color: #fecaca; font-size: 0.75rem; padding: 6px 10px; border-radius: 6px; margin-left: 6px; flex-shrink: 0; }
-    .acoes-item { display: flex; align-items: center; flex-shrink: 0; }
-    .kpi { font-size: 1.15rem; font-weight: 700; color: #fdba74; }
-    .barra-bg { width: 100%; height: 14px; background: #0f172a; border-radius: 999px; overflow: hidden; border: 1px solid #475569; margin: 6px 0 10px; }
-    .barra-fill { height: 100%; background: #38bdf8; min-width: 6px; width: 6%; transition: width 0.25s; }
-    .barra-saude { background: #22c55e; }
-    .barra-treino { background: #fb923c; }
-    .barra-kcal { background: #facc15; }
-    .barra-kcal.passou { background: #ef4444; }
-    .crono-display { font-size: 2rem; font-weight: 800; text-align: center; color: #fdba74; letter-spacing: 1px; margin: 6px 0 12px; font-variant-numeric: tabular-nums; }
-    .sub { font-size: 0.88rem; color: #cbd5e1; margin-top: 6px; line-height: 1.35; }
-    .calc-preview { font-size: 0.86rem; color: #86efac; background: #052e16; border: 1px solid #166534; border-radius: 8px; padding: 9px 10px; margin-bottom: 10px; line-height: 1.45; }
-    .soma-prato-box { font-size: 0.95rem; font-weight: 700; color: #fdba74; background: #0f172a; border: 1px solid #ea580c; border-radius: 10px; padding: 10px 12px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+    .grid-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; }
+    label { display: block; font-size: 0.78rem; color: #94a3b8; margin-bottom: 4px; }
+    input, select, button { width: 100%; padding: 9px 10px; border-radius: 8px; border: 1px solid #475569; font-size: 0.92rem; }
+    input, select { background: #0f172a; color: #f8fafc; }
+    button { background: #f97316; border-color: #f97316; color: #ffffff; font-weight: 700; cursor: pointer; }
+    button:hover { background: #ea580c; }
+    .btn-sec { background: #0f172a; border-color: #475569; color: #e2e8f0; }
+    .btn-sec:hover { background: #1e293b; }
+    .btn-ok { background: #16a34a; border-color: #16a34a; color: #ffffff; }
+    .btn-del { width: auto; padding: 4px 8px; font-size: 0.78rem; background: #dc2626; border-color: #dc2626; }
+    .kpi { font-size: 1.25rem; font-weight: 800; color: #fb923c; }
+    .sub { font-size: 0.86rem; color: #cbd5e1; margin-top: 6px; }
+    .calc-box { background: #0f172a; border: 1px solid #166534; color: #86efac; border-radius: 8px; padding: 9px 12px; margin: 10px 0; font-size: 0.88rem; font-weight: 600; }
+    .soma-box { display: flex; justify-content: space-between; align-items: center; background: #0b1220; border: 1px solid #f97316; border-radius: 10px; padding: 10px 12px; margin-top: 10px; font-weight: 700; color: #fdba74; }
     .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #334155; font-size: 0.88rem; }
     .item:last-child { border-bottom: none; }
-    .dia-bloco { border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; background: #0f172a; }
-    .dia-bloco:last-child { margin-bottom: 0; }
-    .dia-topo { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
-    .dia-titulo { font-weight: 700; color: #fb923c; font-size: 0.92rem; }
-    .dia-kcal { font-size: 0.82rem; font-weight: 600; color: #e2e8f0; }
-    .prato-card { border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-top: 8px; background: #1e293b; }
-    .prato-cab { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
-    .badge-ok { background: #14532d; color: #86efac; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
-    .badge-warn { background: #7c2d12; color: #fed7aa; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
-    .chart-row { margin-bottom: 12px; }
-    .chart-head { display: flex; justify-content: space-between; font-size: 0.82rem; color: #e2e8f0; }
-    .aba { display: none; }
-    .aba.ativa { display: block; }
-    nav { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; border-top: 1px solid #334155; display: flex; justify-content: space-around; padding: 6px 2px; overflow-x: auto; }
-    nav button { background: transparent; color: #94a3b8; font-size: 0.62rem; padding: 6px 2px; border-radius: 6px; min-width: 42px; }
-    nav button.ativa { background: #334155; color: #fb923c; }
-    @media (max-width: 560px) {
-      .grid-3 { grid-template-columns: 1fr; }
-    }
+    .barra-bg { height: 10px; background: #0f172a; border-radius: 999px; overflow: hidden; margin-top: 6px; }
+    .barra-fill { height: 100%; background: #38bdf8; width: 0%; transition: width 0.25s; }
+    .barra-kcal { background: #facc15; }
+    .barra-kcal.passou { background: #ef4444; }
+    .barra-treino { background: #fb923c; }
+    .alerta-kcal-box { margin-top: 10px; padding: 10px 12px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; background: #0f172a; border: 1px solid #38bdf8; color: #bae6fd; }
+    .alerta-kcal-box.passou { background: #450a0a; border-color: #ef4444; color: #fecaca; }
+    .alerta-kcal-box.na_meta { background: #052e16; border-color: #22c55e; color: #bbf7d0; }
+    .prato-card { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px; margin-top: 8px; }
+    .prato-cab { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+    .acoes-item { display: flex; gap: 6px; width: auto; }
+    .acoes-item button { width: auto; padding: 5px 9px; font-size: 0.78rem; }
+    nav { position: fixed; left: 0; right: 0; bottom: 0; display: flex; overflow-x: auto; gap: 4px; padding: 8px; background: #0b1220; border-top: 1px solid #334155; z-index: 40; }
+    nav button { width: auto; flex: 1 0 auto; padding: 8px 10px; font-size: 0.8rem; background: #1e293b; border-color: #334155; color: #cbd5e1; }
+    nav button.ativa { background: #f97316; border-color: #f97316; color: #ffffff; }
+    @media (max-width: 640px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Fire Fit</h1>
-    <div class="aviso">Apoio educativo no dia a dia — não substitui profissionais de saúde.</div>
-  </header>
-
-  <main>
-    <div id="alerta-banner" class="alerta-banner"></div>
-
-    <section id="aba-painel" class="aba">
-      <div class="card">
-        <div id="resumo-aluno" style="font-weight:700; font-size:1rem; margin-bottom:8px;">Aluno não cadastrado</div>
-        <div class="grid-2">
-          <div>
-            <label>Peso atual (kg)</label>
-            <div class="kpi" id="kpi-peso">--</div>
-          </div>
-          <div>
-            <label>Meta de peso (kg)</label>
-            <div class="kpi" id="kpi-meta">--</div>
-          </div>
-        </div>
-        <div class="sub" id="kpi-diff">Diferença para meta: --</div>
-        <div class="sub" id="kpi-meta-kcal">Meta diária do instrutor: 1500 kcal/dia</div>
-        <div class="sub" id="base-instrutor"></div>
-      </div>
-
-      <div class="card">
-        <label for="p-nome">Nome</label>
-        <input id="p-nome" type="text" placeholder="Nome completo" />
-
-        <div class="grid-2">
-          <div>
-            <label for="p-idade">Idade</label>
-            <input id="p-idade" type="number" inputmode="numeric" placeholder="Ex: 32" />
-          </div>
-          <div>
-            <label for="p-altura">Altura (cm)</label>
-            <input id="p-altura" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 175" />
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div>
-            <label for="painel-peso">Peso atual (kg)</label>
-            <input id="painel-peso" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 82.5" />
-          </div>
-          <div>
-            <label for="painel-meta">Meta de peso (kg)</label>
-            <input id="painel-meta" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 75.0" />
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div>
-            <label for="p-objetivo">Programa / Objetivo</label>
-            <select id="p-objetivo">
-              <option value="perda">Perda de peso</option>
-              <option value="ganho">Ganho de massa</option>
-            </select>
-          </div>
-          <div>
-            <label for="p-meta-kcal">Meta diária de calorias (instrutor)</label>
-            <input id="p-meta-kcal" type="number" step="10" inputmode="numeric" placeholder="Ex: 1500" />
-          </div>
-        </div>
-
-        <button onclick="salvarPerfilCompleto()">Salvar dados e meta</button>
-      </div>
-    </section>
+  <div class="container">
+    <div class="header-app">
+      <h1>Fire Fit</h1>
+      <small>Apoio educativo no dia a dia — não substitui profissionais de saúde.</small>
+    </div>
 
     <section id="aba-cardapio" class="aba">
       <div class="card">
-        <div style="font-weight:700; font-size:1rem; margin-bottom:8px;">Pesagem Individual por Alimento (Cardápio)</div>
-        <div class="sub" style="margin-bottom:10px;">Escreva em linha (ex.: <b>arroz 100g 50 calorias</b> ou <b>arroz 100g feijao 200g</b>) ou em bloco (uma linha por alimento). Mostra o valor individual e no final soma tudo.</div>
-
-        <div class="grid-2">
+        <div style="font-weight:700; font-size:1.05rem; margin-bottom:10px;">Alimentos e Cardápio</div>
+        <div class="grid-2" style="margin-bottom:10px;">
           <div>
             <label for="prato-dia">Dia da semana</label>
             <select id="prato-dia">
-              <option value="Segunda">Segunda</option>
-              <option value="Terça">Terça</option>
-              <option value="Quarta">Quarta</option>
-              <option value="Quinta">Quinta</option>
-              <option value="Sexta">Sexta</option>
-              <option value="Sábado">Sábado</option>
-              <option value="Domingo">Domingo</option>
+              <option>Segunda</option><option>Terça</option><option>Quarta</option>
+              <option>Quinta</option><option>Sexta</option><option>Sábado</option><option>Domingo</option>
             </select>
           </div>
           <div>
             <label for="prato-refeicao">Refeição</label>
             <select id="prato-refeicao">
-              <option value="Café da manhã">Café da manhã</option>
-              <option value="Almoço">Almoço</option>
-              <option value="Lanche da tarde">Lanche da tarde</option>
-              <option value="Jantar">Jantar</option>
+              <option>Café da manhã</option><option>Almoço</option><option>Lanche da tarde</option><option>Jantar</option>
             </select>
           </div>
         </div>
-
-        <label for="porcao-alimento">Alimento(s) — em linha ou em bloco</label>
-        <textarea id="porcao-alimento" placeholder="Ex: arroz 100g 50 calorias&#10;feijao 200g&#10;ou na mesma linha: arroz 100g 50calorias feijao 200g" oninput="atualizarPreviewPorcao()"></textarea>
-
         <div class="grid-3">
           <div>
-            <label for="porcao-qtd">Peso individual (g)</label>
-            <input id="porcao-qtd" type="number" step="1" inputmode="decimal" placeholder="Ex: 100" oninput="atualizarPreviewPorcao()" />
+            <label for="al-nome">Alimento</label>
+            <input id="al-nome" type="text" placeholder="Ex: arroz, feijão, bife" oninput="atualizarCalculoAoVivo()" />
           </div>
           <div>
-            <label for="porcao-kcal">Calorias item (kcal)</label>
-            <input id="porcao-kcal" type="number" inputmode="numeric" placeholder="Calcula auto" oninput="marcarKcalManual('porcao')" />
+            <label for="al-gramas">Quantidade (g)</label>
+            <input id="al-gramas" type="number" step="any" min="0.1" placeholder="Ex: 150" oninput="atualizarCalculoAoVivo()" />
           </div>
           <div>
-            <label for="porcao-saude">Tipo do alimento</label>
-            <select id="porcao-saude">
-              <option value="auto">Automático</option>
-              <option value="saudavel">Saudável</option>
-              <option value="nao_saudavel">Não saudável</option>
-            </select>
+            <label for="al-kcal100">Kcal por 100g (opcional)</label>
+            <input id="al-kcal100" type="number" step="any" min="0" placeholder="Ex: 128" oninput="atualizarCalculoAoVivo()" />
           </div>
         </div>
-
-        <div class="calc-preview" id="porcao-preview">Digite em linha ou em bloco para ver o valor individual de cada alimento e a soma final.</div>
-        <button type="button" class="btn-sec" style="margin-bottom:10px;" onclick="adicionarPorcaoAoPrato()">+ Adicionar alimento(s) ao prato</button>
-
-        <div id="lista-porcoes-rascunho">
-          <div class="item"><span>Nenhum alimento adicionado ao prato ainda.</span></div>
-        </div>
-
-        <div class="soma-prato-box">
-          <span>Soma final do prato:</span>
-          <span id="soma-prato-kcal">0 kcal</span>
-        </div>
-
+        <div class="calc-box" id="previa-calculo">Cálculo automático: informe o alimento e as gramas (ex.: 150g com 128 kcal/100g = 192 kcal).</div>
         <div class="grid-2">
-          <button type="button" onclick="salvarPratoNoCardapio(false)">Salvar no Cardápio</button>
-          <button type="button" class="btn-ok" style="width:100%; margin-left:0; padding:10px; font-size:0.9rem;" onclick="salvarPratoNoCardapio(true)">Salvar e ir p/ Calorias</button>
+          <button type="button" onclick="lancarAlimentoHoje()">+ Consumir agora (soma no dia)</button>
+          <button type="button" class="btn-sec" onclick="adicionarAoRascunhoPrato()">+ Adicionar ao prato do cardápio</button>
+        </div>
+        <div id="lista-rascunho-prato" style="margin-top:10px;"><div class="item"><span>Nenhum alimento no rascunho do prato.</span></div></div>
+        <div class="soma-box"><span>Soma do prato em montagem:</span><span id="soma-rascunho-kcal">0 kcal</span></div>
+        <div class="grid-2" style="margin-top:10px;">
+          <button type="button" class="btn-sec" onclick="salvarPratoSemana(false)">Salvar prato no cardápio semanal</button>
+          <button type="button" class="btn-ok" onclick="salvarPratoSemana(true)">Salvar prato e consumir hoje</button>
         </div>
       </div>
 
-      <div class="card" id="lista-cardapio-semana">
-        <div class="item"><span>Nenhum prato cadastrado no cardápio da semana.</span></div>
+      <div class="card">
+        <div style="font-weight:700; font-size:1rem; margin-bottom:8px;">Alimentos consumidos hoje</div>
+        <div id="lista-alimentos-hoje"><div class="item"><span>Nenhum alimento registrado hoje.</span></div></div>
+        <div class="soma-box"><span>Total consumido hoje:</span><span id="total-dia-alimentos">0 kcal</span></div>
       </div>
 
-      <div class="soma-prato-box" id="cardapio-soma-geral-box">
-        <span>Soma total de todos os itens do cardápio:</span>
-        <span id="cardapio-soma-geral-kcal">0 kcal</span>
+      <div class="card">
+        <div style="font-weight:700; font-size:1rem; margin-bottom:8px;">Cardápio da semana</div>
+        <div id="lista-cardapio-semana"><div class="item"><span>Nenhum prato no cardápio semanal.</span></div></div>
       </div>
     </section>
 
     <section id="aba-calorias" class="aba">
       <div class="card">
-        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Resumo de Calorias Consumidas Hoje</div>
-
+        <div style="font-weight:700; font-size:1.05rem; margin-bottom:10px;">Total de Calorias do Dia</div>
         <div class="grid-2">
-          <div>
-            <label>Já consumiu hoje</label>
-            <div class="kpi" id="cal-aba-ingerido">0 kcal</div>
-          </div>
-          <div>
-            <label>Meta diária (instrutor)</label>
-            <div class="kpi" id="cal-aba-meta">1500 kcal</div>
-          </div>
+          <div><label>Total consumido hoje</label><div class="kpi" id="cal-ingerido">0 kcal</div></div>
+          <div><label>Meta diária</label><div class="kpi" id="cal-meta">1500 kcal</div></div>
         </div>
+        <div class="barra-bg"><div class="barra-fill barra-kcal" id="cal-barra"></div></div>
+        <div id="cal-alerta" class="alerta-kcal-box">Já consumiu 0 kcal de 1500 kcal — faltam 1500 kcal.</div>
+      </div>
+      <div class="card">
+        <label for="cal-input-meta">Meta diária de calorias (kcal)</label>
+        <input id="cal-input-meta" type="number" step="10" placeholder="Ex: 1500" />
+        <label for="cal-input-obj" style="margin-top:8px;">Objetivo</label>
+        <select id="cal-input-obj"><option value="perda">Perda de peso</option><option value="ganho">Ganho de massa</option></select>
+        <button type="button" style="margin-top:10px;" onclick="salvarMetaCalorias()">Salvar meta diária</button>
+      </div>
+      <div class="card">
+        <div style="font-weight:700; font-size:1rem; margin-bottom:8px;">Itens que compõem o total do dia</div>
+        <div id="cal-lista-itens"><div class="item"><span>Nenhum item hoje.</span></div></div>
+        <div class="soma-box"><span>Soma final do dia:</span><span id="cal-soma-final">0 kcal</span></div>
+      </div>
+    </section>
 
+    <section id="aba-painel" class="aba">
+      <div class="card">
+        <div style="font-weight:700; font-size:1.05rem; margin-bottom:10px;">Perfil e Metas</div>
+        <div class="grid-2">
+          <div><label for="p-nome">Nome</label><input id="p-nome" type="text" placeholder="Seu nome" /></div>
+          <div><label for="p-objetivo">Objetivo</label><select id="p-objetivo"><option value="perda">Perda de peso</option><option value="ganho">Ganho de massa</option></select></div>
+        </div>
         <div class="grid-2" style="margin-top:8px;">
-          <div>
-            <label>Quanto falta / passou</label>
-            <div class="kpi" id="cal-aba-saldo">Faltam 1500 kcal</div>
-          </div>
-          <div>
-            <label>Status de saúde</label>
-            <div class="kpi" id="cal-aba-saude">Aguardando</div>
-          </div>
+          <div><label for="p-peso">Peso atual (kg)</label><input id="p-peso" type="number" step="0.1" placeholder="Ex: 80.5" /></div>
+          <div><label for="p-meta-peso">Meta de peso (kg)</label><input id="p-meta-peso" type="number" step="0.1" placeholder="Ex: 75.0" /></div>
         </div>
-
-        <div class="barra-bg"><div class="barra-fill barra-kcal" id="cal-aba-barra"></div></div>
-        <div id="cal-aba-alerta" class="alerta-kcal-box faltando">Já consumiu 0 kcal de 1500 kcal — faltam 1500 kcal.</div>
-      </div>
-
-      <div class="card">
-        <label for="cal-aba-input-meta">Definir meta diária de calorias (instrutor)</label>
-        <input id="cal-aba-input-meta" type="number" step="10" inputmode="numeric" placeholder="Ex: 1500" />
-
-        <label for="cal-aba-input-obj">Objetivo da pessoa</label>
-        <select id="cal-aba-input-obj">
-          <option value="perda">Perda de peso</option>
-          <option value="ganho">Ganho de massa</option>
-        </select>
-
-        <button type="button" onclick="salvarMetaCaloriasAba()">Salvar meta diária de calorias</button>
-      </div>
-
-      <div class="card">
-        <label>Todas as refeições e alimentos pesados consumidos hoje</label>
-        <div id="cal-aba-lista"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
-        <div class="soma-prato-box" style="margin-bottom:0;">
-          <span>Soma final consumida hoje:</span>
-          <span id="cal-aba-soma-final">0 kcal</span>
-        </div>
+        <div style="margin-top:8px;"><label for="p-meta-kcal">Meta diária de calorias (kcal)</label><input id="p-meta-kcal" type="number" step="10" placeholder="Ex: 1500" /></div>
+        <div class="sub" id="painel-orientacao"></div>
+        <button type="button" style="margin-top:10px;" onclick="salvarPerfil()">Salvar perfil</button>
       </div>
     </section>
 
     <section id="aba-rotina" class="aba">
       <div class="card">
-        <label>Água hoje</label>
-        <div class="kpi" id="agua-status">0 / 2500 ml</div>
-        <div class="barra-bg"><div class="barra-fill" id="agua-barra"></div></div>
-        <div class="sub" id="agua-lembrete">Lembrete de água: beba água aos poucos ao longo do dia.</div>
-
-        <div class="grid-3" style="margin-top: 10px;">
-          <button type="button" onclick="addAgua(250)">+ 250 ml</button>
-          <button type="button" onclick="addAgua(500)">+ 500 ml</button>
-          <button type="button" class="btn-sec" onclick="resetAgua()">Zerar dia</button>
+        <div style="font-weight:700; font-size:1.05rem; margin-bottom:8px;">Água e Horários de Refeição</div>
+        <div class="sub" id="agua-resumo">0 / 2500 ml</div>
+        <div class="grid-2" style="margin-top:8px;">
+          <input id="agua-ml" type="number" step="50" placeholder="Ex: 250" />
+          <button type="button" onclick="registrarAgua()">+ Registrar água (ml)</button>
         </div>
-
-        <label for="agua-meta" style="margin-top: 10px;">Meta diária de água (ml)</label>
-        <input id="agua-meta" type="number" step="50" inputmode="numeric" placeholder="Ex: 2500" />
-        <button type="button" class="btn-sec" onclick="salvarMetaAgua()">Salvar meta de água</button>
+        <div id="lista-agua" style="margin-top:10px;"></div>
       </div>
-
-      <div class="card" id="lista-agua"></div>
-
       <div class="card">
-        <label>Alerta de horário das refeições</label>
-        <div class="sub" style="margin-bottom:10px;">Quando o app estiver aberto no horário configurado, ele exibe um alerta visual e notificação (se permitida).</div>
-        <button type="button" class="btn-sec" style="margin-bottom:12px;" onclick="pedirPermissaoNotif()">Ativar notificações do navegador</button>
-
-        <label for="ref-nome">Refeição</label>
-        <input id="ref-nome" type="text" placeholder="Ex: Café da manhã / Pré-treino" />
-        <label for="ref-hora">Horário</label>
-        <input id="ref-hora" type="time" />
-        <button type="button" onclick="addRefeicao()">Adicionar horário de refeição</button>
+        <div style="font-weight:700; font-size:1rem; margin-bottom:8px;">Horários de refeição</div>
+        <div class="grid-2"><input id="ref-nome" type="text" placeholder="Ex: Almoço" /><input id="ref-hora" type="time" /></div>
+        <button type="button" style="margin-top:8px;" onclick="addRefeicao()">Adicionar horário</button>
+        <div id="lista-refeicoes" style="margin-top:10px;"></div>
       </div>
-
-      <div class="card" id="lista-refeicoes"></div>
     </section>
 
     <section id="aba-balanca" class="aba">
       <div class="card">
-        <label for="bal-peso">Peso (kg)</label>
-        <input id="bal-peso" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 82.5" />
-        <label for="bal-meta">Meta de peso (kg)</label>
-        <input id="bal-meta" type="number" step="0.1" inputmode="decimal" placeholder="Ex: 75.0" />
-        <button onclick="registrarBalanca()">Registrar na balança</button>
+        <div style="font-weight:700; font-size:1.05rem; margin-bottom:8px;">Balança</div>
+        <div class="grid-2"><input id="bal-peso" type="number" step="0.1" placeholder="Peso (kg)" /><input id="bal-meta" type="number" step="0.1" placeholder="Meta (kg)" /></div>
+        <button type="button" style="margin-top:8px;" onclick="registrarBalanca()">Salvar pesagem</button>
+        <div id="lista-balanca" style="margin-top:10px;"></div>
       </div>
-      <div class="card" id="lista-balanca"></div>
     </section>
 
     <section id="aba-treinos" class="aba">
       <div class="card">
-        <label>Cronômetro do treino</label>
-        <div class="crono-display" id="crono-display">00:00:00</div>
-        <div class="grid-3" style="margin-bottom: 10px;">
-          <button type="button" onclick="iniciarCrono()">Iniciar</button>
-          <button type="button" class="btn-sec" onclick="pausarCrono()">Pausar</button>
-          <button type="button" class="btn-sec" onclick="zerarCrono()">Zerar</button>
-        </div>
-        <button type="button" class="btn-sec" onclick="usarTempoCrono()">Usar tempo no treino</button>
+        <div style="font-weight:700; font-size:1.05rem; margin-bottom:8px;">Treinos</div>
+        <div class="grid-2"><input id="tr-mod" type="text" placeholder="Ex: Musculação / Corrida" /><input id="tr-min" type="number" step="1" placeholder="Duração (min)" /></div>
+        <button type="button" style="margin-top:8px;" onclick="registrarTreino()">Salvar treino</button>
+        <div id="lista-treinos" style="margin-top:10px;"></div>
       </div>
-
-      <div class="card">
-        <label for="tr-desc">Treino</label>
-        <input id="tr-desc" type="text" placeholder="Ex: Caminhada leve / Musculação" />
-        <label for="tr-min">Duração (min)</label>
-        <input id="tr-min" type="number" inputmode="numeric" placeholder="Ex: 30" />
-        <button onclick="registrarTreino()">Salvar treino</button>
-      </div>
-      <div class="card" id="lista-treinos"></div>
     </section>
 
     <section id="aba-glicemia" class="aba">
       <div class="card">
-        <label for="gl-val">Glicemia (mg/dL)</label>
-        <input id="gl-val" type="number" step="1" inputmode="numeric" placeholder="Ex: 98" />
-        <label for="gl-mom">Momento</label>
-        <input id="gl-mom" type="text" placeholder="Ex: Jejum / Pós-refeição" />
-        <button onclick="registrarGlicemia()">Salvar glicemia</button>
-      </div>
-      <div class="card" id="lista-glicemia"></div>
-    </section>
-
-    <section id="aba-alimentos" class="aba">
-      <div class="card">
-        <label for="al-nome">Alimento(s) — em linha (ex.: arroz 100g 50 calorias) ou em bloco</label>
-        <textarea id="al-nome" placeholder="Ex: arroz 100g 50 calorias&#10;feijao 200g&#10;ou em linha: arroz 100g 50calorias feijao 200g" oninput="atualizarPreviewAvulso()"></textarea>
-
-        <div class="grid-3">
-          <div>
-            <label for="al-qtd">Peso individual (g)</label>
-            <input id="al-qtd" type="number" step="1" inputmode="decimal" placeholder="Ex: 100" oninput="atualizarPreviewAvulso()" />
-          </div>
-          <div>
-            <label for="al-kcal">Calorias item (kcal)</label>
-            <input id="al-kcal" type="number" inputmode="numeric" placeholder="Calcula auto" oninput="marcarKcalManual('al')" />
-          </div>
-          <div>
-            <label for="al-saude">Tipo</label>
-            <select id="al-saude">
-              <option value="auto">Automático</option>
-              <option value="saudavel">Saudável</option>
-              <option value="nao_saudavel">Não saudável</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="calc-preview" id="al-preview">Digite em linha ou em bloco para ver o valor individual e a soma final.</div>
-        <button onclick="registrarAlimento()">Salvar alimentação</button>
-      </div>
-
-      <div class="card" id="lista-alimentos"></div>
-
-      <div class="soma-prato-box" id="alimentos-soma-final-box">
-        <span>Soma final de todos os alimentos:</span>
-        <span id="alimentos-soma-final-kcal">0 kcal</span>
+        <div style="font-weight:700; font-size:1.05rem; margin-bottom:8px;">Glicemia</div>
+        <div class="grid-2"><input id="gl-val" type="number" step="1" placeholder="mg/dL" /><input id="gl-mom" type="text" placeholder="Ex: Jejum / Pós-refeição" /></div>
+        <button type="button" style="margin-top:8px;" onclick="registrarGlicemia()">Salvar glicemia</button>
+        <div id="lista-glicemia" style="margin-top:10px;"></div>
       </div>
     </section>
 
     <section id="aba-resumo" class="aba ativa">
       <div class="card">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-weight:700; font-size:1rem;">Dashboard do Dia</span>
-          <span id="resumo-data-hoje" style="font-size:0.82rem; color:#94a3b8;">--/--/----</span>
+          <div style="font-weight:700; font-size:1.1rem;">Dashboard do Dia</div>
+          <span id="resumo-data-hoje" style="color:#94a3b8; font-size:0.85rem;">--/--/----</span>
         </div>
-        <div class="sub" id="resumo-avaliacao-alim">Nenhuma alimentação registrada hoje ainda.</div>
-        <div id="alerta-kcal-box" class="alerta-kcal-box faltando">Já consumiu 0 kcal de 1500 kcal — faltam 1500 kcal.</div>
-
+        <div class="sub" id="resumo-avaliacao">Nenhuma alimentação registrada hoje ainda.</div>
+        <div id="dash-alerta-kcal" class="alerta-kcal-box">Já consumiu 0 kcal de 1500 kcal — faltam 1500 kcal.</div>
         <div class="grid-2" style="margin-top:12px;">
-          <div>
-            <label>Água tomada hoje</label>
-            <div class="kpi" id="dash-agua">0 / 2500 ml</div>
-          </div>
-          <div>
-            <label>Calorias / Meta do instrutor</label>
-            <div class="kpi" id="dash-kcal">0 / 1500 kcal</div>
-          </div>
-          <div>
-            <label>Tempo de treino hoje</label>
-            <div class="kpi" id="dash-treino">0 min</div>
-          </div>
-          <div>
-            <label>Registros de destros hoje</label>
-            <div class="kpi" id="dash-destros">0</div>
-          </div>
+          <div><label>Água tomada hoje</label><div class="kpi" id="dash-agua">0 / 2500 ml</div></div>
+          <div><label>Total de calorias do dia</label><div class="kpi" id="dash-kcal">0 / 1500 kcal</div></div>
+          <div><label>Tempo de treino hoje</label><div class="kpi" id="dash-treino">0 min</div></div>
+          <div><label>Registros de glicemia hoje</label><div class="kpi" id="dash-glicemia">0</div></div>
         </div>
       </div>
-
       <div class="card">
-        <label>Gráfico comparativo do dia</label>
-
-        <div class="chart-row">
-          <div class="chart-head">
-            <span>Hidratação (meta diária)</span>
-            <span id="grafico-agua-txt">0% (0 ml)</span>
-          </div>
-          <div class="barra-bg"><div class="barra-fill" id="grafico-agua-bar"></div></div>
+        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Gráfico comparativo do dia</div>
+        <div>
+          <div style="display:flex; justify-content:space-between; font-size:0.84rem;"><span>Calorias do dia</span><span id="graf-kcal-txt">0 / 1500 kcal (0%)</span></div>
+          <div class="barra-bg"><div class="barra-fill barra-kcal" id="graf-kcal-bar"></div></div>
         </div>
-
-        <div class="chart-row">
-          <div class="chart-head">
-            <span>Proporção de itens saudáveis</span>
-            <span id="grafico-saude-txt">Sem registros hoje</span>
-          </div>
-          <div class="barra-bg"><div class="barra-fill barra-saude" id="grafico-saude-bar"></div></div>
+        <div style="margin-top:10px;">
+          <div style="display:flex; justify-content:space-between; font-size:0.84rem;"><span>Hidratação</span><span id="graf-agua-txt">0%</span></div>
+          <div class="barra-bg"><div class="barra-fill" id="graf-agua-bar"></div></div>
         </div>
-
-        <div class="chart-row">
-          <div class="chart-head">
-            <span id="grafico-kcal-label">Calorias do dia (meta 1.500 kcal)</span>
-            <span id="grafico-kcal-txt">0 / 1500 kcal (0%)</span>
-          </div>
-          <div class="barra-bg"><div class="barra-fill barra-kcal" id="grafico-kcal-bar"></div></div>
-        </div>
-
-        <div class="chart-row">
-          <div class="chart-head">
-            <span>Tempo de treino hoje (ref. 45 min)</span>
-            <span id="grafico-treino-txt">0 min (0%)</span>
-          </div>
-          <div class="barra-bg"><div class="barra-fill barra-treino" id="grafico-treino-bar"></div></div>
+        <div style="margin-top:10px;">
+          <div style="display:flex; justify-content:space-between; font-size:0.84rem;"><span>Treino hoje</span><span id="graf-treino-txt">0 min</span></div>
+          <div class="barra-bg"><div class="barra-fill barra-treino" id="graf-treino-bar"></div></div>
         </div>
       </div>
-
       <div class="card">
-        <label>O que você comeu hoje (e classificação)</label>
-        <div id="dash-lista-prato"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
-      </div>
-
-      <div class="card">
-        <label>Água, treinos e destros registrados hoje</label>
-        <div id="dash-lista-atividades"><div class="item"><span>Nenhuma atividade registrada hoje ainda.</span></div></div>
+        <div style="font-weight:700; font-size:1rem; margin-bottom:8px;">Alimentos somados no dia de hoje</div>
+        <div id="dash-lista-alimentos"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
       </div>
     </section>
-  </main>
+  </div>
 
   <nav>
-    <button onclick="abrirAba('painel', this)">Painel</button>
-    <button onclick="abrirAba('cardapio', this)">Cardápio</button>
-    <button onclick="abrirAba('calorias', this)">Calorias</button>
-    <button onclick="abrirAba('rotina', this)">Água/Ref.</button>
-    <button onclick="abrirAba('balanca', this)">Balança</button>
-    <button onclick="abrirAba('treinos', this)">Treinos</button>
-    <button onclick="abrirAba('glicemia', this)">Glicemia</button>
-    <button class="ativa" onclick="abrirAba('resumo', this)">Resumo</button>
+    <button type="button" onclick="abrirAba('painel', this)">Painel</button>
+    <button type="button" onclick="abrirAba('cardapio', this)">Cardápio/Alim.</button>
+    <button type="button" onclick="abrirAba('calorias', this)">Calorias</button>
+    <button type="button" onclick="abrirAba('rotina', this)">Água/Ref.</button>
+    <button type="button" onclick="abrirAba('balanca', this)">Balança</button>
+    <button type="button" onclick="abrirAba('treinos', this)">Treinos</button>
+    <button type="button" onclick="abrirAba('glicemia', this)">Glicemia</button>
+    <button type="button" class="ativa" onclick="abrirAba('resumo', this)">Resumo</button>
   </nav>
 
   <script>
-    const DIAS_ORDEM = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
-    const PALAVRAS_NAO_SAUD_JS = [
-      "feijoada", "farofa", "torresmo", "feijao tropeiro", "feijão tropeiro",
-      "picanha", "costela", "carne seca", "carbonara", "estrogonofe", "lasanha",
-      "fritura", "frito", "frita", "batata frita", "doce", "chocolate", "sorvete",
-      "refrigerante", "refri", "pizza", "hamburguer", "hambúrguer", "burger",
-      "cachorro quente", "hot dog", "nugget", "nuggets", "salgado", "coxinha",
-      "pastel", "empada", "biscoito", "bolacha", "bolo", "pudim", "cerveja",
-      "alcool", "álcool", "fast food", "bacon", "linguica", "linguiça", "salsicha",
-      "presunto", "maionese", "chantilly", "leite condensado", "quesadilla",
-      "falafel", "esfiha", "pao de queijo", "pão de queijo"
-    ];
-
     let tabelaKcal100g = {
-      "arroz branco": 128,
-      "arroz integral": 124,
-      "arroz": 128,
-      "feijao": 76,
-      "feijão": 76,
-      "feijao carioca": 76,
-      "feijao preto": 77,
-      "feijoada": 117,
-      "farofa": 406,
-      "torresmo": 544,
-      "frango": 159,
-      "peito de frango": 159,
-      "patinho": 219,
-      "alcatra": 241,
-      "batata doce": 77,
-      "batata": 52,
-      "ovo": 146,
-      "pizza": 266,
-      "bolo": 350,
-      "pastel": 310
+      "arroz branco": 128, "arroz": 128, "arroz integral": 124,
+      "feijão": 76, "feijao": 76, "peito de frango": 159,
+      "frango grelhado": 159, "frango": 159, "bife": 163,
+      "ovo cozido": 146, "ovo": 146, "batata-doce": 77,
+      "batata doce": 77, "banana": 98, "aveia": 394
     };
-
-    let porcoesRascunho = [];
-    let cronoSegundos = 0;
-    let cronoTimer = null;
+    let rascunhoPrato = [];
     let ultimoEstado = null;
-    const alertasDisparadosHoje = new Set();
-    const kcalManualFlag = { porcao: false, al: false };
 
-    function marcarKcalManual(tipo) {
-      kcalManualFlag[tipo] = true;
+    function toNum(v) {
+      if (v === null || v === undefined) return NaN;
+      const n = parseFloat(String(v).replace(",", ".").trim());
+      return isNaN(n) ? NaN : n;
     }
 
-    function normalizarTexto(txt) {
-      return (txt || "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .trim();
+    function acharKcal100g(nome, manualKcal100) {
+      const m = toNum(manualKcal100);
+      if (!isNaN(m) && m > 0) return m;
+      const texto = (nome || "").toLowerCase();
+      for (const ch of Object.keys(tabelaKcal100g).sort((a, b) => b.length - a.length)) {
+        if (texto.includes(ch.toLowerCase())) return Number(tabelaKcal100g[ch]);
+      }
+      return 0;
     }
 
-    function buscarKcal100g(nome) {
-      const texto = normalizarTexto(nome);
-      const chaves = Object.keys(tabelaKcal100g || {}).sort((a, b) => b.length - a.length);
-      for (const ch of chaves) {
-        const chNorm = normalizarTexto(ch);
-        if (texto.includes(chNorm)) {
-          return Number(tabelaKcal100g[ch]);
+    function calcPorGramas(nome, gramas, manualKcal100) {
+      const g = toNum(gramas);
+      const k100 = acharKcal100g(nome, manualKcal100);
+      if (isNaN(g) || g <= 0 || k100 <= 0) return { gramas: isNaN(g) ? 0 : g, kcal100: k100, kcal: 0 };
+      return { gramas: g, kcal100: k100, kcal: Math.round((g / 100.0) * k100) };
+    }
+
+    function atualizarCalculoAoVivo() {
+      const nome = document.getElementById("al-nome").value;
+      const res = calcPorGramas(nome, document.getElementById("al-gramas").value, document.getElementById("al-kcal100").value);
+      const box = document.getElementById("previa-calculo");
+      if (!nome.trim() || res.gramas <= 0) {
+        box.textContent = "Cálculo automático: informe o alimento e as gramas (ex.: 150g com 128 kcal/100g = 192 kcal).";
+        return;
+      }
+      box.textContent = res.kcal100 <= 0
+        ? `${res.gramas}g de "${nome.trim()}" — informe "Kcal por 100g" para calcular.`
+        : `${res.gramas}g × (${res.kcal100} kcal ÷ 100g) = ${res.kcal} kcal`;
+    }
+
+    function abrirAba(nomeAba, btn) {
+      document.querySelectorAll(".aba").forEach(el => el.classList.remove("ativa"));
+      const alvo = document.getElementById("aba-" + nomeAba);
+      if (alvo) alvo.classList.add("ativa");
+      document.querySelectorAll("nav button").forEach(b => b.classList.remove("ativa"));
+      if (btn) btn.classList.add("ativa");
+      else {
+        const navBtn = Array.from(document.querySelectorAll("nav button")).find(b => (b.getAttribute("onclick") || "").includes(`'${nomeAba}'`));
+        if (navBtn) navBtn.classList.add("ativa");
+      }
+    }
+
+    function adicionarAoRascunhoPrato() {
+      const nome = (document.getElementById("al-nome").value || "").trim();
+      const res = calcPorGramas(nome, document.getElementById("al-gramas").value, document.getElementById("al-kcal100").value);
+      if (!nome || res.gramas <= 0) { alert("Preencha o alimento e a quantidade em gramas."); return; }
+      rascunhoPrato.push({ alimento: nome, gramas: res.gramas, kcal_100g: res.kcal100 || null, kcal: res.kcal });
+      document.getElementById("al-nome").value = "";
+      document.getElementById("al-gramas").value = "";
+      document.getElementById("al-kcal100").value = "";
+      atualizarCalculoAoVivo();
+      renderRascunho();
+    }
+
+    function removerRascunho(idx) { rascunhoPrato.splice(idx, 1); renderRascunho(); }
+
+    function renderRascunho() {
+      const box = document.getElementById("lista-rascunho-prato");
+      document.getElementById("soma-rascunho-kcal").textContent = `${rascunhoPrato.reduce((a, b) => a + Number(b.kcal || 0), 0)} kcal`;
+      box.innerHTML = rascunhoPrato.length
+        ? rascunhoPrato.map((item, i) => `<div class="item"><span><b>${item.alimento}</b> (${item.gramas}g) — <b>${item.kcal} kcal</b></span><button type="button" class="btn-del" onclick="removerRascunho(${i})">Tirar</button></div>`).join("")
+        : '<div class="item"><span>Nenhum alimento no rascunho do prato.</span></div>';
+    }
+
+    async function lancarAlimentoHoje() {
+      const nome = (document.getElementById("al-nome").value || "").trim();
+      const res = calcPorGramas(nome, document.getElementById("al-gramas").value, document.getElementById("al-kcal100").value);
+      if (!nome || res.gramas <= 0) { alert("Informe o alimento e a quantidade em gramas."); return; }
+      const resp = await fetch("/api/alimentos", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, gramas: res.gramas, kcal_100g: res.kcal100 || null, kcal: res.kcal })
+      });
+      if (resp.ok) {
+        document.getElementById("al-nome").value = "";
+        document.getElementById("al-gramas").value = "";
+        document.getElementById("al-kcal100").value = "";
+        atualizarCalculoAoVivo();
+        await carregarEstado();
+      }
+    }
+
+    async function salvarPratoSemana(consumirAgora) {
+      if (!rascunhoPrato.length) {
+        const nome = (document.getElementById("al-nome").value || "").trim();
+        const res = calcPorGramas(nome, document.getElementById("al-gramas").value, document.getElementById("al-kcal100").value);
+        if (nome && res.gramas > 0) rascunhoPrato.push({ alimento: nome, gramas: res.gramas, kcal_100g: res.kcal100 || null, kcal: res.kcal });
+      }
+      if (!rascunhoPrato.length) { alert("Adicione ao menos um alimento ao prato."); return; }
+      const resp = await fetch("/api/cardapio/prato", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ dia: document.getElementById("prato-dia").value, refeicao: document.getElementById("prato-refeicao").value, porcoes: rascunhoPrato })
+      });
+      if (resp.ok) {
+        rascunhoPrato = []; renderRascunho(); await carregarEstado();
+        if (consumirAgora && ultimoEstado && Array.isArray(ultimoEstado.cardapio_semana) && ultimoEstado.cardapio_semana.length) {
+          await consumirPrato(ultimoEstado.cardapio_semana.length - 1, true);
         }
       }
-      return null;
     }
 
-    function parseNumero(val) {
-      if (val === "" || val === null || val === undefined) return null;
-      const n = parseFloat(String(val).replace(",", ".").trim());
-      return isNaN(n) ? null : n;
-    }
+    async function consumirPrato(idx, irCalorias) { await fetch(`/api/cardapio/consumir/${idx}`, { method: "POST" }); await carregarEstado(); if (irCalorias) abrirAba("calorias", null); }
+    async function excluirPrato(idx) { await fetch(`/api/cardapio/excluir/${idx}`, { method: "DELETE" }); await carregarEstado(); }
+    async function excluirAlimento(idx) { await fetch(`/api/excluir/alimentos/${idx}`, { method: "DELETE" }); await carregarEstado(); }
+    async function salvarMetaCalorias() { await fetch("/api/perfil", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ meta_kcal_dia: document.getElementById("cal-input-meta").value, objetivo: document.getElementById("cal-input-obj").value }) }); await carregarEstado(); }
+    async function salvarPerfil() { await fetch("/api/perfil", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nome: document.getElementById("p-nome").value, objetivo: document.getElementById("p-objetivo").value, peso_atual: document.getElementById("p-peso").value, meta_peso: document.getElementById("p-meta-peso").value, meta_kcal_dia: document.getElementById("p-meta-kcal").value }) }); await carregarEstado(); }
+    async function registrarAgua() { await fetch("/api/agua", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ml: document.getElementById("agua-ml").value }) }); document.getElementById("agua-ml").value = ""; await carregarEstado(); }
+    async function excluirAgua(idx) { await fetch(`/api/agua/excluir/${idx}`, { method: "DELETE" }); await carregarEstado(); }
+    async function addRefeicao() { await fetch("/api/refeicoes", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ nome: document.getElementById("ref-nome").value, horario: document.getElementById("ref-hora").value }) }); document.getElementById("ref-nome").value = ""; await carregarEstado(); }
+    async function excluirRefeicao(idx) { await fetch(`/api/refeicoes/excluir/${idx}`, { method: "DELETE" }); await carregarEstado(); }
+    async function registrarBalanca() { await fetch("/api/balanca", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ peso: document.getElementById("bal-peso").value, meta: document.getElementById("bal-meta").value }) }); document.getElementById("bal-peso").value = ""; await carregarEstado(); }
+    async function registrarTreino() { await fetch("/api/treinos", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ modalidade: document.getElementById("tr-mod").value, duracao_min: document.getElementById("tr-min").value }) }); document.getElementById("tr-mod").value = ""; document.getElementById("tr-min").value = ""; await carregarEstado(); }
+    async function registrarGlicemia() { await fetch("/api/glicemia", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ valor: document.getElementById("gl-val").value, momento: document.getElementById("gl-mom").value }) }); document.getElementById("gl-val").value = ""; document.getElementById("gl-mom").value = ""; await carregarEstado(); }
+    async function excluirGenerico(cat, idx) { await fetch(`/api/excluir/${cat}/${idx}`, { method: "DELETE" }); await carregarEstado(); }
 
-    // 1) Tenta ler em linha: ex. "arroz 100g 50calorias" ou "arroz 100g 50 kcal" ou "arroz 100g"
-    function tentarLerEmLinha(textoRaw, qtdFallback) {
-      let s = (textoRaw || "").trim();
-      if (!s || /\r?\n|;|,/.test(s)) return null;
-
-      let kcalExplicita = null;
-      const mKcal = s.match(/(?:^|\s)(\d+(?:[.,]\d+)?)\s*(?:kcal|calorias?|cal)\b\s*$/i);
-      if (mKcal) {
-        kcalExplicita = Math.max(0, Math.round(parseFloat(mKcal[1].replace(",", "."))));
-        s = s.slice(0, mKcal.index).trim();
-      }
-
-      let gramas = parseNumero(qtdFallback);
-      let alimento = s;
-
-      const mPrefixo = s.match(/^\s*(\d+(?:[.,]\d+)?)\s*(kg|gramas?|grama|g)\b(?:\s+(?:de|da|do|das|dos))?\s+(.+)$/i);
-      const mSufixo = s.match(/^(.+?)\s+(\d+(?:[.,]\d+)?)\s*(kg|gramas?|grama|g)\s*$/i);
-
-      if (mPrefixo) {
-        let g = parseFloat(mPrefixo[1].replace(",", "."));
-        if (mPrefixo[2].toLowerCase() === "kg") g = g * 1000;
-        alimento = mPrefixo[3].trim();
-        if (gramas === null) gramas = g;
-      } else if (mSufixo) {
-        let g = parseFloat(mSufixo[2].replace(",", "."));
-        if (mSufixo[3].toLowerCase() === "kg") g = g * 1000;
-        alimento = mSufixo[1].trim();
-        if (gramas === null) gramas = g;
-      }
-
-      if (!alimento) return null;
-      if (gramas !== null && gramas > 0) {
-        gramas = Math.round(gramas * 10) / 10;
-      } else {
-        gramas = null;
-      }
-
-      return { alimento, gramas, kcalExplicita };
-    }
-
-    // 2) Fallback em bloco: quebra por linha, ; ou multiplas ocorrencias "alimento + peso" na mesma linha
-    function lerEmBloco(textoRaw, qtdFallback) {
-      const bruto = (textoRaw || "").trim();
-      if (!bruto) return [];
-
-      let blocos = bruto.split(/\r?\n|;/).map(x => x.trim()).filter(Boolean);
-      if (blocos.length === 1) {
-        // Ex: "arroz 100g 50calorias feijao 200g 120calorias"
-        const matches = bruto.match(/.+?\d+(?:[.,]\d+)?\s*(?:kg|gramas?|grama|g)\b(?:\s+\d+(?:[.,]\d+)?\s*(?:kcal|calorias?|cal)\b)?/gi);
-        if (matches && matches.length > 1) {
-          blocos = matches.map(m => m.trim());
-        } else if (bruto.includes(",")) {
-          blocos = bruto.split(",").map(m => m.trim()).filter(Boolean);
-        }
-      }
-
-      return blocos.map((parte, idx) => {
-        const emLinha = tentarLerEmLinha(parte, idx === 0 ? qtdFallback : null);
-        if (emLinha) return emLinha;
-        return {
-          alimento: parte.replace(/\s+(?:de|da|do|das|dos)\s*$/i, "").trim(),
-          gramas: idx === 0 ? parseNumero(qtdFallback) : null,
-          kcalExplicita: null
-        };
-      }).filter(x => x.alimento);
-    }
-
-    function calcularAutoKcalGramas(nome, gramasVal) {
-      const base100 = buscarKcal100g(nome);
-      if (base100 === null) return 0;
-      if (gramasVal !== null && gramasVal !== undefined && !isNaN(Number(gramasVal)) && Number(gramasVal) > 0) {
-        return Math.round((Number(gramasVal) / 100) * base100);
-      }
-      return base100;
-    }
-
-    function resolverItens(nomeRaw, qtdRaw, kcalRaw, isManual, tipoSaude) {
-      const bruto = (nomeRaw || "").trim();
-      if (!bruto) return [];
-
-      const linhaUnica = tentarLerEmLinha(bruto, qtdRaw);
-      const rawItens = linhaUnica ? [linhaUnica] : lerEmBloco(bruto, qtdRaw);
-      const manualNum = parseNumero(kcalRaw);
-
-      return rawItens.map((item, idx) => {
-        let kcal = calcularAutoKcalGramas(item.alimento, item.gramas);
-        if (item.kcalExplicita !== null) {
-          kcal = item.kcalExplicita;
-        } else if (Boolean(isManual) && manualNum !== null && rawItens.length === 1) {
-          kcal = Math.max(0, Math.round(manualNum));
-        } else if (idx === 0 && Boolean(isManual) && manualNum !== null && kcal === 0) {
-          kcal = Math.max(0, Math.round(manualNum));
-        }
-
-        return {
-          alimento: item.alimento,
-          unidade: "gramas",
-          quantidade: item.gramas,
-          gramas: item.gramas,
-          kcal,
-          saudavel: classificarSaudeJs(item.alimento, tipoSaude)
-        };
-      });
-    }
-
-    function classificarSaudeJs(nome, tipoSel) {
-      if (tipoSel === "saudavel") return true;
-      if (tipoSel === "nao_saudavel") return false;
-      const texto = normalizarTexto(nome);
-      for (const p of PALAVRAS_NAO_SAUD_JS) {
-        if (texto.includes(normalizarTexto(p))) return false;
-      }
-      return true;
-    }
-
-    function montarPreviewGramas(nomeRaw, qtdRaw, kcalInput, tipoFlag, listaAtual) {
-      kcalManualFlag[tipoFlag] = false;
-      const itens = resolverItens(nomeRaw, qtdRaw, "", false, "auto");
-      const somaLista = (listaAtual || []).reduce((acc, x) => acc + Number(x.kcal || 0), 0);
-
-      if (!itens.length) {
-        if (kcalInput) kcalInput.value = "";
-        return somaLista > 0
-          ? `Soma atual: ${somaLista} kcal. Digite o próximo item em linha ou em bloco.`
-          : 'Digite em linha (ex.: arroz 100g 50calorias) ou em bloco para ver o valor individual e a soma final.';
-      }
-
-      const somaEntrada = itens.reduce((a, b) => a + Number(b.kcal || 0), 0);
-      if (kcalInput) kcalInput.value = itens.length === 1 ? itens[0].kcal : somaEntrada;
-
-      const individuais = itens.map(i => {
-        const pesoTxt = i.gramas != null && i.gramas > 0 ? `${i.gramas}g` : "100g";
-        return `${i.alimento} (${pesoTxt}) = ${i.kcal} kcal`;
-      }).join(" • ");
-
-      return `${individuais} | Soma desta entrada: ${somaEntrada} kcal (Soma final c/ lista: ${somaLista + somaEntrada} kcal).`;
-    }
-
-    function atualizarPreviewPorcao() {
-      document.getElementById('porcao-preview').textContent = montarPreviewGramas(
-        document.getElementById('porcao-alimento').value,
-        document.getElementById('porcao-qtd').value,
-        document.getElementById('porcao-kcal'),
-        'porcao',
-        porcoesRascunho
-      );
-    }
-
-    function atualizarPreviewAvulso() {
-      const listaSalva = (ultimoEstado && ultimoEstado.alimentos) || [];
-      document.getElementById('al-preview').textContent = montarPreviewGramas(
-        document.getElementById('al-nome').value,
-        document.getElementById('al-qtd').value,
-        document.getElementById('al-kcal'),
-        'al',
-        listaSalva
-      );
-    }
-
-    function formatarRotuloGramas(item) {
-      const gramas = item.gramas != null ? item.gramas : item.quantidade;
-      if (gramas != null && gramas !== "" && Number(gramas) > 0) {
-        return `<b>${item.alimento || item.nome}</b> — ${gramas}g`;
-      }
-      return `<b>${item.alimento || item.nome}</b>`;
-    }
-
-    function renderizarPorcoesRascunho() {
-      const total = porcoesRascunho.reduce((acc, x) => acc + Number(x.kcal || 0), 0);
-      document.getElementById('soma-prato-kcal').textContent = `${total} kcal`;
-
-      document.getElementById('lista-porcoes-rascunho').innerHTML = porcoesRascunho.length
-        ? porcoesRascunho.map((x, idx) => {
-            const badge = x.saudavel
-              ? '<span class="badge-ok">Saudável</span>'
-              : '<span class="badge-warn">Não saudável</span>';
-            return `
-              <div class="item">
-                <span>${formatarRotuloGramas(x)} — <b>${x.kcal} kcal</b> ${badge}</span>
-                <button type="button" class="btn-del" onclick="removerPorcaoRascunho(${idx})">Tirar</button>
-              </div>`;
-          }).join('')
-        : '<div class="item"><span>Nenhum alimento adicionado ao prato ainda.</span></div>';
-    }
-
-    function adicionarPorcaoAoPrato() {
-      const itens = resolverItens(
-        document.getElementById('porcao-alimento').value,
-        document.getElementById('porcao-qtd').value,
-        document.getElementById('porcao-kcal').value,
-        kcalManualFlag.porcao,
-        document.getElementById('porcao-saude').value
-      );
-      if (!itens.length) return;
-
-      itens.forEach(it => porcoesRascunho.push(it));
-      document.getElementById('porcao-alimento').value = '';
-      document.getElementById('porcao-qtd').value = '';
-      document.getElementById('porcao-kcal').value = '';
-      kcalManualFlag.porcao = false;
-      renderizarPorcoesRascunho();
-      const somaPrato = porcoesRascunho.reduce((a, b) => a + Number(b.kcal || 0), 0);
-      document.getElementById('porcao-preview').textContent = `Adicionado! Valor individual exibido acima e soma final do prato: ${somaPrato} kcal.`;
-    }
-
-    function removerPorcaoRascunho(idx) {
-      porcoesRascunho.splice(idx, 1);
-      renderizarPorcoesRascunho();
-    }
-
-    async function salvarPratoNoCardapio(irParaCalorias) {
-      if (!porcoesRascunho.length && document.getElementById('porcao-alimento').value.trim()) {
-        adicionarPorcaoAoPrato();
-      }
-      if (!porcoesRascunho.length) return;
-
-      const res = await fetch('/api/cardapio/prato', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          dia: document.getElementById('prato-dia').value,
-          refeicao: document.getElementById('prato-refeicao').value,
-          porcoes: porcoesRascunho
-        })
-      });
-      const data = await res.json();
-      porcoesRascunho = [];
-      renderizarPorcoesRascunho();
-      await carregarEstado();
-
-      if (irParaCalorias && data && data.ok && ultimoEstado && ultimoEstado.cardapio_semana && ultimoEstado.cardapio_semana.length > 0) {
-        const novoIdx = ultimoEstado.cardapio_semana.length - 1;
-        await consumirCardapio(novoIdx, true);
-      }
-    }
-
-    function formatarCrono(seg) {
-      const h = String(Math.floor(seg / 3600)).padStart(2, '0');
-      const m = String(Math.floor((seg % 3600) / 60)).padStart(2, '0');
-      const s = String(seg % 60).padStart(2, '0');
-      return `${h}:${m}:${s}`);
-    }
-
-    function iniciarCrono() {
-      if (cronoTimer) return;
-      cronoTimer = setInterval(() => {
-        cronoSegundos++;
-        document.getElementById('crono-display').textContent = formatarCrono(cronoSegundos);
-      }, 1000);
-    }
-
-    function pausarCrono() {
-      if (cronoTimer) {
-        clearInterval(cronoTimer);
-        cronoTimer = null;
-      }
-    }
-
-    function zerarCrono() {
-      pausarCrono();
-      cronoSegundos = 0;
-      document.getElementById('crono-display').textContent = '00:00:00';
-    }
-
-    function usarTempoCrono() {
-      document.getElementById('tr-min').value = Math.max(1, Math.round(cronoSegundos / 60));
-    }
-
-    function abrirAba(nome, btn) { if (nomeAba === 'alimentos') nomeAba = 'cardapio';
-      document.querySelectorAll('.aba').forEach(el => el.classList.remove('ativa'));
-      document.querySelectorAll('nav button').forEach(b => b.classList.remove('ativa'));
-      document.getElementById('aba-' + nome).classList.add('ativa');
-      if (btn) {
-        btn.classList.add('ativa');
-      } else {
-        const alvo = Array.from(document.querySelectorAll('nav button')).find(b => (b.getAttribute('onclick') || '').includes(`'${nome}'`));
-        if (alvo) alvo.classList.add('ativa');
-      }
-    }
-
-    async function pedirPermissaoNotif() {
-      if (!('Notification' in window)) return;
-      await Notification.requestPermission();
-    }
-
-    function dispararNotificacao(titulo, corpo) {
-      if ('Notification' in window && Notification.permission === 'granted') {
-        try { new Notification(titulo, { body: corpo }); } catch (e) {}
-      }
-    }
-
-    function verificarAlertas(estado) {
-      if (!estado) return;
-      const agora = new Date();
-      const hh = String(agora.getHours()).padStart(2, '0');
-      const mm = String(agora.getMinutes()).padStart(2, '0');
-      const horaAtual = `${hh}:${mm}`);
-      const diaKey = agora.toISOString().slice(0, 10);
-
-      const agua = estado.agua || { consumido_ml: 0, meta_ml: 2500 };
-      const faltamAgua = Math.max(0, (agua.meta_ml || 2500) - (agua.consumido_ml || 0));
-      const alertaKcal = (estado.resumo_dia && estado.resumo_dia.alerta_kcal) || null;
-
-      const refeicoes = estado.refeicoes || [];
-      const refAgora = refeicoes.filter(r => r.horario === horaAtual);
-      const proximas = refeicoes.filter(r => r.horario >= horaAtual).slice(0, 2);
-
-      const banner = document.getElementById('alerta-banner');
-      if (refAgora.length > 0) {
-        const nomes = refAgora.map(r => `${r.nome} (${r.horario})`).join(', ');
-        banner.textContent = `Hora da refeição: ${nomes}! Lembre-se também de beber água.`;
-        banner.classList.add('ativo');
-        refAgora.forEach(r => {
-          const chave = `${diaKey}-${r.nome}-${r.horario}`);
-          if (!alertasDisparadosHoje.has(chave)) {
-            alertasDisparadosHoje.add(chave);
-            dispararNotificacao('Fire Fit — Horário de refeição', `Chegou a hora de: ${r.nome} (${r.horario})`);
-          }
-        });
-      } else if (alertaKcal && alertaKcal.status === 'passou') {
-        banner.textContent = `${alertaKcal.mensagem} ${faltamAgua > 0 ? `Faltam ${faltamAgua} ml de água.` : ''}`.trim();
-        banner.classList.add('ativo');
-      } else if (proximas.length > 0) {
-        const proxTxt = proximas.map(r => `${r.nome} às ${r.horario}`).join(' • ');
-        const aguaTxt = faltamAgua > 0 ? `Faltam ${faltamAgua} ml de água hoje.` : 'Meta de água de hoje concluída!';
-        banner.textContent = `Próximas refeições: ${proxTxt} — ${aguaTxt}`);
-        banner.classList.add('ativo');
-      } else {
-        banner.classList.remove('ativo');
-      }
-    }
-
-    function obterKcalSalvaPorcao(p) {
-      if (p && p.kcal != null && p.kcal !== "" && !isNaN(Number(p.kcal))) return Number(p.kcal);
-      const gramas = p && (p.gramas != null ? p.gramas : p.quantidade);
-      return calcularAutoKcalGramas(p && p.alimento, gramas);
-    }
-
-    function renderizarCardapioSemana(lista, metaKcal) {
-      const pratos = lista || [];
-      const meta = Math.max(1, Number(metaKcal || 1500));
-      const blocos = [];
-      let somaGeralCardapio = 0;
-
-      DIAS_ORDEM.forEach(dia => {
-        const pratosDia = pratos
-          .map((prato, idx) => ({ prato, idx }))
-          .filter(x => (x.prato.dia || 'Segunda') === dia);
-        if (!pratosDia.length) return;
-
-        const somaDia = pratosDia.reduce((acc, x) => {
-          const porcoes = x.prato.porcoes || [];
-          const somaPrato = porcoes.length
-            ? porcoes.reduce((s, p) => s + obterKcalSalvaPorcao(p), 0)
-            : Number(x.prato.total_kcal || 0);
-          return acc + somaPrato;
-        }, 0);
-
-        somaGeralCardapio += somaDia;
-
-        const diff = somaDia - meta;
-        let statusDia = `Faltam ${Math.abs(diff)} kcal p/ meta`;
-        if (diff > 0) statusDia = `Passou ${diff} kcal da meta`;
-        else if (diff === 0) statusDia = `Na meta (${meta} kcal)`;
-
-        const cardsPratos = pratosDia.map(({ prato, idx }) => {
-          const porcoes = prato.porcoes || [];
-          const totalPrato = porcoes.length
-            ? porcoes.reduce((s, p) => s + obterKcalSalvaPorcao(p), 0)
-            : Number(prato.total_kcal || 0);
-
-          const linhasPorcoes = porcoes.map(p => {
-            const kcalItem = obterKcalSalvaPorcao(p);
-            const badge = p.saudavel !== false
-              ? '<span class="badge-ok">Saudável</span>'
-              : '<span class="badge-warn">Não saudável</span>';
-            return `<div class="item"><span>${formatarRotuloGramas(p)} — <b>${kcalItem} kcal</b></span>${badge}</div>`;
-          }).join('');
-
-          return `
-            <div class="prato-card">
-              <div class="prato-cab">
-                <span><b>${prato.refeicao || 'Refeição'}</b> • Soma final do prato: <b>${totalPrato} kcal</b></span>
-                <span class="acoes-item">
-                  <button type="button" class="btn-ok" onclick="consumirCardapio(${idx}, true)">Ir p/ Calorias</button>
-                  <button type="button" class="btn-del" onclick="excluirCardapio(${idx})">Excluir</button>
-                </span>
-              </div>
-              ${linhasPorcoes}
-            </div>`;
-        }).join('');
-
-        blocos.push(`
-          <div class="dia-bloco">
-            <div class="dia-topo">
-              <span class="dia-titulo">${dia}</span>
-              <span class="dia-kcal">Total do dia: ${somaDia} kcal • ${statusDia}</span>
-            </div>
-            ${cardsPratos}
-          </div>`);
-      });
-
-      document.getElementById('lista-cardapio-semana').innerHTML = blocos.length
-        ? blocos.join('')
-        : '<div class="item"><span>Nenhum prato cadastrado no cardápio da semana.</span></div>';
-
-      document.getElementById('cardapio-soma-geral-kcal').textContent = `${somaGeralCardapio} kcal`;
-    }
-
-    async function excluirCardapio(idx) {
-      await fetch(`/api/cardapio/excluir/${idx}`, { method: 'DELETE' })
-      carregarEstado();
-    }
-
-    async function consumirCardapio(idx, abrirCalorias) {
-      await fetch(`/api/cardapio/consumir/${idx}`, { method: 'POST' })
-      await carregarEstado();
-      if (abrirCalorias) abrirAba('calorias', null);
-    }
-
-    function formatarDetalheItem(x) {
-      const gramas = x.gramas != null ? x.gramas : x.quantidade;
-      if (gramas != null && gramas !== "" && Number(gramas) > 0) return ` (${gramas}g)`;
-      return "";
-    }
-
-    function renderizarAbaCalorias(res, perfil) {
-      const r = res || {};
-      const alimHoje = r.alimentos_hoje || [];
-      const somaListaHoje = alimHoje.reduce((acc, item) => acc + Number(item.kcal || 0), 0);
-      const kcalHoje = alimHoje.length ? somaListaHoje : Number(r.kcal_hoje || 0);
-      const metaKcal = Math.max(1, r.meta_kcal_dia || 1500);
+    function renderizarTudo(d) {
+      const res = d.resumo_dia || {};
+      const kcalHoje = Number(res.kcal_hoje || 0);
+      const metaKcal = Math.max(1, Number(res.meta_kcal_dia || d.meta_kcal_dia || 1500));
       const pctKcal = Math.min(100, Math.round((kcalHoje / metaKcal) * 100));
-      const alerta = r.alerta_kcal || {
-        status: 'faltando', faltam: metaKcal, passou: 0, saude_texto: 'Aguardando',
-        mensagem: `Já consumiu ${kcalHoje} kcal de ${metaKcal} kcal.`
-      };
+      const alerta = res.alerta_kcal || { status: "faltando", mensagem: `Já consumiu ${kcalHoje} kcal de ${metaKcal} kcal.` };
+      const alimHoje = res.alimentos_hoje || [];
 
-      document.getElementById('cal-aba-ingerido').textContent = `${kcalHoje} kcal`;
-      document.getElementById('cal-aba-meta').textContent = `${metaKcal} kcal`;
-      if ((alerta.passou || 0) > 0) document.getElementById('cal-aba-saldo').textContent = `Passou ${alerta.passou} kcal`;
-      else if ((alerta.faltam || 0) > 0) document.getElementById('cal-aba-saldo').textContent = `Faltam ${alerta.faltam} kcal`;
-      else document.getElementById('cal-aba-saldo').textContent = `0 kcal (Na meta)`;
-      document.getElementById('cal-aba-saude').textContent = alerta.saude_texto || 'Saudável';
+      document.getElementById("lista-alimentos-hoje").innerHTML = alimHoje.length
+        ? alimHoje.map((x, i) => `<div class="item"><span>${x.data || ""} — <b>${x.nome}</b>${x.gramas ? ` (${x.gramas}g)` : ""} — <b>${x.kcal} kcal</b></span><button type="button" class="btn-del" onclick="excluirAlimento(${i})">Excluir</button></div>`).join("")
+        : '<div class="item"><span>Nenhum alimento registrado hoje.</span></div>';
+      document.getElementById("total-dia-alimentos").textContent = `${kcalHoje} kcal`;
 
-      const barra = document.getElementById('cal-aba-barra');
-      barra.className = `barra-fill barra-kcal ${alerta.status === 'passou' ? 'passou' : ''}`);
-      barra.style.width = `${Math.max(4, pctKcal)}%`;
+      const cardapio = d.cardapio_semana || [];
+      document.getElementById("lista-cardapio-semana").innerHTML = cardapio.length
+        ? cardapio.map((prato, idx) => {
+            const itensTxt = (prato.porcoes || []).map(p => `${p.alimento}${p.gramas ? ` (${p.gramas}g)` : ""}: ${p.kcal} kcal`).join(" • ");
+            return `<div class="prato-card"><div class="prato-cab"><span><b>${prato.dia}</b> • <b>${prato.refeicao}</b> — <b>${prato.total_kcal || 0} kcal</b></span><span class="acoes-item"><button type="button" class="btn-ok" onclick="consumirPrato(${idx}, true)">Consumir hoje</button><button type="button" class="btn-del" onclick="excluirPrato(${idx})">Excluir</button></span></div><div class="sub" style="margin-top:0;">${itensTxt}</div></div>`;
+          }).join("")
+        : '<div class="item"><span>Nenhum prato no cardápio semanal.</span></div>';
 
-      const box = document.getElementById('cal-aba-alerta');
-      box.className = `alerta-kcal-box ${alerta.status || 'faltando'}`);
-      box.textContent = alerta.mensagem;
+      document.getElementById("cal-ingerido").textContent = `${kcalHoje} kcal`;
+      document.getElementById("cal-meta").textContent = `${metaKcal} kcal`;
+      document.getElementById("cal-barra").style.width = `${Math.max(3, pctKcal)}%`;
+      document.getElementById("cal-barra").classList.toggle("passou", alerta.status === "passou");
+      document.getElementById("cal-alerta").className = `alerta-kcal-box ${alerta.status || "faltando"}`;
+      document.getElementById("cal-alerta").textContent = alerta.mensagem;
+      document.getElementById("cal-input-meta").value = metaKcal;
+      document.getElementById("cal-input-obj").value = (d.perfil && d.perfil.objetivo) || "perda";
+      document.getElementById("cal-lista-itens").innerHTML = alimHoje.length
+        ? alimHoje.map(x => `<div class="item"><span><b>${x.nome}</b>${x.gramas ? ` (${x.gramas}g)` : ""}</span><b>${x.kcal} kcal</b></div>`).join("")
+        : '<div class="item"><span>Nenhum item hoje.</span></div>';
+      document.getElementById("cal-soma-final").textContent = `${kcalHoje} kcal`;
 
-      document.getElementById('cal-aba-input-meta').value = metaKcal;
-      document.getElementById('cal-aba-input-obj').value = (perfil && perfil.objetivo) || r.objetivo || 'perda';
-
-      document.getElementById('cal-aba-lista').innerHTML = alimHoje.length
-        ? alimHoje.map(x => {
-            const tag = x.saudavel !== false
-              ? '<span class="badge-ok">Saudável</span>'
-              : '<span class="badge-warn">Não saudável</span>';
-            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b>${formatarDetalheItem(x)} — <b>${x.kcal} kcal</b></span>${tag}</div>`;
-          }).join('')
-        : '<div class="item"><span>Nenhuma alimentação registrada hoje.</span></div>';
-
-      document.getElementById('cal-aba-soma-final').textContent = `${kcalHoje} kcal`;
-    }
-
-    async function salvarMetaCaloriasAba() {
-      await fetch('/api/perfil', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          meta_kcal_dia: document.getElementById('cal-aba-input-meta').value,
-          objetivo: document.getElementById('cal-aba-input-obj').value
-        })
-      });
-      carregarEstado();
-    }
-
-    function renderizarDashboardDia(res, perfil) {
-      const agora = new Date();
-      const dataPadrao = agora.toLocaleDateString('pt-BR');
-      const r = res || {};
-      document.getElementById('resumo-data-hoje').textContent = r.data_hoje || dataPadrao;
-      document.getElementById('resumo-avaliacao-alim').textContent = r.avaliacao_alimentacao || 'Nenhuma alimentação registrada hoje ainda.';
-
-      const aguaMl = r.agua_ml || 0;
-      const metaAgua = Math.max(1, r.meta_agua_ml || 2500);
+      const aguaMl = Number(res.agua_ml || 0);
+      const metaAgua = Math.max(1, Number(res.meta_agua_ml || 2500));
       const pctAgua = Math.min(100, Math.round((aguaMl / metaAgua) * 100));
-
-      const kcalHoje = r.kcal_hoje || 0;
-      const metaKcal = Math.max(1, r.meta_kcal_dia || 1500);
-      const pctKcal = Math.min(100, Math.round((kcalHoje / metaKcal) * 100));
-
-      const alertaKcal = r.alerta_kcal || {
-        status: 'faltando',
-        mensagem: `Já consumiu 0 kcal de ${metaKcal} kcal — faltam ${metaKcal} kcal.`
-      };
-      const boxKcal = document.getElementById('alerta-kcal-box');
-      boxKcal.className = `alerta-kcal-box ${alertaKcal.status || 'faltando'}`);
-      boxKcal.textContent = alertaKcal.mensagem;
-
-      const minTreino = r.minutos_treino_hoje || 0;
+      const minTreino = Number(res.minutos_treino_hoje || 0);
       const pctTreino = Math.min(100, Math.round((minTreino / 45) * 100));
 
-      const qtdSaud = r.qtd_saudaveis || 0;
-      const qtdNaoSaud = r.qtd_nao_saudaveis || 0;
-      const totalItensAlim = qtdSaud + qtdNaoSaud;
-      const pctSaude = totalItensAlim > 0 ? Math.round((qtdSaud / totalItensAlim) * 100) : 0;
+      document.getElementById("resumo-data-hoje").textContent = res.data_hoje || "--/--/----";
+      document.getElementById("resumo-avaliacao").textContent = res.avaliacao_alimentacao || "";
+      document.getElementById("dash-alerta-kcal").className = `alerta-kcal-box ${alerta.status || "faltando"}`;
+      document.getElementById("dash-alerta-kcal").textContent = alerta.mensagem;
+      document.getElementById("dash-agua").textContent = `${aguaMl} / ${metaAgua} ml`;
+      document.getElementById("dash-kcal").textContent = `${kcalHoje} / ${metaKcal} kcal`;
+      document.getElementById("dash-treino").textContent = `${minTreino} min`;
+      document.getElementById("dash-glicemia").textContent = `${res.destros_hoje || 0}`;
 
-      document.getElementById('dash-agua').textContent = `${aguaMl} / ${metaAgua} ml`;
-      document.getElementById('dash-kcal').textContent = `${kcalHoje} / ${metaKcal} kcal`;
-      document.getElementById('dash-treino').textContent = `${minTreino} min`;
-      document.getElementById('dash-destros').textContent = `${r.destros_hoje || 0}`);
+      document.getElementById("graf-kcal-txt").textContent = `${kcalHoje} / ${metaKcal} kcal (${pctKcal}%)`;
+      document.getElementById("graf-kcal-bar").style.width = `${Math.max(3, pctKcal)}%`;
+      document.getElementById("graf-kcal-bar").classList.toggle("passou", alerta.status === "passou");
+      document.getElementById("graf-agua-txt").textContent = `${pctAgua}% (${aguaMl} ml)`;
+      document.getElementById("graf-agua-bar").style.width = `${Math.max(3, pctAgua)}%`;
+      document.getElementById("graf-treino-txt").textContent = `${minTreino} min`;
+      document.getElementById("graf-treino-bar").style.width = `${Math.max(3, pctTreino)}%`;
 
-      document.getElementById('grafico-agua-txt').textContent = `${pctAgua}% (${aguaMl} ml)`;
-      document.getElementById('grafico-agua-bar').style.width = `${Math.max(4, pctAgua)}%`;
-
-      document.getElementById('grafico-saude-txt').textContent = totalItensAlim > 0
-        ? `${pctSaude}% saudáveis (${qtdSaud}/${totalItensAlim})`
-        : 'Sem registros hoje';
-      document.getElementById('grafico-saude-bar').style.width = `${Math.max(4, pctSaude)}%`;
-
-      document.getElementById('grafico-kcal-label').textContent = `Calorias do dia (meta ${metaKcal} kcal)`;
-      document.getElementById('grafico-kcal-txt').textContent = `${kcalHoje} / ${metaKcal} kcal (${pctKcal}%)`;
-      const kcalBar = document.getElementById('grafico-kcal-bar');
-      kcalBar.className = `barra-fill barra-kcal ${alertaKcal.status === 'passou' ? 'passou' : ''}`);
-      kcalBar.style.width = `${Math.max(4, pctKcal)}%`;
-
-      document.getElementById('grafico-treino-txt').textContent = `${minTreino} min (${pctTreino}%)`;
-      document.getElementById('grafico-treino-bar').style.width = `${Math.max(4, pctTreino)}%`;
-
-      const alimHoje = r.alimentos_hoje || [];
-      document.getElementById('dash-lista-prato').innerHTML = alimHoje.length
-        ? alimHoje.map(x => {
-            const tag = x.saudavel !== false
-              ? '<span class="badge-ok">Saudável</span>'
-              : '<span class="badge-warn">Não saudável</span>';
-            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b>${formatarDetalheItem(x)} (${x.kcal} kcal)</span>${tag}</div>`;
-          }).join('')
+      document.getElementById("dash-lista-alimentos").innerHTML = alimHoje.length
+        ? alimHoje.map(x => `<div class="item"><span><b>${x.nome}</b>${x.gramas ? ` (${x.gramas}g)` : ""}</span><b>${x.kcal} kcal</b></div>`).join("")
         : '<div class="item"><span>Nenhuma alimentação registrada hoje.</span></div>';
 
-      const linhasAtividades = [];
-      (r.agua_historico || []).forEach(a => linhasAtividades.push(`<div class="item"><span>Água às ${a.hora} — <b>+${a.ml} ml</b></span><span class="badge-ok">Água</span></div>`));
-      (r.treinos_hoje || []).forEach(t => linhasAtividades.push(`<div class="item"><span>${t.data} — Treino <b>${t.descricao}</b> (${t.minutos} min${t.tempo_fmt ? ' • ' + t.tempo_fmt : ''})</span><span class="badge-warn">Treino</span></div>`));
-      (r.balanca_hoje || []).forEach(b => linhasAtividades.push(`<div class="item"><span>${b.data} — Destro / Balança: <b>${b.peso} kg</b> (Meta: ${b.meta} kg)</span><span class="badge-ok">Destro</span></div>`));
-      (r.glicemia_hoje || []).forEach(g => linhasAtividades.push(`<div class="item"><span>${g.data} — Glicemia: <b>${g.valor} mg/dL</b> (${g.momento})</span><span class="badge-ok">Glicemia</span></div>`));
+      const p = d.perfil || {};
+      document.getElementById("p-nome").value = p.nome || "";
+      document.getElementById("p-objetivo").value = p.objetivo || "perda";
+      document.getElementById("p-peso").value = d.peso_atual != null ? d.peso_atual : "";
+      document.getElementById("p-meta-peso").value = d.meta_peso != null ? d.meta_peso : "";
+      document.getElementById("p-meta-kcal").value = metaKcal;
+      document.getElementById("painel-orientacao").textContent = (d.orientacao && d.orientacao.texto) || "";
 
-      document.getElementById('dash-lista-atividades').innerHTML = linhasAtividades.length
-        ? linhasAtividades.join('')
-        : '<div class="item"><span>Nenhuma atividade registrada hoje ainda.</span></div>';
-
-      renderizarAbaCalorias(r, perfil);
-    }
-
-    async function excluirItem(categoria, idx) {
-      await fetch(`/api/excluir/${categoria}/${idx}`, { method: 'DELETE' })
-      carregarEstado();
-    }
-
-    async function addAgua(ml) {
-      await fetch('/api/agua', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ add_ml: ml }) })
-      carregarEstado();
-    }
-
-    async function resetAgua() {
-      await fetch('/api/agua', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ resetar: true }) })
-      carregarEstado();
-    }
-
-    async function salvarMetaAgua() {
-      await fetch('/api/agua', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ meta_ml: document.getElementById('agua-meta').value }) })
-      carregarEstado();
-    }
-
-    async function excluirAgua(idx) {
-      await fetch(`/api/agua/excluir/${idx}`, { method: 'DELETE' })
-      carregarEstado();
-    }
-
-    async function addRefeicao() {
-      await fetch('/api/refeicoes', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ nome: document.getElementById('ref-nome').value, horario: document.getElementById('ref-hora').value })
-      });
-      document.getElementById('ref-nome').value = '';
-      carregarEstado();
-    }
-
-    async function excluirRefeicao(idx) {
-      await fetch(`/api/refeicoes/excluir/${idx}`, { method: 'DELETE' })
-      carregarEstado();
+      document.getElementById("agua-resumo").textContent = `${aguaMl} / ${metaAgua} ml (${pctAgua}%)`;
+      document.getElementById("lista-agua").innerHTML = ((d.agua && d.agua.historico) || []).map((h, i) => `<div class="item"><span>${h.hora} — <b>+${h.ml} ml</b></span><button type="button" class="btn-del" onclick="excluirAgua(${i})">Excluir</button></div>`).join("") || '<div class="item"><span>Sem registros de água hoje.</span></div>';
+      document.getElementById("lista-refeicoes").innerHTML = (d.refeicoes || []).map((r, i) => `<div class="item"><span><b>${r.horario}</b> — ${r.nome}</span><button type="button" class="btn-del" onclick="excluirRefeicao(${i})">Excluir</button></div>`).join("") || '<div class="item"><span>Nenhum horário cadastrado.</span></div>';
+      document.getElementById("lista-balanca").innerHTML = (d.balanca || []).map((b, i) => `<div class="item"><span>${b.data} — <b>${b.peso} kg</b> (Meta: ${b.meta} kg)</span><button type="button" class="btn-del" onclick="excluirGenerico('balanca', ${i})">Excluir</button></div>`).join("") || '<div class="item"><span>Sem registros na balança.</span></div>';
+      document.getElementById("lista-treinos").innerHTML = (d.treinos || []).map((t, i) => `<div class="item"><span>${t.data} — <b>${t.modalidade}</b> (${t.duracao_min} min)</span><button type="button" class="btn-del" onclick="excluirGenerico('treinos', ${i})">Excluir</button></div>`).join("") || '<div class="item"><span>Sem treinos registrados.</span></div>';
+      document.getElementById("lista-glicemia").innerHTML = (d.glicemia || []).map((g, i) => `<div class="item"><span>${g.data} — <b>${g.valor} mg/dL</b> (${g.momento})</span><button type="button" class="btn-del" onclick="excluirGenerico('glicemia', ${i})">Excluir</button></div>`).join("") || '<div class="item"><span>Sem registros de glicemia.</span></div>';
     }
 
     async function carregarEstado() {
-      renderizarDashboardDia(ultimoEstado ? ultimoEstado.resumo_dia : null, ultimoEstado ? ultimoEstado.perfil : null);
       try {
-        const res = await fetch('/api/estado')
+        const res = await fetch("/api/estado");
         if (!res.ok) return;
         const d = await res.json();
         ultimoEstado = d;
-        if (d.tabela_kcal_100g && typeof d.tabela_kcal_100g === 'object') {
-          tabelaKcal100g = Object.assign({}, tabelaKcal100g, d.tabela_kcal_100g);
-        }
-        const p = d.perfil || {};
-
-        const partes = [];
-        if (p.nome) partes.push(p.nome);
-        if (p.idade != null) partes.push(p.idade + ' anos');
-        if (p.altura_cm != null) partes.push(p.altura_cm + ' cm');
-        document.getElementById('resumo-aluno').textContent = partes.length ? partes.join(' • ') : 'Aluno não cadastrado';
-
-        document.getElementById('kpi-peso').textContent = d.peso_atual != null ? d.peso_atual + ' kg' : '--';
-        document.getElementById('kpi-meta').textContent = d.meta_peso != null ? d.meta_peso + ' kg' : '--';
-        document.getElementById('kpi-diff').textContent = d.diferenca_meta != null ? 'Diferença para meta: ' + d.diferenca_meta + ' kg' : 'Diferença para meta: --';
-
-        const metaKcal = d.meta_kcal_dia || 1500;
-        document.getElementById('kpi-meta-kcal').textContent = `Meta diária do instrutor: ${metaKcal} kcal/dia`;
-        document.getElementById('p-meta-kcal').value = metaKcal;
-
-        const ori = d.orientacao || {};
-        document.getElementById('base-instrutor').textContent =
-          (ori.foco ? 'Programa: ' + ori.foco + ' — ' : '') +
-          (ori.meta_status ? ori.meta_status + ' ' : '') +
-          (ori.base_resumo || '');
-
-        document.getElementById('p-nome').value = p.nome || '';
-        document.getElementById('p-idade').value = p.idade != null ? p.idade : '';
-        document.getElementById('p-altura').value = p.altura_cm != null ? p.altura_cm : '';
-        document.getElementById('p-objetivo').value = p.objetivo || 'perda';
-
-        if (d.meta_peso != null) {
-          document.getElementById('painel-meta').value = d.meta_peso;
-          document.getElementById('bal-meta').value = d.meta_peso;
-        }
-        if (d.peso_atual != null) {
-          document.getElementById('painel-peso').value = d.peso_atual;
-          document.getElementById('bal-peso').value = d.peso_atual;
-        } else {
-          document.getElementById('painel-peso').value = '';
-          document.getElementById('bal-peso').value = '';
-        }
-
-        renderizarCardapioSemana(d.cardapio_semana, metaKcal);
-
-        const agua = d.agua || { consumido_ml: 0, meta_ml: 2500, historico: [] };
-        const pct = Math.min(100, Math.round(((agua.consumido_ml || 0) / Math.max(1, agua.meta_ml || 2500)) * 100));
-        document.getElementById('agua-status').textContent = `${agua.consumido_ml || 0} / ${agua.meta_ml || 2500} ml (${pct}%)`;
-        document.getElementById('agua-barra').style.width = Math.max(4, pct) + '%';
-        document.getElementById('agua-meta').value = agua.meta_ml || 2500;
-        const restante = Math.max(0, (agua.meta_ml || 2500) - (agua.consumido_ml || 0));
-        document.getElementById('agua-lembrete').textContent = restante > 0
-          ? `Lembrete de água: faltam ${restante} ml para a meta de hoje.`
-          : 'Parabéns: meta diária de água atingida!';
-
-        document.getElementById('lista-agua').innerHTML =
-          (agua.historico || []).map((x, i) => `<div class="item"><span>${x.hora} — <b>+${x.ml} ml</b></span><button type="button" class="btn-del" onclick="excluirAgua(${i})">Excluir</button></div>`).join('')
-          || '<div class="item"><span>Sem copos registrados hoje.</span></div>';
-
-        document.getElementById('lista-refeicoes').innerHTML =
-          (d.refeicoes || []).map((x, i) => `<div class="item"><span><b>${x.horario}</b> — ${x.nome}</span><button type="button" class="btn-del" onclick="excluirRefeicao(${i})">Excluir</button></div>`).join('')
-          || '<div class="item"><span>Nenhum horário de refeição cadastrado.</span></div>';
-
-        document.getElementById('lista-balanca').innerHTML =
-          (d.balanca || []).map((x, i) => `<div class="item"><span>${x.data} — <b>${x.peso} kg</b> (Meta: ${x.meta} kg)</span><button type="button" class="btn-del" onclick="excluirItem('balanca', ${i})">Excluir</button></div>`).join('')
-          || '<div class="item"><span>Sem registros ainda.</span></div>';
-
-        document.getElementById('lista-treinos').innerHTML =
-          (d.treinos || []).map((x, i) => `<div class="item"><span>${x.data} — <b>${x.descricao}</b> (${x.minutos} min${x.tempo_fmt ? ' • ' + x.tempo_fmt : ''})</span><button type="button" class="btn-del" onclick="excluirItem('treinos', ${i})">Excluir</button></div>`).join('')
-          || '<div class="item"><span>Sem treinos ainda.</span></div>';
-
-        document.getElementById('lista-glicemia').innerHTML =
-          (d.glicemia || []).map((x, i) => `<div class="item"><span>${x.data} — <b>${x.valor} mg/dL</b> (${x.momento})</span><button type="button" class="btn-del" onclick="excluirItem('glicemia', ${i})">Excluir</button></div>`).join('')
-          || '<div class="item"><span>Sem medições ainda.</span></div>';
-
-        const alimentosLista = d.alimentos || [];
-        const somaFinalAlimentos = alimentosLista.reduce((acc, item) => acc + Number(item.kcal || 0), 0);
-
-        document.getElementById('lista-alimentos').innerHTML =
-          alimentosLista.map((x, i) => {
-            const badge = x.saudavel !== false
-              ? '<span class="badge-ok">Saudável</span>'
-              : '<span class="badge-warn">Não saudável</span>';
-            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b>${formatarDetalheItem(x)} — <b>${x.kcal} kcal</b> ${badge}</span><button type="button" class="btn-del" onclick="excluirItem('alimentos', ${i})">Excluir</button></div>`;
-          }).join('')
-          || '<div class="item"><span>Sem alimentos cadastrados.</span></div>';
-
-        document.getElementById('alimentos-soma-final-kcal').textContent = `${somaFinalAlimentos} kcal`;
-
-        renderizarDashboardDia(d.resumo_dia, p);
-        verificarAlertas(d);
+        if (d.tabela_kcal_100g && typeof d.tabela_kcal_100g === "object") tabelaKcal100g = Object.assign({}, tabelaKcal100g, d.tabela_kcal_100g);
+        renderizarTudo(d);
       } catch (e) {}
     }
 
-    async function salvarPerfilCompleto() {
-      await fetch('/api/perfil', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          nome: document.getElementById('p-nome').value,
-          idade: document.getElementById('p-idade').value,
-          altura_cm: document.getElementById('p-altura').value,
-          objetivo: document.getElementById('p-objetivo').value,
-          meta_kcal_dia: document.getElementById('p-meta-kcal').value,
-          peso_atual: document.getElementById('painel-peso').value,
-          meta_peso: document.getElementById('painel-meta').value
-        })
-      });
-      carregarEstado();
-    }
-
-    async function registrarBalanca() {
-      await fetch('/api/balanca', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ peso: document.getElementById('bal-peso').value, meta_peso: document.getElementById('bal-meta').value })
-      });
-      carregarEstado();
-    }
-
-    async function registrarTreino() {
-      const tempoFmt = cronoSegundos > 0 ? formatarCrono(cronoSegundos) : '';
-      const minsInput = document.getElementById('tr-min').value;
-      const minsFinal = minsInput ? minsInput : (cronoSegundos > 0 ? Math.max(1, Math.round(cronoSegundos / 60)) : 0);
-      await fetch('/api/treinos', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ descricao: document.getElementById('tr-desc').value, minutos: minsFinal, tempo_fmt: tempoFmt })
-      });
-      document.getElementById('tr-desc').value = '';
-      document.getElementById('tr-min').value = '';
-      zerarCrono();
-      carregarEstado();
-    }
-
-    async function registrarGlicemia() {
-      await fetch('/api/glicemia', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ valor: document.getElementById('gl-val').value, momento: document.getElementById('gl-mom').value })
-      });
-      document.getElementById('gl-val').value = '';
-      document.getElementById('gl-mom').value = '';
-      carregarEstado();
-    }
-
-    async function registrarAlimento() {
-      const itens = resolverItens(
-        document.getElementById('al-nome').value,
-        document.getElementById('al-qtd').value,
-        document.getElementById('al-kcal').value,
-        kcalManualFlag.al,
-        document.getElementById('al-saude').value
-      );
-      if (!itens.length) return;
-
-      for (const it of itens) {
-        const gramas = it.gramas !== null ? it.gramas : '';
-        await fetch('/api/alimentos', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            nome: it.alimento,
-            unidade: 'gramas',
-            quantidade: gramas,
-            gramas: gramas,
-            kcal: it.kcal,
-            saude_tipo: document.getElementById('al-saude').value
-          })
-        });
-      }
-
-      document.getElementById('al-nome').value = '';
-      document.getElementById('al-qtd').value = '';
-      document.getElementById('al-kcal').value = '';
-      kcalManualFlag.al = false;
-      document.getElementById('al-preview').textContent = 'Alimento(s) salvo(s)! Veja cada valor individual e a soma final abaixo.';
-      carregarEstado();
-    }
-
-    renderizarPorcoesRascunho();
+    renderRascunho();
     carregarEstado();
-    setInterval(() => verificarAlertas(ultimoEstado), 30000);
   </script>
-<script>
-if (typeof window.abrirAba !== "function") {
-  window.abrirAba = function(nome, btn) {
-    document.querySelectorAll(".aba").forEach(function(el) { el.classList.remove("ativa"); });
-    document.querySelectorAll("nav button").forEach(function(b) { b.classList.remove("ativa"); });
-    var sec = document.getElementById("aba-" + nome);
-    if (sec) sec.classList.add("ativa");
-    if (btn) btn.classList.add("ativa");
-  };
-}
-</script>
-<script>
-window.TABELA_100G = {
-  "arroz branco": 128,
-  "arroz integral": 124,
-  "arroz": 128,
-  "feijao": 76,
-  "feijao preto": 77,
-  "feijao carioca": 76,
-  "frango": 159,
-  "peito de frango": 159,
-  "patinho": 219,
-  "alcatra": 241,
-  "batata doce": 77,
-  "batata": 52,
-  "ovo": 146,
-  "macarrao": 124,
-  "aveia": 394,
-  "banana": 89,
-  "maca": 52
-};
-
-window.normAlimento = function(s) {
-  return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
-};
-
-window.kcalPor100g = function(nome) {
-  var k = window.normAlimento(nome);
-  if (!k) return null;
-  var chaves = Object.keys(window.TABELA_100G).sort(function(a, b) { return b.length - a.length; });
-  for (var i = 0; i < chaves.length; i++) {
-    if (k.indexOf(chaves[i]) !== -1) return window.TABELA_100G[chaves[i]];
-  }
-  return null;
-};
-
-window.calcularItemExato = function(nome, gramas) {
-  var base = window.kcalPor100g(nome);
-  var g = Number(gramas);
-  if (base === null || isNaN(g) || g <= 0) return { valido: false, kcal: 0, base100g: base, gramas: g };
-  var kcal = Math.round((g / 100) * base);
-  return { valido: true, kcal: kcal, base100g: base, gramas: g };
-};
-
-window.somarItensExatos = function(itens) {
-  return (itens || []).reduce(function(acc, it) {
-    return acc + (Number(it.kcal) || 0);
-  }, 0);
-};
-</script>
-<script>
-window.TABELA_100G = window.TABELA_100G || {};
-
-window.normTabelaItem = function(s) {
-  return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
-};
-
-window.acharBase100g = function(nomeAlimento) {
-  var chave = window.normTabelaItem(nomeAlimento);
-  if (!chave) return null;
-  var tabela = window.TABELA_100G || {};
-  var nomes = Object.keys(tabela).sort(function(a, b) { return b.length - a.length; });
-  for (var i = 0; i < nomes.length; i++) {
-    var itemNorm = window.normTabelaItem(nomes[i]);
-    if (chave === itemNorm || chave.indexOf(itemNorm) !== -1 || itemNorm.indexOf(chave) !== -1) {
-      var val = Number(tabela[nomes[i]]);
-      if (!isNaN(val) && val > 0) return val;
-    }
-  }
-  return null;
-};
-
-window.calcularAlimentoTabela = function(nomeAlimento, gramas) {
-  var base = window.acharBase100g(nomeAlimento);
-  var g = Number(String(gramas || "").replace(",", ".").replace(/[^0-9.]/g, ""));
-  if (base === null || isNaN(g) || g <= 0) {
-    return { ok: false, kcal: 0, base100g: base, gramas: g };
-  }
-  return { ok: true, kcal: Math.round((g / 100) * base), base100g: base, gramas: g };
-};
-
-window.somarTotalTabela = function(itens) {
-  return (itens || []).reduce(function(total, item) {
-    return total + (Number(item.kcal) || 0);
-  }, 0);
-};
-</script>
-<script>
-window.calcPorGramasLivre = function(alimento, gramas, kcal100g) {
-  var g = Number(String(gramas || "").replace(",", ".").replace(/[^0-9.]/g, ""));
-  var base = Number(String(kcal100g || "").replace(",", ".").replace(/[^0-9.]/g, ""));
-  if (isNaN(g) || g <= 0 || isNaN(base) || base < 0) {
-    return { ok: false, alimento: (alimento || "").trim(), gramas: g, kcal100g: base, kcal: 0 };
-  }
-  return {
-    ok: true,
-    alimento: (alimento || "").trim(),
-    gramas: g,
-    kcal100g: base,
-    kcal: Math.round((g / 100) * base)
-  };
-};
-
-window.somarTotalPrato = function(itens) {
-  return (itens || []).reduce(function(acc, item) {
-    return acc + (Number(item.kcal) || 0);
-  }, 0);
-};
-</script>
-<script>
-window.calcularFacil = function(alimento, gramas, kcal100g, fallback100g) {
-  var g = Number(String(gramas || "").replace(",", ".").replace(/[^0-9.]/g, ""));
-  var base = Number(String(kcal100g !== "" && kcal100g !== undefined ? kcal100g : (fallback100g || "")).replace(",", ".").replace(/[^0-9.]/g, ""));
-  if (isNaN(g) || g <= 0 || isNaN(base) || base < 0) {
-    return { ok: false, alimento: (alimento || "").trim(), gramas: g, kcal100g: base, kcal: 0 };
-  }
-  return {
-    ok: true,
-    alimento: (alimento || "").trim(),
-    gramas: g,
-    kcal100g: base,
-    kcal: Math.round((g / 100) * base)
-  };
-};
-
-window.somarFacil = function(itens) {
-  return (itens || []).reduce(function(soma, item) {
-    return soma + (Number(item.kcal) || 0);
-  }, 0);
-};
-</script>
-
-<script id="firefit-excel-js">
-(function() {
-  if (typeof window.abrirAba !== "function") {
-    window.abrirAba = function(nome, btn) {
-      document.querySelectorAll(".aba").forEach(function(e) { e.classList.remove("ativa"); });
-      document.querySelectorAll("nav button").forEach(function(b) { b.classList.remove("ativa"); });
-      var sec = document.getElementById("aba-" + nome);
-      if (sec) sec.classList.add("ativa");
-      if (btn) btn.classList.add("ativa");
-    };
-  }
-
-  window.montarTabelaExcel = function(itens, tituloTotal) {
-    var lista = itens || [];
-    var totKcal = 0;
-    var totGramas = 0;
-    var linhasHtml = lista.map(function(it) {
-      var nome = it.alimento || it.nome || "Alimento";
-      var g = Number(it.gramas != null ? it.gramas : (it.quantidade || 0)) || 0;
-      var kcal = Number(it.kcal != null ? it.kcal : (it.valor_calorico || 0)) || 0;
-      totGramas += g;
-      totKcal += kcal;
-      return "<tr><td>" + nome + "</td><td>" + g + "g</td><td>" + kcal + " kcal</td><td>-</td></tr>";
-    }).join("");
-
-    if (!linhasHtml) {
-      linhasHtml = "<tr><td colspan='4'>Nenhum alimento na fileira ainda.</td></tr>";
-    }
-
-    return "<div class='excel-box'><table class='excel-tab'><thead><tr>" +
-      "<th>alimento</th><th>quantidade</th><th>valor calorico</th><th>total de calorias no prato</th>" +
-      "</tr></thead><tbody>" + linhasHtml +
-      "<tr class='total-row'><td>" + (tituloTotal || "Total no prato") + "</td><td>" + totGramas + "g</td><td>-</td><td>" + totKcal + " kcal</td></tr>" +
-      "</tbody></table></div>";
-  };
-
-  function atualizarGrades() {
-    var alvoCardapio = document.getElementById("lista-porcoes-rascunho");
-    if (alvoCardapio && typeof porcoesRascunho !== "undefined") {
-      var boxC = document.getElementById("excel-grade-cardapio");
-      if (!boxC) {
-        boxC = document.createElement("div");
-        boxC.id = "excel-grade-cardapio";
-        alvoCardapio.parentNode.insertBefore(boxC, alvoCardapio.nextSibling);
-      }
-      boxC.innerHTML = window.montarTabelaExcel(porcoesRascunho, "Total no prato");
-    }
-
-    var alvoAlim = document.getElementById("lista-alimentos");
-    if (alvoAlim) {
-      var boxA = document.getElementById("excel-grade-alimentos");
-      if (!boxA) {
-        boxA = document.createElement("div");
-        boxA.id = "excel-grade-alimentos";
-        alvoAlim.parentNode.insertBefore(boxA, alvoAlim.nextSibling);
-      }
-      var listaSalva = (typeof ultimoEstado !== "undefined" && ultimoEstado && ultimoEstado.alimentos) ? ultimoEstado.alimentos : [];
-      boxA.innerHTML = window.montarTabelaExcel(listaSalva, "Total de calorias");
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", atualizarGrades);
-  setInterval(atualizarGrades, 1000);
-})();
-</script>
-
-<script id="firefit-excel-simples">
-(function() {
-  var linhasPrato = [];
-
-  window.addLinhaExcel = function() {
-    var nomeEl = document.getElementById("ex-alimento");
-    var gramasEl = document.getElementById("ex-gramas");
-    var kcal100El = document.getElementById("ex-kcal100");
-    if (!nomeEl || !gramasEl || !kcal100El) return;
-
-    var alimento = (nomeEl.value || "").trim();
-    var gramas = parseFloat(String(gramasEl.value || "").replace(",", "."));
-    var kcal100 = parseFloat(String(kcal100El.value || "").replace(",", "."));
-
-    if (!alimento || isNaN(gramas) || gramas <= 0 || isNaN(kcal100) || kcal100 < 0) return;
-
-    var valorCalorico = Math.round((gramas / 100) * kcal100);
-    linhasPrato.push({
-      alimento: alimento,
-      gramas: gramas,
-      valorCalorico: valorCalorico
-    });
-
-    nomeEl.value = "";
-    gramasEl.value = "";
-    kcal100El.value = "";
-    nomeEl.focus();
-    renderExcelPrato();
-  };
-
-  window.limparLinhasExcel = function() {
-    linhasPrato = [];
-    renderExcelPrato();
-  };
-
-  window.removerLinhaExcel = function(idx) {
-    linhasPrato.splice(idx, 1);
-    renderExcelPrato();
-  };
-
-  function renderExcelPrato() {
-    var tbody = document.getElementById("excel-linhas-body");
-    if (!tbody) return;
-
-    if (!linhasPrato.length) {
-      tbody.innerHTML = "<tr><td colspan='4'>Nenhuma linha adicionada ainda.</td></tr>";
-      return;
-    }
-
-    var totalKcal = 0;
-    var totalGramas = 0;
-    var html = "";
-
-    for (var i = 0; i < linhasPrato.length; i++) {
-      var item = linhasPrato[i];
-      totalGramas += item.gramas;
-      totalKcal += item.valorCalorico;
-      html += "<tr>" +
-        "<td>" + item.alimento + " <button type='button' class='btn-del' style='padding:2px 6px;font-size:0.7rem;' onclick='removerLinhaExcel(" + i + ")'>x</button></td>" +
-        "<td>" + item.gramas + "g</td>" +
-        "<td>" + item.valorCalorico + " kcal</td>" +
-        "<td>-</td>" +
-        "</tr>";
-    }
-
-    html += "<tr class='total-row'>" +
-      "<td>Total no prato</td>" +
-      "<td>" + totalGramas + "g</td>" +
-      "<td>-</td>" +
-      "<td>" + totalKcal + " kcal</td>" +
-      "</tr>";
-
-    tbody.innerHTML = html;
-  }
-
-  document.addEventListener("DOMContentLoaded", renderExcelPrato);
-})();
-</script>
-
-<script id="firefit-fix-gramas-unificado">
-(function() {
-  function numBR(v) {
-    if (v === null || v === undefined) return NaN;
-    var s = String(v).trim().replace(",", ".");
-    if (!s) return NaN;
-    var n = parseFloat(s);
-    return isNaN(n) ? NaN : n;
-  }
-
-  window.calcGramas100 = function(gramas, kcal100) {
-    var g = numBR(gramas);
-    var k = numBR(kcal100);
-    if (isNaN(g) || g <= 0 || isNaN(k) || k < 0) return 0;
-    return Math.round((g / 100.0) * k);
-  };
-
-  // Sobrescreve calcularAutoKcalGramas para usar sempre (gramas / 100) * base100
-  window.calcularAutoKcalGramas = function(nome, gramasVal) {
-    var base100 = (typeof buscarKcal100g === "function") ? buscarKcal100g(nome) : null;
-    var g = numBR(gramasVal);
-    if (base100 !== null && !isNaN(base100) && !isNaN(g) && g > 0) {
-      return Math.round((g / 100.0) * Number(base100));
-    }
-    if (base100 !== null && !isNaN(base100)) return Math.round(Number(base100));
-    return 0;
-  };
-
-  // Ajusta addLinhaExcel para mostrar o valor calórico e somar corretamente
-  window.addLinhaExcel = function() {
-    var nomeEl = document.getElementById("ex-alimento");
-    var gramasEl = document.getElementById("ex-gramas");
-    var kcal100El = document.getElementById("ex-kcal100");
-    var tbody = document.getElementById("excel-linhas-body");
-    if (!nomeEl || !gramasEl || !kcal100El || !tbody) return;
-
-    var alimento = (nomeEl.value || "").trim();
-    var gramas = numBR(gramasEl.value);
-    var kcal100 = numBR(kcal100El.value);
-    if (!alimento || isNaN(gramas) || gramas <= 0 || isNaN(kcal100) || kcal100 < 0) {
-      alert("Preencha alimento, quantidade em gramas e kcal por 100g.");
-      return;
-    }
-
-    var kcalItem = window.calcGramas100(gramas, kcal100);
-    var tr = document.createElement("tr");
-    tr.className = "linha-prato-calc";
-    tr.setAttribute("data-gramas", String(gramas));
-    tr.setAttribute("data-kcal", String(kcalItem));
-    tr.innerHTML =
-      "<td>" + alimento + "</td>" +
-      "<td>" + gramas + "g</td>" +
-      "<td>" + kcalItem + " kcal (" + kcal100 + "/100g)</td>" +
-      "<td><button type='button' class='btn-del' onclick='this.closest("tr").remove(); window.recalcularTabelaPrato();'>Tirar</button></td>";
-
-    var totalRow = tbody.querySelector("tr.total-row");
-    if (totalRow) {
-      tbody.insertBefore(tr, totalRow);
-    } else {
-      tbody.innerHTML = "";
-      tbody.appendChild(tr);
-    }
-
-    nomeEl.value = "";
-    gramasEl.value = "";
-    kcal100El.value = "";
-    nomeEl.focus();
-    window.recalcularTabelaPrato();
-  };
-
-  window.recalcularTabelaPrato = function() {
-    var tbody = document.getElementById("excel-linhas-body");
-    if (!tbody) return;
-    var linhas = tbody.querySelectorAll("tr.linha-prato-calc");
-    var totG = 0;
-    var totK = 0;
-    linhas.forEach(function(tr) {
-      totG += numBR(tr.getAttribute("data-gramas")) || 0;
-      totK += numBR(tr.getAttribute("data-kcal")) || 0;
-    });
-
-    var totalRow = tbody.querySelector("tr.total-row");
-    if (!linhas.length) {
-      tbody.innerHTML = "<tr><td colspan='4'>Nenhuma linha adicionada ainda.</td></tr>";
-      return;
-    }
-    var htmlTotal =
-      "<tr class='total-row'>" +
-      "<td><b>Total no prato</b></td>" +
-      "<td><b>" + Math.round(totG * 10) / 10 + "g</b></td>" +
-      "<td>-</td>" +
-      "<td><b>" + Math.round(totK * 10) / 10 + " kcal</b></td>" +
-      "</tr>";
-    if (totalRow) {
-      totalRow.outerHTML = htmlTotal;
-    } else {
-      tbody.insertAdjacentHTML("beforeend", htmlTotal);
-    }
-  };
-
-  window.limparLinhasExcel = function() {
-    var tbody = document.getElementById("excel-linhas-body");
-    if (tbody) {
-      tbody.innerHTML = "<tr><td colspan='4'>Nenhuma linha adicionada ainda.</td></tr>";
-    }
-  };
-})();
-</script>
-
-<script id="firefit-prato-fix-final">
-(function(){
-function num(v){
-var n = parseFloat(String(v == null ? "" : v).replace(",", ".").trim());
-return isNaN(n) ? 0 : n;
-}
-window.calcKcalGramas = function(gramas, kcal100){
-var g = num(gramas), k = num(kcal100);
-if (g <= 0 || k < 0) return 0;
-return Math.round((g / 100.0) * k);
-};
-window.addLinhaExcel = function(){
-var nomeEl = document.getElementById("ex-alimento");
-var gEl = document.getElementById("ex-gramas");
-var kEl = document.getElementById("ex-kcal100");
-var tbody = document.getElementById("excel-linhas-body");
-if (!nomeEl || !gEl || !kEl || !tbody) return;
-var nome = (nomeEl.value || "").trim();
-var g = num(gEl.value), k = num(kEl.value);
-if (!nome || g <= 0) return;
-var kcal = window.calcKcalGramas(g, k);
-var totalRow = tbody.querySelector("tr.total-row");
-if (totalRow) totalRow.remove();
-if (tbody.innerHTML.indexOf("Nenhuma linha") !== -1) tbody.innerHTML = "";
-var tr = document.createElement("tr");
-tr.className = "linha-kcal-ok";
-tr.setAttribute("data-g", g);
-tr.setAttribute("data-k", kcal);
-tr.innerHTML = "<td>" + nome + " <button type='button' class='btn-del' style='padding:2px 6px;font-size:0.75rem;' onclick='this.closest(\"tr\").remove(); window.atualizarTotaisPrato();'>x</button></td><td>" + g + "g</td><td>" + kcal + " kcal</td><td>-</td>";
-tbody.appendChild(tr);
-nomeEl.value = ""; gEl.value = ""; kEl.value = "";
-window.atualizarTotaisPrato();
-};
-window.atualizarTotaisPrato = function(){
-var tbody = document.getElementById("excel-linhas-body");
-if (!tbody) return;
-var totRow = tbody.querySelector("tr.total-row");
-if (totRow) totRow.remove();
-var rows = tbody.querySelectorAll("tr.linha-kcal-ok");
-var sg = 0, sk = 0;
-rows.forEach(function(r){ sg += num(r.getAttribute("data-g")); sk += num(r.getAttribute("data-k")); });
-if (!rows.length) {
-  tbody.innerHTML = "<tr><td colspan='4'>Nenhuma linha adicionada ainda.</td></tr>";
-  return;
-}
-var trTot = document.createElement("tr");
-trTot.className = "total-row";
-trTot.innerHTML = "<td><b>Total no prato</b></td><td><b>" + sg + "g</b></td><td>-</td><td><b>" + sk + " kcal</b></td>";
-tbody.appendChild(trTot);
-};
-window.limparLinhasExcel = function(){
-var tbody = document.getElementById("excel-linhas-body");
-if (tbody) tbody.innerHTML = "<tr><td colspan='4'>Nenhuma linha adicionada ainda.</td></tr>";
-};
-})();
-</script>
 </body>
 </html>
-
-
