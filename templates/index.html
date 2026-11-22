@@ -26,8 +26,8 @@
     button { background: #ea580c; color: #fff; border: none; font-weight: 600; cursor: pointer; }
     button:active { opacity: 0.85; }
     .btn-sec { background: #334155; color: #f8fafc; }
-    .btn-ok { width: auto; background: #15803d; color: #dcfce7; font-size: 0.75rem; padding: 5px 9px; border-radius: 6px; margin-left: 6px; flex-shrink: 0; }
-    .btn-del { width: auto; background: #991b1b; color: #fecaca; font-size: 0.75rem; padding: 5px 9px; border-radius: 6px; margin-left: 6px; flex-shrink: 0; }
+    .btn-ok { width: auto; background: #15803d; color: #dcfce7; font-size: 0.75rem; padding: 6px 10px; border-radius: 6px; margin-left: 6px; flex-shrink: 0; }
+    .btn-del { width: auto; background: #991b1b; color: #fecaca; font-size: 0.75rem; padding: 6px 10px; border-radius: 6px; margin-left: 6px; flex-shrink: 0; }
     .acoes-item { display: flex; align-items: center; flex-shrink: 0; }
     .kpi { font-size: 1.15rem; font-weight: 700; color: #fdba74; }
     .barra-bg { width: 100%; height: 14px; background: #0f172a; border-radius: 999px; overflow: hidden; border: 1px solid #475569; margin: 6px 0 10px; }
@@ -38,13 +38,17 @@
     .barra-kcal.passou { background: #ef4444; }
     .crono-display { font-size: 2rem; font-weight: 800; text-align: center; color: #fdba74; letter-spacing: 1px; margin: 6px 0 12px; font-variant-numeric: tabular-nums; }
     .sub { font-size: 0.88rem; color: #cbd5e1; margin-top: 6px; line-height: 1.35; }
+    .calc-preview { font-size: 0.86rem; color: #86efac; background: #052e16; border: 1px solid #166534; border-radius: 8px; padding: 9px 10px; margin-bottom: 10px; }
+    .soma-prato-box { font-size: 0.95rem; font-weight: 700; color: #fdba74; background: #0f172a; border: 1px solid #ea580c; border-radius: 10px; padding: 10px 12px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; }
     .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid #334155; font-size: 0.88rem; }
     .item:last-child { border-bottom: none; }
     .dia-bloco { border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; background: #0f172a; }
     .dia-bloco:last-child { margin-bottom: 0; }
-    .dia-topo { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .dia-topo { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
     .dia-titulo { font-weight: 700; color: #fb923c; font-size: 0.92rem; }
     .dia-kcal { font-size: 0.82rem; font-weight: 600; color: #e2e8f0; }
+    .prato-card { border: 1px solid #334155; border-radius: 10px; padding: 10px 12px; margin-top: 8px; background: #1e293b; }
+    .prato-cab { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
     .badge-ok { background: #14532d; color: #86efac; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
     .badge-warn { background: #7c2d12; color: #fed7aa; font-size: 0.72rem; padding: 2px 7px; border-radius: 999px; font-weight: 600; }
     .chart-row { margin-bottom: 12px; }
@@ -129,39 +133,71 @@
 
     <section id="aba-cardapio" class="aba">
       <div class="card">
-        <div style="font-weight:700; font-size:1rem; margin-bottom:8px;">Cardápio da Semana</div>
-        <div class="sub" style="margin-bottom:10px;">Adicione o prato do dia e quantas calorias ele tem. Você também pode mandar o prato direto para a alimentação de hoje.</div>
-
-        <label for="card-dia">Dia da semana</label>
-        <select id="card-dia">
-          <option value="Segunda">Segunda</option>
-          <option value="Terça">Terça</option>
-          <option value="Quarta">Quarta</option>
-          <option value="Quinta">Quinta</option>
-          <option value="Sexta">Sexta</option>
-          <option value="Sábado">Sábado</option>
-          <option value="Domingo">Domingo</option>
-        </select>
-
-        <label for="card-prato">Prato / Refeição</label>
-        <input id="card-prato" type="text" placeholder="Ex: Almoço: Frango grelhado + arroz integral + salada" />
+        <div style="font-weight:700; font-size:1rem; margin-bottom:8px;">Montar Prato por Porções</div>
+        <div class="sub" style="margin-bottom:10px;">Adicione cada porção (ex.: 100g de arroz, 100g de feijão, 200g de bife, batata frita) para ver as calorias de cada item e a soma total do prato.</div>
 
         <div class="grid-2">
           <div>
-            <label for="card-kcal">Calorias do prato (kcal)</label>
-            <input id="card-kcal" type="number" inputmode="numeric" placeholder="Ex: 450" />
+            <label for="prato-dia">Dia da semana</label>
+            <select id="prato-dia">
+              <option value="Segunda">Segunda</option>
+              <option value="Terça">Terça</option>
+              <option value="Quarta">Quarta</option>
+              <option value="Quinta">Quinta</option>
+              <option value="Sexta">Sexta</option>
+              <option value="Sábado">Sábado</option>
+              <option value="Domingo">Domingo</option>
+            </select>
           </div>
           <div>
-            <label for="card-saude">Classificação</label>
-            <select id="card-saude">
-              <option value="auto">Automático (pelo prato)</option>
-              <option value="saudavel">Saudável</option>
-              <option value="nao_saudavel">Não saudável / Livre</option>
+            <label for="prato-refeicao">Refeição</label>
+            <select id="prato-refeicao">
+              <option value="Café da manhã">Café da manhã</option>
+              <option value="Almoço">Almoço</option>
+              <option value="Lanche da tarde">Lanche da tarde</option>
+              <option value="Jantar">Jantar</option>
             </select>
           </div>
         </div>
 
-        <button type="button" onclick="adicionarPratoCardapio()">Adicionar ao cardápio da semana</button>
+        <label for="porcao-alimento">Alimento da porção</label>
+        <input id="porcao-alimento" type="text" placeholder="Ex: Arroz / Feijão / Bife / Batata frita" oninput="atualizarPreviewPorcao()" />
+
+        <div class="grid-3">
+          <div>
+            <label for="porcao-gramas">Gramas</label>
+            <input id="porcao-gramas" type="number" step="1" inputmode="numeric" placeholder="Ex: 100 ou 200" oninput="atualizarPreviewPorcao()" />
+          </div>
+          <div>
+            <label for="porcao-kcal">Calorias (kcal)</label>
+            <input id="porcao-kcal" type="number" inputmode="numeric" placeholder="Calcula auto" />
+          </div>
+          <div>
+            <label for="porcao-saude">Tipo</label>
+            <select id="porcao-saude">
+              <option value="auto">Automático</option>
+              <option value="saudavel">Saudável</option>
+              <option value="nao_saudavel">Não saudável</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="calc-preview" id="porcao-preview">Informe o alimento e as gramas para ver as calorias da porção.</div>
+        <button type="button" class="btn-sec" style="margin-bottom:10px;" onclick="adicionarPorcaoAoPrato()">+ Adicionar porção ao prato</button>
+
+        <div id="lista-porcoes-rascunho">
+          <div class="item"><span>Nenhuma porção adicionada ao prato ainda.</span></div>
+        </div>
+
+        <div class="soma-prato-box">
+          <span>Total do prato:</span>
+          <span id="soma-prato-kcal">0 kcal</span>
+        </div>
+
+        <div class="grid-2">
+          <button type="button" onclick="salvarPratoNoCardapio(false)">Salvar no Cardápio</button>
+          <button type="button" class="btn-ok" style="width:100%; margin-left:0; padding:10px; font-size:0.9rem;" onclick="salvarPratoNoCardapio(true)">Salvar e ir p/ Calorias</button>
+        </div>
       </div>
 
       <div class="card" id="lista-cardapio-semana">
@@ -171,22 +207,22 @@
 
     <section id="aba-calorias" class="aba">
       <div class="card">
-        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Controle Diário de Calorias (Instrutor)</div>
+        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Resumo de Calorias Consumidas Hoje</div>
 
         <div class="grid-2">
           <div>
-            <label>Precisa ingerir (meta/dia)</label>
-            <div class="kpi" id="cal-aba-meta">1500 kcal</div>
+            <label>Já consumiu hoje</label>
+            <div class="kpi" id="cal-aba-ingerido">0 kcal</div>
           </div>
           <div>
-            <label>Já ingeriu hoje</label>
-            <div class="kpi" id="cal-aba-ingerido">0 kcal</div>
+            <label>Meta diária (instrutor)</label>
+            <div class="kpi" id="cal-aba-meta">1500 kcal</div>
           </div>
         </div>
 
         <div class="grid-2" style="margin-top:8px;">
           <div>
-            <label>Falta / Passou</label>
+            <label>Quanto falta / passou</label>
             <div class="kpi" id="cal-aba-saldo">Faltam 1500 kcal</div>
           </div>
           <div>
@@ -196,7 +232,7 @@
         </div>
 
         <div class="barra-bg"><div class="barra-fill barra-kcal" id="cal-aba-barra"></div></div>
-        <div id="cal-aba-alerta" class="alerta-kcal-box faltando">Faltam 1500 kcal para atingir 1500 kcal.</div>
+        <div id="cal-aba-alerta" class="alerta-kcal-box faltando">Já consumiu 0 kcal de 1500 kcal — faltam 1500 kcal.</div>
       </div>
 
       <div class="card">
@@ -213,7 +249,7 @@
       </div>
 
       <div class="card">
-        <label>Refeições e calorias registradas hoje</label>
+        <label>Todas as refeições e porções consumidas hoje</label>
         <div id="cal-aba-lista"><div class="item"><span>Nenhuma alimentação registrada hoje.</span></div></div>
       </div>
     </section>
@@ -299,22 +335,29 @@
 
     <section id="aba-alimentos" class="aba">
       <div class="card">
-        <label for="al-nome">Alimento / Refeição</label>
-        <input id="al-nome" type="text" placeholder="Ex: Frango + arroz integral" />
-        <div class="grid-2">
+        <label for="al-nome">Alimento avulso</label>
+        <input id="al-nome" type="text" placeholder="Ex: Banana / Ovo / Peito de frango" oninput="atualizarPreviewKcal('al')" />
+
+        <div class="grid-3">
           <div>
-            <label for="al-kcal">Calorias (kcal)</label>
-            <input id="al-kcal" type="number" inputmode="numeric" placeholder="Ex: 250" />
+            <label for="al-gramas">Peso (gramas)</label>
+            <input id="al-gramas" type="number" step="1" inputmode="numeric" placeholder="Ex: 100" oninput="atualizarPreviewKcal('al')" />
           </div>
           <div>
-            <label for="al-saude">Tipo de alimentação</label>
+            <label for="al-kcal">Calorias (kcal)</label>
+            <input id="al-kcal" type="number" inputmode="numeric" placeholder="Calcula auto" />
+          </div>
+          <div>
+            <label for="al-saude">Tipo</label>
             <select id="al-saude">
-              <option value="auto">Automático (pelo item)</option>
+              <option value="auto">Automático</option>
               <option value="saudavel">Saudável</option>
-              <option value="nao_saudavel">Não saudável / Livre</option>
+              <option value="nao_saudavel">Não saudável</option>
             </select>
           </div>
         </div>
+
+        <div class="calc-preview" id="al-preview">Digite o alimento e as gramas para ver as calorias calculadas.</div>
         <button onclick="registrarAlimento()">Salvar alimentação</button>
       </div>
       <div class="card" id="lista-alimentos"></div>
@@ -327,7 +370,7 @@
           <span id="resumo-data-hoje" style="font-size:0.82rem; color:#94a3b8;">--/--/----</span>
         </div>
         <div class="sub" id="resumo-avaliacao-alim">Nenhuma alimentação registrada hoje ainda.</div>
-        <div id="alerta-kcal-box" class="alerta-kcal-box faltando">Faltam 1500 kcal para atingir 1500 kcal.</div>
+        <div id="alerta-kcal-box" class="alerta-kcal-box faltando">Já consumiu 0 kcal de 1500 kcal — faltam 1500 kcal.</div>
 
         <div class="grid-2" style="margin-top:12px;">
           <div>
@@ -411,10 +454,164 @@
 
   <script>
     const DIAS_ORDEM = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
+    const PALAVRAS_NAO_SAUD_JS = [
+      "fritura", "frito", "frita", "batata frita", "doce", "chocolate", "sorvete",
+      "refrigerante", "refri", "pizza", "hamburguer", "hambúrguer", "burger",
+      "salgado", "coxinha", "pastel", "empada", "biscoito", "bolacha", "bolo",
+      "pudim", "cerveja", "alcool", "álcool", "fast food", "bacon", "linguica",
+      "linguiça", "salsicha", "presunto", "maionese", "chantilly", "leite condensado"
+    ];
+
+    let tabelaKcal100g = {
+      "arroz branco": 128,
+      "arroz": 128,
+      "arroz integral": 124,
+      "feijao": 76,
+      "feijão": 76,
+      "bife": 219,
+      "patinho": 219,
+      "peito de frango": 159,
+      "frango": 159,
+      "batata frita": 312,
+      "batata": 52
+    };
+
+    let porcoesRascunho = [];
     let cronoSegundos = 0;
     let cronoTimer = null;
     let ultimoEstado = null;
     const alertasDisparadosHoje = new Set();
+
+    function estimarKcal100g(nome) {
+      const texto = (nome || "").toLowerCase();
+      const chaves = Object.keys(tabelaKcal100g || {}).sort((a, b) => b.length - a.length);
+      for (const ch of chaves) {
+        if (texto.includes(ch)) return tabelaKcal100g[ch];
+      }
+      return null;
+    }
+
+    function classificarSaudeJs(nome, tipoSel) {
+      if (tipoSel === "saudavel") return true;
+      if (tipoSel === "nao_saudavel") return false;
+      const texto = (nome || "").toLowerCase();
+      for (const p of PALAVRAS_NAO_SAUD_JS) {
+        if (texto.includes(p)) return false;
+      }
+      return true;
+    }
+
+    function atualizarPreviewPorcao() {
+      const nome = document.getElementById('porcao-alimento').value;
+      const gramasVal = parseFloat(document.getElementById('porcao-gramas').value);
+      const kcalInput = document.getElementById('porcao-kcal');
+      const preview = document.getElementById('porcao-preview');
+      const base100 = estimarKcal100g(nome);
+
+      if (base100 !== null && !isNaN(gramasVal) && gramasVal > 0) {
+        const calc = Math.round((gramasVal / 100) * base100);
+        kcalInput.value = calc;
+        preview.textContent = `${gramasVal}g de ${nome.trim()} = ${calc} kcal (${base100} kcal/100g).`;
+      } else if (base100 !== null) {
+        preview.textContent = `${nome.trim()} = ${base100} kcal por 100g. Digite as gramas para calcular a porção.`;
+      } else {
+        preview.textContent = 'Alimento fora da tabela base: você pode informar as calorias da porção manualmente.';
+      }
+    }
+
+    function atualizarPreviewKcal(prefixo) {
+      const nome = document.getElementById(`${prefixo}-nome`).value;
+      const gramasVal = parseFloat(document.getElementById(`${prefixo}-gramas`).value);
+      const kcalInput = document.getElementById(`${prefixo}-kcal`);
+      const preview = document.getElementById(`${prefixo}-preview`);
+      const base100 = estimarKcal100g(nome);
+
+      if (base100 !== null && !isNaN(gramasVal) && gramasVal > 0) {
+        const calc = Math.round((gramasVal / 100) * base100);
+        kcalInput.value = calc;
+        preview.textContent = `${gramasVal}g de ${nome.trim()} = ${calc} kcal (${base100} kcal/100g).`;
+      } else if (base100 !== null) {
+        preview.textContent = `${nome.trim()} tem referência de ${base100} kcal por 100g. Digite as gramas para calcular.`;
+      } else {
+        preview.textContent = 'Alimento fora da tabela base: você pode informar as calorias manualmente.';
+      }
+    }
+
+    function renderizarPorcoesRascunho() {
+      const total = porcoesRascunho.reduce((acc, x) => acc + Number(x.kcal || 0), 0);
+      document.getElementById('soma-prato-kcal').textContent = `${total} kcal`;
+
+      document.getElementById('lista-porcoes-rascunho').innerHTML = porcoesRascunho.length
+        ? porcoesRascunho.map((x, idx) => {
+            const badge = x.saudavel
+              ? '<span class="badge-ok">Saudável</span>'
+              : '<span class="badge-warn">Não saudável</span>';
+            const gTxt = x.gramas ? `${x.gramas}g de ` : '';
+            return `
+              <div class="item">
+                <span>${gTxt}<b>${x.alimento}</b> — <b>${x.kcal} kcal</b> ${badge}</span>
+                <button type="button" class="btn-del" onclick="removerPorcaoRascunho(${idx})">Tirar</button>
+              </div>`;
+          }).join('')
+        : '<div class="item"><span>Nenhuma porção adicionada ao prato ainda.</span></div>';
+    }
+
+    function adicionarPorcaoAoPrato() {
+      const alimento = document.getElementById('porcao-alimento').value.trim();
+      if (!alimento) return;
+      const gramasRaw = document.getElementById('porcao-gramas').value;
+      const gramas = gramasRaw !== '' ? Math.round(parseFloat(gramasRaw)) : null;
+      const base100 = estimarKcal100g(alimento);
+      let kcal = parseInt(document.getElementById('porcao-kcal').value, 10);
+      if (isNaN(kcal)) {
+        kcal = (base100 !== null && gramas && gramas > 0)
+          ? Math.round((gramas / 100) * base100)
+          : (base100 || 0);
+      }
+      const saudavel = classificarSaudeJs(alimento, document.getElementById('porcao-saude').value);
+
+      porcoesRascunho.push({ alimento, gramas, kcal: Math.max(0, kcal), saudavel });
+      document.getElementById('porcao-alimento').value = '';
+      document.getElementById('porcao-gramas').value = '';
+      document.getElementById('porcao-kcal').value = '';
+      document.getElementById('porcao-preview').textContent = 'Porção adicionada! Adicione outra porção ou salve o prato.';
+      renderizarPorcoesRascunho();
+    }
+
+    function removerPorcaoRascunho(idx) {
+      porcoesRascunho.splice(idx, 1);
+      renderizarPorcoesRascunho();
+    }
+
+    async function salvarPratoNoCardapio(irParaCalorias) {
+      if (!porcoesRascunho.length) {
+        const alimento = document.getElementById('porcao-alimento').value.trim();
+        if (alimento) {
+          adicionarPorcaoAoPrato();
+        }
+      }
+      if (!porcoesRascunho.length) return;
+
+      const res = await fetch('/api/cardapio/prato', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          dia: document.getElementById('prato-dia').value,
+          refeicao: document.getElementById('prato-refeicao').value,
+          porcoes: porcoesRascunho
+        })
+      });
+      const data = await res.json();
+      porcoesRascunho = [];
+      renderizarPorcoesRascunho();
+
+      await carregarEstado();
+
+      if (irParaCalorias && data && data.ok && ultimoEstado && ultimoEstado.cardapio_semana && ultimoEstado.cardapio_semana.length > 0) {
+        const novoIdx = ultimoEstado.cardapio_semana.length - 1;
+        await consumirCardapio(novoIdx, true);
+      }
+    }
 
     function formatarCrono(seg) {
       const h = String(Math.floor(seg / 3600)).padStart(2, '0');
@@ -453,7 +650,12 @@
       document.querySelectorAll('.aba').forEach(el => el.classList.remove('ativa'));
       document.querySelectorAll('nav button').forEach(b => b.classList.remove('ativa'));
       document.getElementById('aba-' + nome).classList.add('ativa');
-      if (btn) btn.classList.add('ativa');
+      if (btn) {
+        btn.classList.add('ativa');
+      } else {
+        const alvo = Array.from(document.querySelectorAll('nav button')).find(b => (b.getAttribute('onclick') || '').includes(`'${nome}'`));
+        if (alvo) alvo.classList.add('ativa');
+      }
     }
 
     async function pedirPermissaoNotif() {
@@ -509,34 +711,43 @@
     }
 
     function renderizarCardapioSemana(lista, metaKcal) {
-      const itens = lista || [];
+      const pratos = lista || [];
       const meta = Math.max(1, Number(metaKcal || 1500));
       const blocos = [];
 
       DIAS_ORDEM.forEach(dia => {
-        const pratosDia = itens
-          .map((item, idx) => ({ item, idx }))
-          .filter(x => (x.item.dia || 'Segunda') === dia);
+        const pratosDia = pratos
+          .map((prato, idx) => ({ prato, idx }))
+          .filter(x => (x.prato.dia || 'Segunda') === dia);
 
         if (!pratosDia.length) return;
 
-        const somaKcal = pratosDia.reduce((acc, x) => acc + Number(x.item.kcal || 0), 0);
-        const diff = somaKcal - meta;
+        const somaDia = pratosDia.reduce((acc, x) => acc + Number(x.prato.total_kcal || 0), 0);
+        const diff = somaDia - meta;
         let statusDia = `Faltam ${Math.abs(diff)} kcal p/ meta`;
         if (diff > 0) statusDia = `Passou ${diff} kcal da meta`;
         else if (diff === 0) statusDia = `Na meta (${meta} kcal)`;
 
-        const linhasPratos = pratosDia.map(({ item, idx }) => {
-          const badge = item.saudavel !== false
-            ? '<span class="badge-ok">Saudável</span>'
-            : '<span class="badge-warn">Não saudável</span>';
+        const cardsPratos = pratosDia.map(({ prato, idx }) => {
+          const porcoes = prato.porcoes || [];
+          const linhasPorcoes = porcoes.map(p => {
+            const badge = p.saudavel !== false
+              ? '<span class="badge-ok">Saudável</span>'
+              : '<span class="badge-warn">Não saudável</span>';
+            const gTxt = p.gramas ? `${p.gramas}g de ` : '';
+            return `<div class="item"><span>${gTxt}<b>${p.alimento}</b> — <b>${p.kcal || 0} kcal</b></span>${badge}</div>`;
+          }).join('');
+
           return `
-            <div class="item">
-              <span><b>${item.prato}</b> — <b>${item.kcal || 0} kcal</b> ${badge}</span>
-              <span class="acoes-item">
-                <button type="button" class="btn-ok" onclick="consumirCardapio(${idx})">Comer hoje</button>
-                <button type="button" class="btn-del" onclick="excluirCardapio(${idx})">Excluir</button>
-              </span>
+            <div class="prato-card">
+              <div class="prato-cab">
+                <span><b>${prato.refeicao || 'Refeição'}</b> • Soma do prato: <b>${prato.total_kcal || 0} kcal</b></span>
+                <span class="acoes-item">
+                  <button type="button" class="btn-ok" onclick="consumirCardapio(${idx}, true)">Ir p/ Calorias</button>
+                  <button type="button" class="btn-del" onclick="excluirCardapio(${idx})">Excluir</button>
+                </span>
+              </div>
+              ${linhasPorcoes}
             </div>`;
         }).join('');
 
@@ -544,9 +755,9 @@
           <div class="dia-bloco">
             <div class="dia-topo">
               <span class="dia-titulo">${dia}</span>
-              <span class="dia-kcal">${somaKcal} kcal • ${statusDia}</span>
+              <span class="dia-kcal">Total do dia: ${somaDia} kcal • ${statusDia}</span>
             </div>
-            ${linhasPratos}
+            ${cardsPratos}
           </div>`);
       });
 
@@ -555,32 +766,17 @@
         : '<div class="item"><span>Nenhum prato cadastrado no cardápio da semana.</span></div>';
     }
 
-    async function adicionarPratoCardapio() {
-      const prato = document.getElementById('card-prato').value.trim();
-      if (!prato) return;
-      await fetch('/api/cardapio', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          dia: document.getElementById('card-dia').value,
-          prato: prato,
-          kcal: document.getElementById('card-kcal').value,
-          saude_tipo: document.getElementById('card-saude').value
-        })
-      });
-      document.getElementById('card-prato').value = '';
-      document.getElementById('card-kcal').value = '';
-      carregarEstado();
-    }
-
     async function excluirCardapio(idx) {
       await fetch(`/api/cardapio/excluir/${idx}`, { method: 'DELETE' });
       carregarEstado();
     }
 
-    async function consumirCardapio(idx) {
+    async function consumirCardapio(idx, abrirCalorias) {
       await fetch(`/api/cardapio/consumir/${idx}`, { method: 'POST' });
-      carregarEstado();
+      await carregarEstado();
+      if (abrirCalorias) {
+        abrirAba('calorias', null);
+      }
     }
 
     function renderizarAbaCalorias(res, perfil) {
@@ -593,11 +789,11 @@
         faltam: metaKcal,
         passou: 0,
         saude_texto: 'Aguardando',
-        mensagem: `Faltam ${metaKcal} kcal para atingir ${metaKcal} kcal.`
+        mensagem: `Já consumiu 0 kcal de ${metaKcal} kcal — faltam ${metaKcal} kcal.`
       };
 
-      document.getElementById('cal-aba-meta').textContent = `${metaKcal} kcal`;
       document.getElementById('cal-aba-ingerido').textContent = `${kcalHoje} kcal`;
+      document.getElementById('cal-aba-meta').textContent = `${metaKcal} kcal`;
 
       if ((alerta.passou || 0) > 0) {
         document.getElementById('cal-aba-saldo').textContent = `Passou ${alerta.passou} kcal`;
@@ -626,7 +822,8 @@
             const tag = x.saudavel !== false
               ? '<span class="badge-ok">Saudável</span>'
               : '<span class="badge-warn">Não saudável</span>';
-            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b> (${x.kcal} kcal)</span>${tag}</div>`;
+            const gramasTxt = x.gramas ? ` (${x.gramas}g)` : '';
+            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b>${gramasTxt} — <b>${x.kcal} kcal</b></span>${tag}</div>`;
           }).join('')
         : '<div class="item"><span>Nenhuma alimentação registrada hoje.</span></div>';
     }
@@ -660,7 +857,7 @@
 
       const alertaKcal = r.alerta_kcal || {
         status: 'faltando',
-        mensagem: `Faltam ${metaKcal} kcal para atingir ${metaKcal} kcal.`
+        mensagem: `Já consumiu 0 kcal de ${metaKcal} kcal — faltam ${metaKcal} kcal.`
       };
       const boxKcal = document.getElementById('alerta-kcal-box');
       boxKcal.className = `alerta-kcal-box ${alertaKcal.status || 'faltando'}`;
@@ -702,7 +899,8 @@
             const tag = x.saudavel !== false
               ? '<span class="badge-ok">Saudável</span>'
               : '<span class="badge-warn">Não saudável</span>';
-            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b> (${x.kcal} kcal)</span>${tag}</div>`;
+            const gramasTxt = x.gramas ? ` (${x.gramas}g)` : '';
+            return `<div class="item"><span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b>${gramasTxt} (${x.kcal} kcal)</span>${tag}</div>`;
           }).join('')
         : '<div class="item"><span>Nenhuma alimentação registrada hoje.</span></div>';
 
@@ -789,6 +987,9 @@
         if (!res.ok) return;
         const d = await res.json();
         ultimoEstado = d;
+        if (d.tabela_kcal_100g && typeof d.tabela_kcal_100g === 'object') {
+          tabelaKcal100g = d.tabela_kcal_100g;
+        }
         const p = d.perfil || {};
 
         const partes = [];
@@ -881,9 +1082,10 @@
             const badge = x.saudavel !== false
               ? '<span class="badge-ok">Saudável</span>'
               : '<span class="badge-warn">Não saudável</span>';
+            const gramasTxt = x.gramas ? ` (${x.gramas}g)` : '';
             return `
               <div class="item">
-                <span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b> (${x.kcal} kcal) ${badge}</span>
+                <span>${x.data ? x.data + ' — ' : ''}<b>${x.nome}</b>${gramasTxt} (${x.kcal} kcal) ${badge}</span>
                 <button type="button" class="btn-del" onclick="excluirItem('alimentos', ${i})">Excluir</button>
               </div>`;
           }).join('') || '<div class="item"><span>Sem alimentos cadastrados.</span></div>';
@@ -961,15 +1163,19 @@
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           nome: document.getElementById('al-nome').value,
+          gramas: document.getElementById('al-gramas').value,
           kcal: document.getElementById('al-kcal').value,
           saude_tipo: document.getElementById('al-saude').value
         })
       });
       document.getElementById('al-nome').value = '';
+      document.getElementById('al-gramas').value = '';
       document.getElementById('al-kcal').value = '';
+      document.getElementById('al-preview').textContent = 'Digite o alimento e as gramas para ver as calorias calculadas.';
       carregarEstado();
     }
 
+    renderizarPorcoesRascunho();
     carregarEstado();
     setInterval(() => verificarAlertas(ultimoEstado), 30000);
   </script>
