@@ -146,7 +146,7 @@
 
     <section id="aba-cardapio" class="aba">
       <div class="card">
-        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Tabela do Prato (Estilo Excel)</div>
+        <div style="font-weight:700; font-size:1rem; margin-bottom:10px;">Prato e Cardapio (Alimentos + Gramas)</div>
 
         <div class="grid-3">
           <div>
@@ -2345,5 +2345,62 @@ window.somarFacil = function(itens) {
 })();
 </script>
 
+<script id="firefit-prato-fix-final">
+(function(){
+function num(v){
+var n = parseFloat(String(v == null ? "" : v).replace(",", ".").trim());
+return isNaN(n) ? 0 : n;
+}
+window.calcKcalGramas = function(gramas, kcal100){
+var g = num(gramas), k = num(kcal100);
+if (g <= 0 || k < 0) return 0;
+return Math.round((g / 100.0) * k);
+};
+window.addLinhaExcel = function(){
+var nomeEl = document.getElementById("ex-alimento");
+var gEl = document.getElementById("ex-gramas");
+var kEl = document.getElementById("ex-kcal100");
+var tbody = document.getElementById("excel-linhas-body");
+if (!nomeEl || !gEl || !kEl || !tbody) return;
+var nome = (nomeEl.value || "").trim();
+var g = num(gEl.value), k = num(kEl.value);
+if (!nome || g <= 0) return;
+var kcal = window.calcKcalGramas(g, k);
+var totalRow = tbody.querySelector("tr.total-row");
+if (totalRow) totalRow.remove();
+if (tbody.innerHTML.indexOf("Nenhuma linha") !== -1) tbody.innerHTML = "";
+var tr = document.createElement("tr");
+tr.className = "linha-kcal-ok";
+tr.setAttribute("data-g", g);
+tr.setAttribute("data-k", kcal);
+tr.innerHTML = "<td>" + nome + " <button type='button' class='btn-del' style='padding:2px 6px;font-size:0.75rem;' onclick='this.closest(\"tr\").remove(); window.atualizarTotaisPrato();'>x</button></td><td>" + g + "g</td><td>" + kcal + " kcal</td><td>-</td>";
+tbody.appendChild(tr);
+nomeEl.value = ""; gEl.value = ""; kEl.value = "";
+window.atualizarTotaisPrato();
+};
+window.atualizarTotaisPrato = function(){
+var tbody = document.getElementById("excel-linhas-body");
+if (!tbody) return;
+var totRow = tbody.querySelector("tr.total-row");
+if (totRow) totRow.remove();
+var rows = tbody.querySelectorAll("tr.linha-kcal-ok");
+var sg = 0, sk = 0;
+rows.forEach(function(r){ sg += num(r.getAttribute("data-g")); sk += num(r.getAttribute("data-k")); });
+if (!rows.length) {
+  tbody.innerHTML = "<tr><td colspan='4'>Nenhuma linha adicionada ainda.</td></tr>";
+  return;
+}
+var trTot = document.createElement("tr");
+trTot.className = "total-row";
+trTot.innerHTML = "<td><b>Total no prato</b></td><td><b>" + sg + "g</b></td><td>-</td><td><b>" + sk + " kcal</b></td>";
+tbody.appendChild(trTot);
+};
+window.limparLinhasExcel = function(){
+var tbody = document.getElementById("excel-linhas-body");
+if (tbody) tbody.innerHTML = "<tr><td colspan='4'>Nenhuma linha adicionada ainda.</td></tr>";
+};
+})();
+</script>
 </body>
 </html>
+
